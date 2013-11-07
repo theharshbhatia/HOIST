@@ -72,13 +72,13 @@ for (var j=0; j<18;j++)
 
 
 /*----------------------function call for Document property fetching --------------------------*/
-/*
+
 Document_properties(0);
 
 function Document_properties(number)
 {
 	var Document = app.documents[number]; 
-	
+	/*
 	var Document_activeHistoryBrushSource = Document.activeHistoryBrushSource ;
 	var Document_activeHistoryState = Document.activeHistoryState ;
 	var Document_activeLayer = Document.activeLayer ;
@@ -94,7 +94,34 @@ function Document_properties(number)
 	var Document_guides = Document.guides ;
 	var Document_height = Document.height;
 	var Document_historyStates = Document.historyStates;
+
 	var Document_info = Document.info ;
+		var Document_info_author = Document.info.author ;
+		var Document_info_authorPosition = Document.info.authorPosition ;
+		var Document_info_caption = Document.info.caption;
+		var Document_info_captionWriter = Document.info.captionWriter ;
+		var Document_info_category = Document.info.category ;
+		var Document_info_city = Document.info.city;
+		var Document_info_copyrighted = Document.info.copyrighted;
+		var Document_info_copyrightNotice = Document.info.copyrightNotice;
+		var Document_info_country = Document.info.country ;
+		var Document_info_creationDate = Document.info.creationDate;
+		var Document_info_credit = Document.info.credit; 
+		var Document_info_exif = Document.info.exif;
+		var Document_info_headline = Document.info.headline ;
+		var Document_info_instructions = Document.info.instructions ;
+		var Document_info_jobName = Document.info.jobName;
+		var Document_info_keywords = Document.info.keywords;
+		var Document_info_ownerUrl = Document.info.ownerUrl;
+		var Document_info_parent = Document.info.parent ;
+		var Document_info_provinceState = Document.info.provinceState;
+		var Document_info_source = Document.info.source;
+		var Document_info_supplementalCategories = Document.info.supplementalCategories ;
+		var Document_info_title = Document.info.title;
+		var Document_info_transmissionReference = Document.info.transmissionReference;
+		var Document_info_typename = Document.info.typename;  
+		var Document_info_urgency = Document.info.urgency;
+		
 	var Document_layerComps = Document.layerComps;
 	var Document_layers = Document.layers ;
 	var Document_layerSets = Document.layerSets;
@@ -115,6 +142,10 @@ function Document_properties(number)
 	var Document_width = Document.width ;
 	var Document_xmpMetadata = Document.xmpMetadata;
 	
+	*/
+	
+
+
 
 	 // error states
 	// var Document_ = Document.activeChannels;
@@ -123,7 +154,7 @@ function Document_properties(number)
 	
 	
 }
-*/
+
 
 /*----------------------function call for Channels property fetching --------------------------*/
 /*
