@@ -66,6 +66,46 @@ for (var j=0; j<18;j++)
 }
 */
 
+
+/*----------------------function call for ArtLayer property fetching --------------------------*/
+/*
+ArtLayer_properties(2)
+
+function ArtLayer_properties(Layer_Number)
+{
+	var ArtLayer=app.activeDocument.artLayers[Layer_Number]
+
+	var ArtLayer_allLocked = ArtLayer.allLocked;
+	var ArtLayer_blendMode = ArtLayer.blendMode;
+	var ArtLayer_bounds = ArtLayer.bounds;
+	var ArtLayer_fillOpacity = ArtLayer.fillOpacity;
+	var ArtLayer_grouped = ArtLayer.grouped;
+	var ArtLayer_isBackgroundLayer = ArtLayer.isBackgroundLayer;
+	var ArtLayer_kind = ArtLayer.kind;
+	var ArtLayer_layerMaskDensity = ArtLayer.layerMaskDensity;
+	var ArtLayer_layerMaskFeather = ArtLayer.layerMaskFeather;
+	var ArtLayer_linkedLayers = ArtLayer.linkedLayers;
+	var ArtLayer_name = ArtLayer.name;
+	var ArtLayer_opacity = ArtLayer.opacity; 
+	var ArtLayer_parent = ArtLayer.parent;
+	var ArtLayer_pixelsLocked = ArtLayer.pixelsLocked;
+	var ArtLayer_positionLocked = ArtLayer.positionLocked;
+	var ArtLayer_transparentPixelsLocked = ArtLayer.transparentPixelsLocked;
+	var ArtLayer_typename = ArtLayer.typename;
+	var ArtLayer_vectorMaskDensity = ArtLayer.vectorMaskDensity;
+	var ArtLayer_vectorMaskFeather = ArtLayer.vectorMaskFeather;
+	var ArtLayer_visible = ArtLayer.visible;
+	var ArtLayer_xmpMetadata = ArtLayer.xmpMetadata;
+
+
+// alert(ArtLayer.filterMaskDensity );
+// alert(ArtLayer.filterMaskFeather);
+// alert(ArtLayer.textItem);
+
+
+}
+*/
+
 /*----------------------function call for applicatoin property fetching --------------------------*/
 /*
 Application_properties();
