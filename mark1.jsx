@@ -2,10 +2,7 @@
 
 //Document information
 
-var Document_Name = app.documents[0]; //later the title tag of webpage
-var Document_Length=app.activeDocument.height;
-var Document_Width=app.activeDocument.width;
-var Document_Path=app.activeDocument.fullName; //full path of the ps document
+
 //alert(activeDocument.info.author)
 //---------------------------------------------------------
 
@@ -66,6 +63,100 @@ for (var j=0; j<18;j++)
 }
 */
 
+
+
+
+
+
+
+
+
+/*----------------------function call for Document property fetching --------------------------*/
+/*
+Document_properties(0);
+
+function Document_properties(number)
+{
+	var Document = app.documents[number]; 
+	
+	var Document_activeHistoryBrushSource = Document.activeHistoryBrushSource ;
+	var Document_activeHistoryState = Document.activeHistoryState ;
+	var Document_activeLayer = Document.activeLayer ;
+	var Document_artLayers = Document.artLayers;
+	var Document_bitsPerChannel = Document.bitsPerChannel ;
+	var Document_channels = Document.channels;
+	var Document_colorProfileName = Document.colorProfileName;
+	var Document_colorProfileType = Document.colorProfileType;
+	var Document_colorSamplers = Document.colorSamplers ;
+	var Document_componentChannels = Document.componentChannels;
+	var Document_countItems = Document.countItems;
+	var Document_fullName = Document.fullName;
+	var Document_guides = Document.guides ;
+	var Document_height = Document.height;
+	var Document_historyStates = Document.historyStates;
+	var Document_info = Document.info ;
+	var Document_layerComps = Document.layerComps;
+	var Document_layers = Document.layers ;
+	var Document_layerSets = Document.layerSets;
+	var Document_managed = Document.managed;
+	var Document_measurementScale = Document.measurementScale ;
+	var Document_mode = Document.mode;
+	var Document_name = Document.name;
+	var Document_parent = Document.parent;
+	var Document_path = Document.path;
+	var Document_pathItems = Document.pathItems ;
+	var Document_pixelAspectRatio = Document.pixelAspectRatio ;
+	var Document_printSettings = Document.printSettings;
+	var Document_quickMaskMode = Document.quickMaskMode;
+	var Document_resolution = Document.resolution;
+	var Document_saved = Document.saved ;
+	var Document_selection = Document.selection;
+	var Document_typename = Document.typename ;
+	var Document_width = Document.width ;
+	var Document_xmpMetadata = Document.xmpMetadata;
+	
+
+	 // error states
+	// var Document_ = Document.activeChannels;
+	// var Document_ = Document.backgroundLayer;
+	// var Document_ = Document.histogram; 
+	
+	
+}
+*/
+
+/*----------------------function call for Channels property fetching --------------------------*/
+/*
+Channel_properties(2);
+
+function Channel_properties(Layer_Number)
+{
+	var Channel = app.activeDocument.channels[Layer_Number];
+
+	var Channel_histogram = Channel.histogram;
+	var Channel_kind = Channel.kind;
+	var Channel_name = Channel.name;
+	var Channel_parent = Channel.parent;
+	var Channel_typename = Channel.typename;
+	var Channel_visible = Channel.visible;
+	// var Channel_opacity = Channel.opacity; (not when type= component)
+	// var Channel_color = Channel.color;
+
+}
+*/
+
+/*----------------------function call for ArtLayers property fetching --------------------------*/
+/*
+ArtLayers_properties(2)
+
+function ArtLayers_properties(Layer_Number)
+{
+	var ArtLayers = app.activeDocument.artLayers[2];
+var ArtLayers_parent= ArtLayers.parent;
+var ArtLayers_ = ArtLayers.length; //only if parent is other than doc
+var ArtLayers_ = ArtLayers.typename;
+}
+*/
 
 /*----------------------function call for ArtLayer property fetching --------------------------*/
 /*
