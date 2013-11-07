@@ -1,13 +1,7 @@
 //Photoshop information retrival code
-
-//Document information
-
-
-//alert(activeDocument.info.author)
+// by Harsh Bhatia (Hash113)
 //---------------------------------------------------------
-
 // Layergroup Information
-var LayerSets_Numbers =activeDocument.layerSets.length; //No of layer groups present in the ps document
 //alert(activeDocument.layerSets[0].artLayers.length); //length of a particular layerset
 
 //---------------------------------------------------------
@@ -68,17 +62,62 @@ for (var j=0; j<18;j++)
 
 
 
+/*----------------------function call for LayerSet property fetching --------------------------*/
+/*
+LayerSet_properties(0);
 
+function LayerSet_properties(Layer_Number)
+{
+var LayerSet = activeDocument.layerSets[Layer_Number];
 
+var LayerSet_allLocked = LayerSet.allLocked;
+var LayerSet_artLayers = LayerSet.artLayers;
+var LayerSet_blendMode = LayerSet.blendMode; 
+var LayerSet_bounds = LayerSet.bounds ;
+var LayerSet_enabledChannels = LayerSet.enabledChannels;
+var LayerSet_layers = LayerSet.layers;
+var LayerSet_layerSets = LayerSet.layerSets;
+var LayerSet_linkedLayers = LayerSet.linkedLayers ;
+var LayerSet_name = LayerSet.name;
+var LayerSet_opacity = LayerSet.opacity; 
+var LayerSet_parent = LayerSet.parent;
+var LayerSet_tyename = LayerSet.typename;
+var LayerSet_visible = LayerSet.visible;
+}
+*/
+
+/*----------------------function call for LayerSets property fetching --------------------------*/
+/*LayerSet_properties();
+function LayerSet_properties()
+{
+	var LayerSets = activeDocument.layerSets;
+	var LayerSets_lenght = LayerSets.length; //No of layer groups present in the ps document
+	var LayerSets_typename = LayerSets.typename;
+	var LayerSets_parent = LayerSets.parent;
+}
+*/
+
+/*----------------------function call for Layers property fetching --------------------------*/
+/*
+Layers_properties()
+
+function Layers_properties()
+{
+	var Layers = app.activeDocument.layers;
+	var Layers_length = layers.length;
+	var Layers_parent = layers.parent;//layerset or document
+	var Layers_typename = layers.typename;
+}
+*/
 
 /*----------------------function call for Document property fetching --------------------------*/
-
+/*
 Document_properties(0);
 
 function Document_properties(number)
 {
 	var Document = app.documents[number]; 
-	/*
+	
 	var Document_activeHistoryBrushSource = Document.activeHistoryBrushSource ;
 	var Document_activeHistoryState = Document.activeHistoryState ;
 	var Document_activeLayer = Document.activeLayer ;
@@ -121,7 +160,7 @@ function Document_properties(number)
 		var Document_info_transmissionReference = Document.info.transmissionReference;
 		var Document_info_typename = Document.info.typename;  
 		var Document_info_urgency = Document.info.urgency;
-		
+
 	var Document_layerComps = Document.layerComps;
 	var Document_layers = Document.layers ;
 	var Document_layerSets = Document.layerSets;
@@ -142,11 +181,6 @@ function Document_properties(number)
 	var Document_width = Document.width ;
 	var Document_xmpMetadata = Document.xmpMetadata;
 	
-	*/
-	
-
-
-
 	 // error states
 	// var Document_ = Document.activeChannels;
 	// var Document_ = Document.backgroundLayer;
@@ -154,7 +188,7 @@ function Document_properties(number)
 	
 	
 }
-
+*/
 
 /*----------------------function call for Channels property fetching --------------------------*/
 /*
