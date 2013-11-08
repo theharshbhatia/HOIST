@@ -1,15 +1,27 @@
 //Photoshop information retrival code
 // by Harsh Bhatia (Hash113)
 //---------------------------------------------------------
+/*------------ Document OPERATION ------------------------------*/
+var Doc_height = app.activeDocument.height;
+var Doc_width = app.activeDocument.width;
 
+function Document()
+{
+	alert("Document properties"+"\n"+
+		"title:"+app.activeDocument.name+"\n"+
+		"height:"+app.activeDocument.height+"\n"+
+		"width:"+app.activeDocument.width+"\n");
+	
+	
+}
 /*------------ TEXT FIELD OPERATION ------------------------------*/
-for(var i=0;i<app.activeDocument.layers.length;i++)
+for(var i=0;i<app.activeDocument.layers.length; i++)
 {
 	switch(app.activeDocument.layers[i].kind)
 	{
 	case LayerKind.TEXT:
-	  alert("Text layer");
-	  text_properties(i);
+	  //alert("Text layer");
+	  phase2(i);
 	  break;
 	default:
 	  alert("no match found: unknown layer type");
@@ -17,149 +29,37 @@ for(var i=0;i<app.activeDocument.layers.length;i++)
 	
 }
 /*-------Scripting constant------*/
-AdjustmentReference
-AnchorPosition
-AntiAlias
-AutoKernType
-BatchDestinationType 
-BitmapConversionType
-BitmapHalfToneType 
-BitsPerChannelType
-BlendMode
-BMPDepthType 
-ByteOrder 
-CameraRAWSettingsType
-CameraRAWSize
-ChangeMode
-ChannelType 
-ColorBlendMode
-ColorModel 
-ColorPicker
-ColorProfileType
-ColorReductionType
-ColorSpaceType 
-CopyrightedType
-CreateFields 
-CropToType 
-DCSType
-DepthMapSource 
-DescValueType 
-DialogModes 
-Direction 
-DisplacementMapType 
-Dither 
-DocPositionStyle
-DocumentFill
-DocumentMode
-EditLogItemsType
-ElementPlacement
-EliminateFields 
-ExportType
-Extension 
-FileNamingType
-FontPreviewType
-FontSize
-ForcedColors 
-FormatOptions 
-GalleryConstrainType
-GalleryFontType
-GallerySecurityTextColorType 
-GallerySecurityTextPositionType
-GallerySecurityTextRotateType
-GallerySecurityType
-GalleryThumbSizeType
-Geometry
-GridLineStyle  204
-GridSize  204
-GuideLineStyle 205
-IllustratorPathType 205
-Intent 205
-Justification 205
-Language........................................................................... 205
-LayerCompression...................................................................................................................................................... 205
-LayerKind....................................................................................................................................................................... 206
-LensType........................................................................................................................................................................ 206
-MagnificationType ..................................................................................................................................................... 206
-MatteType ..................................................................................................................................................................... 206
-MeasurementRange .................................................................................................................................................. 206
-MeasurementSource ................................................................................................................................................. 206
-NewDocumentMode................................................................................................................................................. 206
-NoiseDistribution........................................................................................................................................................ 207
-OffsetUndefinedAreas .............................................................................................................................................. 207
-OpenDocumentMode 207
-OpenDocumentType
-OperatingSystem........................................................................................................................................................ 207
-Orientation.................................................................................................................................................................... 207
-OtherPaintingCursors ............................................................................................................................................... 208
-PaintingCursors........................................................................................................................................................... 208
-PaletteType................................................................................................................................................................... 208
-PathKind......................................................................................................................................................................... 208
-PDFCompatibility........................................................................................................................................................ 208
-PDFEncoding................................................................................................................................................................ 208
-PDFResample ............................................................................................................................................................... 209
-PDFStandard ................................................................................................................................................................ 209
-PhotoCDColorSpace.................................................................................................................................................. 209
-PhotoCDSize................................................................................................................................................................. 209
-PICTBitsPerPixels......................................................................................................................................................... 209
-PICTCompression........................................................................................................................................................ 209
-PicturePackageTextType.......................................................................................................................................... 209
-PointKind ....................................................................................................................................................................... 210
-PointType ...................................................................................................................................................................... 210
-PolarConversionType................................................................................................................................................ 210
-Preview........................................................................................................................................................................... 210
-PrintColorHandling.................................................................................................................................................... 210
-PurgeTarget.................................................................................................................................................................. 210
-QueryStateType........................................................................................................................................................... 210
-RadialBlurMethod....................................................................................................................................................... 210
-RadialBlurQuality ........................................................................................................................................................ 210
-RasterizeType............................................................................................................................................................... 210
-ReferenceFormType .................................................................................................................................................. 210
-ResampleMethod ....................................................................................................................................................... 211
-RippleSize ...................................................................................................................................................................... 211
-SaveBehavior................................................................................................................................................................ 211
-SaveDocumentType .................................................................................................................................................. 211
-SaveEncoding .............................................................................................................................................................. 211
-SaveLogItemsType..................................................................................................................................................... 211
-SaveOptions ................................................................................................................................................................. 211
-SelectionType............................................................................................................................................................... 212
-ShapeOperation.......................................................................................................................................................... 212
-SmartBlurMode ........................................................................................................................................................... 212
-SmartBlurQuality......................................................................................................................................................... 212
-SourceSpaceType ....................................................................................................................................................... 212
-SpherizeMode.............................................................................................................................................................. 212
-StrikeThruType ............................................................................................................................................................ 212
-StrokeLocation............................................................................................................................................................. 212
-TargaBitsPerPixels ...................................................................................................................................................... 212
-TextCase......................................................................................................................................................................... 213
-TextComposer.............................................................................................................................................................. 213
-TextType ........................................................................................................................................................................ 213
-TextureType.................................................................................................................................................................. 213
-TIFFEncoding................................................................................................................................................................ 213
-ToolType ........................................................................................................................................................................ 213
-TransitionType............................................................................................................................................................. 213
-TrimType........................................................................................................................................................................ 214
-TypeUnits....................................................................................................................................................................... 214
-Adobe
+function phase2(Layer_Number)
+{
+	Document();
+	current_layer = app.activeDocument.layers[Layer_Number];
+	// var layer = app.activeDocument.layers[Layer_number];
+	alert("Text Properties" + "\n"+
+		"text size:" + current_layer.textItem.size +"\n" +
+		"text font:" + current_layer.textItem.font +"\n" +
+		"text position:" + current_layer.textItem.position +"\n" );
+	//alert(activeDocument.layers[Layer_Number].textItem.color);
+}
 
 
 /*------------------- name of Layers printing -------------------*/
 /*
-for(var i=0;i<app.activeDocument.layers.length;i++)
+for(var i=;i<app.activeDocument.layers.length;i++)
 {
 	alert(app.activeDocument.layers[i].name);
 }
 */
 
 // Layergroup Information
-//alert(activeDocument.layerSets[0].artLayers.length); //length of a particular layerset
+//alert(activeDocument.layerSets[].artLayers.length); //length of a particular layerset
 
 //---------------------------------------------------------
 
-//var myLayer = activeDocument.layerSets[0].artLayers[0]; //first layer of first group
-// alert(activeDocument.layers[0]); //Name of first layer in the document
+//var myLayer = activeDocument.layerSets[].artLayers[]; //first layer of first group
+// alert(activeDocument.layers[]); //Name of first layer in the document
 
 
-//alert(layerRef = app.activeDocument.artLayers[0].kind); //property of a layer
+//alert(layerRef = app.activeDocument.artLayers[].kind); //property of a layer
 //finding the background layer
 
 
@@ -167,7 +67,7 @@ for(var i=0;i<app.activeDocument.layers.length;i++)
 /*
 function background_layer(length)
 {
-	for(var k=0;k<length;k++)
+	for(var k=;k<length;k++)
 	{
 		if(current_layer.isBackgroundLayer)
 		{
@@ -179,7 +79,7 @@ function background_layer(length)
 
 /*----------------------function call for LayerSet property fetching --------------------------*/
 /*
-LayerSet_properties(0);
+LayerSet_properties();
 
 function LayerSet_properties(Layer_Number)
 {
@@ -228,7 +128,7 @@ function Layers_properties()
 
 /*----------------------function call for Document property fetching --------------------------*/
 /*
-Document_properties(0);
+Document_properties();
 
 function Document_properties(number)
 {
@@ -467,7 +367,7 @@ function text_properties (layernumber) {
 	alert("Text Properties" + "\n"+
 		"text size:" + text_size +"\n" +
 		"text position:" + text_position +"\n");
-	/* error zone
+	// error zone
 		// alert(current_layer.textItem.alternateLigatures);
 		// alert(current_layer.textItem.autoKerning);
 		// alert(current_layer.textItem.baselineShift);
@@ -485,9 +385,10 @@ function text_properties (layernumber) {
 		// alert(current_layer.textItem.useAutoLeading);
 		// alert(current_layer.textItem.verticalScale);
 		
-	*/
+	
 
 }
+*/
 
 /*------------------- function call for layer property fetching(incomplete) -------------------*/
 function layer_property(layernumber)
@@ -508,3 +409,131 @@ function layer_property(layernumber)
 }
 //alert(Layers);
 //alert(myLayer.name);
+
+/*
+mark3 check
+AdjustmentReference
+AnchorPosition
+AntiAlias
+AutoKernType
+BatchDestinationType 
+BitmapConversionType
+BitmapHalfToneType 
+BitsPerChannelType
+BlendMode
+BMPDepthType 
+ByteOrder 
+CameraRAWSettingsType
+CameraRAWSize
+ChangeMode
+ChannelType 
+ColorBlendMode
+ColorModel 
+ColorPicker
+ColorProfileType
+ColorReductionType
+ColorSpaceType 
+CopyrightedType
+CreateFields 
+CropToType 
+DCSType
+DepthMapSource 
+DescValueType 
+DialogModes 
+Direction 
+DisplacementMapType 
+Dither 
+DocPositionStyle
+DocumentFill
+DocumentMode
+EditLogItemsType
+ElementPlacement
+EliminateFields 
+ExportType
+Extension 
+FileNamingType
+FontPreviewType
+FontSize
+ForcedColors 
+FormatOptions 
+GalleryConstrainType
+GalleryFontType
+GallerySecurityTextColorType 
+GallerySecurityTextPositionType
+GallerySecurityTextRotateType
+GallerySecurityType
+GalleryThumbSizeType
+Geometry
+GridLineStyle  
+GridSize  
+GuideLineStyle 
+IllustratorPathType 
+Intent 
+Justification 
+Language 
+LayerCompression 
+LayerKind 
+LensType 
+MagnificationType  
+MatteType  
+MeasurementRange  
+MeasurementSource  
+NewDocumentMode 
+NoiseDistribution 
+OffsetUndefinedAreas  
+OpenDocumentMode 
+OpenDocumentType
+OperatingSystem 
+Orientation 
+OtherPaintingCursors  
+PaintingCursors 
+PaletteType 
+PathKind 
+PDFCompatibility 
+PDFEncoding 
+PDFResample  
+PDFStandard  
+PhotoCDColorSpace 
+PhotoCDSize 
+PICTBitsPerPixels 
+PICTCompression 
+PicturePackageTextType 
+PointKind  
+PointType  
+PolarConversionType 
+Preview 
+PrintColorHandling 
+PurgeTarget 
+QueryStateType 
+RadialBlurMethod 
+RadialBlurQuality  
+RasterizeType 
+ReferenceFormType  
+ResampleMethod  
+RippleSize  
+SaveBehavior 
+SaveDocumentType  
+SaveEncoding  
+SaveLogItemsType 
+SaveOptions  
+SelectionType 
+ShapeOperation 
+SmartBlurMode  
+SmartBlurQuality 
+SourceSpaceType  
+SpherizeMode 
+StrikeThruType  
+StrokeLocation 
+TargaBitsPerPixels  
+TextCase 
+TextComposer 
+TextType  
+TextureType 
+TIFFEncoding 
+ToolType  
+TransitionType 
+TrimType
+TypeUnits
+*/
+
+
