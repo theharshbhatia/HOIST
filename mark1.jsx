@@ -1,12 +1,12 @@
 //Photoshop information retrival code
 // by Harsh Bhatia (Hash113)
 //---------------------------------------------------------
+
+
 // Layergroup Information
 //alert(activeDocument.layerSets[0].artLayers.length); //length of a particular layerset
 
 //---------------------------------------------------------
-//Layer Information
-var Independent_Layer_Numbers = app.activeDocument.layers.length // No of layers independent in document (including numbers of free layers n groups)
 
 //var myLayer = activeDocument.layerSets[0].artLayers[0]; //first layer of first group
 // alert(activeDocument.layers[0]); //Name of first layer in the document
@@ -30,35 +30,27 @@ function background_layer(length)
 }
 */
 
-/*------------------- Finding layer type and assignment(incomeplete)-------------------*/
+/*------------------- name of Layers printing -------------------*/
 /*
-//Listing all layers
-var Layers = new Array();
-for (var i=0;i<3;i++)
+for(var i=0;i<app.activeDocument.layers.length;i++)
 {
-Layers[i] = activeDocument.layers[i].name;
-// alert(Layers[i]);	
-}
-//finding ungrouped layers and sorting
-for (var j=0; j<18;j++)
-{
-	if(activeDocument.layers[j].kind)
-	{
-		if (activeDocument.layers[j].kind=="LayerKind.TEXT")
-		{
-			post_text(j); //fucntion for processing if text layer is found.	
-		}		
-	}
-	else
-	{
-		//alert("layerset");
-
-	}
+	alert(app.activeDocument.layers[i].name);
 }
 */
 
-
-
+/*------------ TEXT FIELD OPERATION ------------------------------*/
+for(var i=0;i<app.activeDocument.layers.length;i++)
+{
+	switch(app.activeDocument.layers[i].kind)
+	{
+	case LayerKind.TEXT:
+	  alert("Text layer");
+	  break;
+	default:
+	  alert("no match found: unknown layer type");
+	}
+	
+}
 
 
 
@@ -68,26 +60,27 @@ LayerSet_properties(0);
 
 function LayerSet_properties(Layer_Number)
 {
-var LayerSet = activeDocument.layerSets[Layer_Number];
+	var LayerSet = activeDocument.layerSets[Layer_Number];
 
-var LayerSet_allLocked = LayerSet.allLocked;
-var LayerSet_artLayers = LayerSet.artLayers;
-var LayerSet_blendMode = LayerSet.blendMode; 
-var LayerSet_bounds = LayerSet.bounds ;
-var LayerSet_enabledChannels = LayerSet.enabledChannels;
-var LayerSet_layers = LayerSet.layers;
-var LayerSet_layerSets = LayerSet.layerSets;
-var LayerSet_linkedLayers = LayerSet.linkedLayers ;
-var LayerSet_name = LayerSet.name;
-var LayerSet_opacity = LayerSet.opacity; 
-var LayerSet_parent = LayerSet.parent;
-var LayerSet_tyename = LayerSet.typename;
-var LayerSet_visible = LayerSet.visible;
+	var LayerSet_allLocked = LayerSet.allLocked;
+	var LayerSet_artLayers = LayerSet.artLayers;
+	var LayerSet_blendMode = LayerSet.blendMode; 
+	var LayerSet_bounds = LayerSet.bounds ;
+	var LayerSet_enabledChannels = LayerSet.enabledChannels;
+	var LayerSet_layers = LayerSet.layers;
+	var LayerSet_layerSets = LayerSet.layerSets;
+	var LayerSet_linkedLayers = LayerSet.linkedLayers ;
+	var LayerSet_name = LayerSet.name;
+	var LayerSet_opacity = LayerSet.opacity; 
+	var LayerSet_parent = LayerSet.parent;
+	var LayerSet_tyename = LayerSet.typename;
+	var LayerSet_visible = LayerSet.visible;
 }
 */
 
 /*----------------------function call for LayerSets property fetching --------------------------*/
-/*LayerSet_properties();
+/*
+LayerSet_properties();
 function LayerSet_properties()
 {
 	var LayerSets = activeDocument.layerSets;
@@ -104,7 +97,7 @@ Layers_properties()
 function Layers_properties()
 {
 	var Layers = app.activeDocument.layers;
-	var Layers_length = layers.length;
+	var Layers_length = layers.length; // no of laers in the document
 	var Layers_parent = layers.parent;//layerset or document
 	var Layers_typename = layers.typename;
 }
@@ -230,7 +223,6 @@ ArtLayer_properties(2)
 function ArtLayer_properties(Layer_Number)
 {
 	var ArtLayer=app.activeDocument.artLayers[Layer_Number]
-
 	var ArtLayer_allLocked = ArtLayer.allLocked;
 	var ArtLayer_blendMode = ArtLayer.blendMode;
 	var ArtLayer_bounds = ArtLayer.bounds;
@@ -252,8 +244,6 @@ function ArtLayer_properties(Layer_Number)
 	var ArtLayer_vectorMaskFeather = ArtLayer.vectorMaskFeather;
 	var ArtLayer_visible = ArtLayer.visible;
 	var ArtLayer_xmpMetadata = ArtLayer.xmpMetadata;
-
-
 // alert(ArtLayer.filterMaskDensity );
 // alert(ArtLayer.filterMaskFeather);
 // alert(ArtLayer.textItem);
@@ -299,15 +289,9 @@ var app_windowsFileTypes = app.windowsFileTypes;
 */
 
 /*------------------- function call for text property fetching -------------------*/
-function post_text (layernumber) {
-
+function text_properties (layernumber) {
 	var current_layer=activeDocument.layers[layernumber]
-	/* completed zone
-	if (text_kind == "TextType.PARAGRAPHTEXT")
-	{
-		var text_height = current_layer.textItem.height; //height of the text paragraph section
-		var text_width = current_layer.textItem.width;
-	}
+
 	var text_autoLeadingAmount = current_layer.textItem.autoLeadingAmount;
 	var text_antiAliasMethod = current_layer.textItem.antiAliasMethod;
 	var text_color_hexcode = current_layer.textItem.color.rgb.hexValue;
@@ -348,7 +332,12 @@ function post_text (layernumber) {
 	var text_warpHorizontalDistortion = current_layer.textItem.warpHorizontalDistortion;
 	var text_warpStyle = current_layer.textItem.warpStyle;
 	var text_warpVerticalDistortion = current_layer.textItem.warpVerticalDistortion;
-	*/
+	
+	if (text_kind == "TextType.PARAGRAPHTEXT")
+	{
+		var text_height = current_layer.textItem.height; //height of the text paragraph section
+		var text_width = current_layer.textItem.width;
+	}
 	
 	/* error zone
 		// alert(current_layer.textItem.alternateLigatures);
@@ -356,7 +345,6 @@ function post_text (layernumber) {
 		// alert(current_layer.textItem.baselineShift);
 		// alert(current_layer.textItem.capitalization);
 		// alert(current_layer.textItem.fauxItalic);
-		// alert(current_layer.textItem.height);
 		// alert(current_layer.textItem.horizontalScale);
 		// alert(current_layer.textItem.language);
 		// alert(current_layer.textItem.leading);
@@ -368,7 +356,7 @@ function post_text (layernumber) {
 		// alert(current_layer.textItem.underline);
 		// alert(current_layer.textItem.useAutoLeading);
 		// alert(current_layer.textItem.verticalScale);
-		// alert(current_layer.textItem.width);
+		
 	*/
 
 }
@@ -379,7 +367,6 @@ function layer_property(layernumber)
 	
 	/* incomplete
 	var current_layer = activeDocument.layers[layernumber];
-
 	var layer_visiblitly = current_layer.visible;
 	var layer_opacity = current_layer.opacity;
 	var layer_kind = current_layer.kind;
