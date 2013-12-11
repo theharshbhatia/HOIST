@@ -1,51 +1,6 @@
 //Photoshop information retrival code
 // by Harsh Bhatia (Hash113)
 //---------------------------------------------------------
-var html_code="";
-
-function add_html()
-{
-	html_code="<html>";
-}
-
-function add_head()
-{
-	html_code+="<head></head>"
-}
-function add_title(Document_name)
-{
-	html_code+="<title>"+ Document_name.substring(0,Document_name.length-4)+"</title>";
-	alert(html_code);
-}
-
-function add_body(){
-	html_code+="<body>";
-}
-
-function add_div(){
-	html_code+="<div class="; //layername
-}
-function add_header(){
-	html_code+='<header class="header">';
-}
-
-function add_img(image_source,layername){
-	html_code+='<img src="'+image_source+'"class="'+layername+'/>';
-}
-
-function add_button(layername){
-	html_code+='<button class='+layername+'>';
-}
-
-
-function add_div_close()
-{
-	html_code+="</div>"
-}
-function add_page_close(){
-	html_code+="</body></html>";
-}
-
 
 /*------------ TEXT FIELD OPERATION ------------------------------*/
 // propertyint_start();
@@ -143,7 +98,7 @@ Layers_properties()
 function Layers_properties()
 {
 	var Layers = app.activeDocument.layers;
-	var Layers_length = layers.length; // no of laers in the document
+	var Layers_length = layers.length; // no of layers in the document
 	var Layers_parent = layers.parent;//layerset or document
 	var Layers_typename = layers.typename;
 }
@@ -220,7 +175,7 @@ function Document_properties(number)
 	var Document_width = Document.width ;
 	var Document_xmpMetadata = Document.xmpMetadata;
 	
-	add_title(Document_name);
+	 alert(Document_name);
 	// Document_width=960;
 	 // error states
 	// var Document_ = Document.activeChannels;
