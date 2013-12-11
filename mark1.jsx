@@ -1,8 +1,56 @@
 //Photoshop information retrival code
 // by Harsh Bhatia (Hash113)
 //---------------------------------------------------------
+var html_code="";
+
+function add_html()
+{
+	html_code="<html>";
+}
+
+function add_head()
+{
+	html_code+="<head></head>"
+}
+function add_title(Document_name)
+{
+	html_code+="<title>"+ Document_name.substring(0,Document_name.length-4)+"</title>";
+	alert(html_code);
+}
+
+function add_body(){
+	html_code+="<body>";
+}
+
+function add_div(){
+	html_code+="<div class="; //layername
+}
+function add_header(){
+	html_code+='<header class="header">';
+}
+
+function add_img(image_source,layername){
+	html_code+='<img src="'+image_source+'"class="'+layername+'/>';
+}
+
+function add_button(layername){
+	html_code+='<button class='+layername+'>';
+}
+
+
+function add_div_close()
+{
+	html_code+="</div>"
+}
+function add_page_close(){
+	html_code+="</body></html>";
+}
+
 
 /*------------ TEXT FIELD OPERATION ------------------------------*/
+// propertyint_start();
+/*
+
 for(var i=0;i<app.activeDocument.layers.length;i++)
 {
 	switch(app.activeDocument.layers[i].kind)
@@ -15,7 +63,7 @@ for(var i=0;i<app.activeDocument.layers.length;i++)
 	  alert("no match found: unknown layer type");
 	}
 	
-}
+}*/
 
 /*------------------- name of Layers printing -------------------*/
 /*
@@ -102,7 +150,7 @@ function Layers_properties()
 */
 
 /*----------------------function call for Document property fetching --------------------------*/
-/*
+
 Document_properties(0);
 
 function Document_properties(number)
@@ -172,6 +220,8 @@ function Document_properties(number)
 	var Document_width = Document.width ;
 	var Document_xmpMetadata = Document.xmpMetadata;
 	
+	add_title(Document_name);
+	// Document_width=960;
 	 // error states
 	// var Document_ = Document.activeChannels;
 	// var Document_ = Document.backgroundLayer;
@@ -179,7 +229,7 @@ function Document_properties(number)
 	
 	
 }
-*/
+
 
 /*----------------------function call for Channels property fetching --------------------------*/
 /*
