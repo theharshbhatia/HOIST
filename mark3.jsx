@@ -12,9 +12,23 @@ function get_solid_css(i,j)
 {
 	var layer = activeDocument.layerSets[i].layers[j]	
 	css_code+="."+activeDocument.layerSets[i].layers[j].name+"\n{\n";
-	css_code+="opacity:"+(activeDocument.layerSets[i].layers[j].opacity/100).toFixed(1)+"\n";
+	var boundstring=layer.bounds.toString().split(",");
+	var width = boundstring[0]-boundstring[2];
+	var height = boundstring[1]-boundstring[3];
+	if (width<0)
+		{width=width*(-1); }
+	if (height<0)
+		{ height=height*(-1);}
+	css_code+="height:"+height+"px;\n";
+	css_code+="width:"+width+"px;\n";
+	// turn of rectangel not allowed
+	css_code+="position:absolute;\n"
+	css_code+="left:"+boundstring[0]+";\n";
+	css_code+="top:"+boundstring[1]+"\n";
+	css_code+="opacity:"+(activeDocument.layerSets[i].layers[j].opacity/100).toFixed(1)+";\n";
 	css_code+="}\n";
 }
+
 function get_text_css(i,j)
 {
 	var textitem = activeDocument.layerSets[i].layers[j].textItem;
@@ -88,13 +102,12 @@ function get_text_css(i,j)
 	{
 		css_code+="color: #"+textitem.color.rgb.hexValue+"\n";
 	}
-	css_code+="opacity:"+(activeDocument.layerSets[i].layers[j].opacity/100).toFixed(1)+"\n";
+	css_code+="opacity:"+(activeDocument.layerSets[i].layers[j].opacity/100).toFixed(1)+";\n";
 	css_code+="position:absolute;\n"+"left:"+pos[0].split(".")[0]+";\ntop:"+pos[1].split(".")[0]+";\n";
 	css_code+="text-align:"+text_justification.toString().split(".")[1]+";\n";
 	// css_code+="line-height:";
 	css_code+="}\n";
 }
-
 
 // HTML CODE FORMATION HERE
 function add_html()
@@ -159,6 +172,7 @@ function layersets(){
 
 function layer_post_kind(layer_kind,i,j)
 {
+alert(layer_kind);
 	switch (layer_kind)
 	{
 	case LayerKind.TEXT:
@@ -170,7 +184,9 @@ function layer_post_kind(layer_kind,i,j)
 	  	break;
 
 	case LayerKind.NORMAL:
+		solidfill_layer_addition(i,j);
 		break;
+
 	
 	}
 }
@@ -193,6 +209,7 @@ function normal_layer_addition(i,j){
 	html_code += '<img class="'+ activeDocument.layerSets[i].layers[j].name +'"/>\n';
 }
 
+
 function code_chain_begin()
 {
 add_html();
@@ -201,10 +218,9 @@ add_body();
 css_basic_code();
 layersets();
 add_page_close();
-
 // alert("thanking you for using PS2WEB!!");
 alert(css_code);
-alert(html_code);
+// alert(html_code);
 }
 
 code_chain_begin();
