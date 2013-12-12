@@ -1,5 +1,55 @@
 var html_code="";
+var css_code="";
+//CSS CODE FORMATION
+function get_text_css(i,j)
+{
+	var textitem = activeDocument.layerSets[i].layers[j].textItem;
 
+	var text_autoLeadingAmount = textitem.autoLeadingAmount;
+	var text_antiAliasMethod = textitem.antiAliasMethod;
+	// var text_color_hexcode = textitem.color.rgb.hexValue;
+	var text_contents = textitem.contents;
+	var text_desiredGlyphScaling = textitem.desiredGlyphScaling;
+	var text_desiredLetterScaling = textitem.desiredLetterScaling;
+	var text_desiredWordScaling = textitem.desiredWordScaling;
+	var text_direction = textitem.direction;
+	var text_firstLineIndent = textitem.firstLineIndent;
+	var text_font = textitem.font;
+	var text_hangingPunctuation = textitem.hangingPunctuation;
+	var text_hyphenateAfterFirst = textitem.hyphenateAfterFirst;
+	var text_hyphenateBeforeLast = textitem.hyphenateBeforeLast;
+	var text_hyphenateCapitalWords = textitem.hyphenateCapitalWords;
+	var text_hyphenateWordsLongerThan = textitem.hyphenateWordsLongerThan;
+	var text_hyphenation = textitem.hyphenation;
+	var text_hyphenationZone = textitem.hyphenationZone;
+	var text_hyphenLimit = textitem.hyphenLimit;
+	var text_justification = textitem.justification;
+	var text_kind = textitem.kind;
+	var text_leftIndent = textitem.leftIndent;
+	var text_maximumGlyphScaling = textitem.maximumGlyphScaling;
+	var text_maximumLetterScaling = textitem.maximumLetterScaling;
+	var text_maximumWordScaling = textitem.maximumWordScaling;
+	var text_minimumGlyphScaling = textitem.minimumGlyphScaling;
+	var text_minimumLetterScaling = textitem.minimumLetterScaling;
+	var text_minimumWordScaling = textitem.minimumWordScaling;
+	var text_parent = textitem.parent;
+	var text_position = textitem.position;
+	var text_rightIndent = textitem.rightIndent;
+	var text_size = textitem.size;
+	var text_spaceAfter = textitem.spaceAfter;
+	var text_spaceBefore = textitem.spaceBefore;
+	var text_typename = textitem.typename;
+	var text_textComposer = textitem.textComposer;
+	var text_warpBend = textitem.warpBend;
+	var text_warpDirection = textitem.warpDirection;
+	var text_warpHorizontalDistortion = textitem.warpHorizontalDistortion;
+	var text_warpStyle = textitem.warpStyle;
+	var text_warpVerticalDistortion = textitem.warpVerticalDistortion;
+	alert(textitem.contents + text_font);
+}
+
+
+// HTML CODE FORMATION HERE
 function add_html()
 {
 	html_code+="<html>";
@@ -67,20 +117,25 @@ function layer_post_kind(layer_kind,i,j)
 {
 	if(layer_kind=="LayerKind.NORMAL")
 	{
-	//normal layer fucntions 
+	  	// normal_layer_addition(i,j); 
 
 	}
 	else if (layer_kind=="LayerKind.TEXT") 
 	{
-		 text_layer_addition(i,j);
+		// working
+		text_layer_addition(i,j); 
 	}
 
 }
 
 function text_layer_addition(i,j){
 	html_code+='<p>'+activeDocument.layerSets[i].layers[j].textItem.contents+"</p>";
+	get_text_css(i,j);
 	// alert(activeDocument.layerSets[i].layers[j].textItem.font);
 	//alert(j);
+}
+function normal_layer_addition(i,j){
+	html_code += '<img class="'+ activeDocument.layerSets[i].layers[j].name +'"/>';
 }
 
 function code_chain_begin()
@@ -89,11 +144,9 @@ add_html();
 add_head();
 add_title();
 add_body();
-
 layersets();
-
 add_page_close();
-alert(html_code);
+// alert(html_code);
 
 }
 
