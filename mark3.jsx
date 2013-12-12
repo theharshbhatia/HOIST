@@ -4,6 +4,17 @@ var css_code="";
 function get_text_css(i,j)
 {
 	var textitem = activeDocument.layerSets[i].layers[j].textItem;
+	var text_kind = textitem.kind;
+
+	if (text_kind="TextItem.POINTTEXT")
+	{
+		// alert(text_kind);//does not wrap in a rectangle.
+	}
+	else{
+		// alert("paragraph text"); //does wrap in a rectangle.
+		var text_height = current_layer.textItem.height; //height of the text paragraph section
+		var text_width = current_layer.textItem.width;
+	}
 
 	var text_autoLeadingAmount = textitem.autoLeadingAmount;
 	var text_antiAliasMethod = textitem.antiAliasMethod;
@@ -14,7 +25,6 @@ function get_text_css(i,j)
 	var text_desiredWordScaling = textitem.desiredWordScaling;
 	var text_direction = textitem.direction;
 	var text_firstLineIndent = textitem.firstLineIndent;
-	// var text_font = textitem.font;
 	var text_hangingPunctuation = textitem.hangingPunctuation;
 	var text_hyphenateAfterFirst = textitem.hyphenateAfterFirst;
 	var text_hyphenateBeforeLast = textitem.hyphenateBeforeLast;
@@ -24,7 +34,6 @@ function get_text_css(i,j)
 	var text_hyphenationZone = textitem.hyphenationZone;
 	var text_hyphenLimit = textitem.hyphenLimit;
 	var text_justification = textitem.justification;
-	var text_kind = textitem.kind;
 	var text_leftIndent = textitem.leftIndent;
 	var text_maximumGlyphScaling = textitem.maximumGlyphScaling;
 	var text_maximumLetterScaling = textitem.maximumLetterScaling;
@@ -33,9 +42,8 @@ function get_text_css(i,j)
 	var text_minimumLetterScaling = textitem.minimumLetterScaling;
 	var text_minimumWordScaling = textitem.minimumWordScaling;
 	var text_parent = textitem.parent;
-	var text_position = textitem.position;
+	
 	var text_rightIndent = textitem.rightIndent;
-	// var text_size = textitem.size;
 	var text_spaceAfter = textitem.spaceAfter;
 	var text_spaceBefore = textitem.spaceBefore;
 	var text_typename = textitem.typename;
@@ -46,8 +54,20 @@ function get_text_css(i,j)
 	var text_warpStyle = textitem.warpStyle;
 	var text_warpVerticalDistortion = textitem.warpVerticalDistortion;
 	
-	css_code+="."+activeDocument.layerSets[i].layers[j].name+"\n{";
+	var text_position = textitem.position;
+	var text_size = textitem.size;
+	var text_font = textitem.font;
+	var pos=text_position.toString().split(",");
 	
+	alert(text_justification);
+	
+	//adding css style
+	css_code+="."+activeDocument.layerSets[i].layers[j].name+"\n{\n";
+	css_code+="font-family:"+text_font+";\n";
+	css_code+="font-size:"+text_size+";"; 
+	css_code+="position:absolute;\n"+"left:"+pos[0].split(".")[0]+";\ntop:"+pos[1].split(".")[0]+";\n";
+	css_code+="text-align:"+text_justification.toString().split(".")[1]+";\n";
+	css_code+="}";
 }
 
 
@@ -148,6 +168,7 @@ add_title();
 add_body();
 layersets();
 add_page_close();
+// alert("thanking you for using PS2WEB!!");
 alert(css_code);
 // alert(html_code);
 }
