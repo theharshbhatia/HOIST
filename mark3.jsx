@@ -14,7 +14,7 @@ function get_text_css(i,j)
 	var text_desiredWordScaling = textitem.desiredWordScaling;
 	var text_direction = textitem.direction;
 	var text_firstLineIndent = textitem.firstLineIndent;
-	var text_font = textitem.font;
+	// var text_font = textitem.font;
 	var text_hangingPunctuation = textitem.hangingPunctuation;
 	var text_hyphenateAfterFirst = textitem.hyphenateAfterFirst;
 	var text_hyphenateBeforeLast = textitem.hyphenateBeforeLast;
@@ -35,7 +35,7 @@ function get_text_css(i,j)
 	var text_parent = textitem.parent;
 	var text_position = textitem.position;
 	var text_rightIndent = textitem.rightIndent;
-	var text_size = textitem.size;
+	// var text_size = textitem.size;
 	var text_spaceAfter = textitem.spaceAfter;
 	var text_spaceBefore = textitem.spaceBefore;
 	var text_typename = textitem.typename;
@@ -45,7 +45,9 @@ function get_text_css(i,j)
 	var text_warpHorizontalDistortion = textitem.warpHorizontalDistortion;
 	var text_warpStyle = textitem.warpStyle;
 	var text_warpVerticalDistortion = textitem.warpVerticalDistortion;
-	alert(textitem.contents + text_font);
+	
+	css_code+="."+activeDocument.layerSets[i].layers[j].name+"\n{";
+	
 }
 
 
@@ -62,7 +64,7 @@ function add_head()
 function add_title()
 {
 	var Document_name = app.documents[0].name;;
-	html_code+="<title>"+ Document_name.substring(0,Document_name.length-4)+"</title></head>";
+	html_code+="<title>"+ Document_name.substring(0,Document_name.length-4)+"</title>\n</head>";
 	
 }
 
@@ -71,14 +73,14 @@ function add_body(){
 }
 
 function add_div(div_name){
-	html_code+="<div class="+div_name+'">'; //layername
+	html_code+="<div class="+div_name+'">\n'; //layername
 }
 function add_header(){
-	html_code+='<header class="header">';
+	html_code+='<header class="header">\n';
 }
 
 function add_img(image_source,layername){
-	html_code+='<img src="'+image_source+'"class="'+layername+'/>';
+	html_code+='<img src="'+image_source+'"class="'+layername+'/>\n';
 }
 
 function add_button(layername){
@@ -129,13 +131,13 @@ function layer_post_kind(layer_kind,i,j)
 }
 
 function text_layer_addition(i,j){
-	html_code+='<p>'+activeDocument.layerSets[i].layers[j].textItem.contents+"</p>";
+	html_code+='<p>'+activeDocument.layerSets[i].layers[j].textItem.contents+"</p>\n";
 	get_text_css(i,j);
 	// alert(activeDocument.layerSets[i].layers[j].textItem.font);
 	//alert(j);
 }
 function normal_layer_addition(i,j){
-	html_code += '<img class="'+ activeDocument.layerSets[i].layers[j].name +'"/>';
+	html_code += '<img class="'+ activeDocument.layerSets[i].layers[j].name +'"/>\n';
 }
 
 function code_chain_begin()
@@ -146,8 +148,8 @@ add_title();
 add_body();
 layersets();
 add_page_close();
+alert(css_code);
 // alert(html_code);
-
 }
 
 code_chain_begin();
