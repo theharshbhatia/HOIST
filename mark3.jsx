@@ -1,6 +1,20 @@
 var html_code="";
 var css_code="";
 //CSS CODE FORMATION
+function css_basic_code()
+{
+	css_code+="body\n{"+"\n}\n";
+	// alert(app.foregroundColor.rgb.hexValue);
+
+}
+
+function get_solid_css(i,j)
+{
+	var layer = activeDocument.layerSets[i].layers[j]	
+	css_code+="."+activeDocument.layerSets[i].layers[j].name+"\n{\n";
+	css_code+="opacity:"+(activeDocument.layerSets[i].layers[j].opacity/100).toFixed(1)+"\n";
+	css_code+="}\n";
+}
 function get_text_css(i,j)
 {
 	var textitem = activeDocument.layerSets[i].layers[j].textItem;
@@ -18,7 +32,7 @@ function get_text_css(i,j)
 
 	var text_autoLeadingAmount = textitem.autoLeadingAmount;
 	var text_antiAliasMethod = textitem.antiAliasMethod;
-	// var text_color_hexcode = textitem.color.rgb.hexValue;
+	
 	var text_contents = textitem.contents;
 	var text_desiredGlyphScaling = textitem.desiredGlyphScaling;
 	var text_desiredLetterScaling = textitem.desiredLetterScaling;
@@ -33,7 +47,6 @@ function get_text_css(i,j)
 	var text_hyphenation = textitem.hyphenation;
 	var text_hyphenationZone = textitem.hyphenationZone;
 	var text_hyphenLimit = textitem.hyphenLimit;
-	var text_justification = textitem.justification;
 	var text_leftIndent = textitem.leftIndent;
 	var text_maximumGlyphScaling = textitem.maximumGlyphScaling;
 	var text_maximumLetterScaling = textitem.maximumLetterScaling;
@@ -42,7 +55,6 @@ function get_text_css(i,j)
 	var text_minimumLetterScaling = textitem.minimumLetterScaling;
 	var text_minimumWordScaling = textitem.minimumWordScaling;
 	var text_parent = textitem.parent;
-	
 	var text_rightIndent = textitem.rightIndent;
 	var text_spaceAfter = textitem.spaceAfter;
 	var text_spaceBefore = textitem.spaceBefore;
@@ -54,37 +66,47 @@ function get_text_css(i,j)
 	var text_warpStyle = textitem.warpStyle;
 	var text_warpVerticalDistortion = textitem.warpVerticalDistortion;
 	
+	var text_justification = textitem.justification;
 	var text_position = textitem.position;
-	var text_size = textitem.size;
-	var text_font = textitem.font;
 	var pos=text_position.toString().split(",");
 	
-	alert(text_justification);
-	
+	// alert(text_leftIndent); both are zero so no addition.
 	//adding css style
 	css_code+="."+activeDocument.layerSets[i].layers[j].name+"\n{\n";
-	css_code+="font-family:"+text_font+";\n";
-	css_code+="font-size:"+text_size+";"; 
+
+	// if (textitem.size)
+	// {
+	// css_code+="font-size:"+textitem.size+";\n"	
+	// }
+
+	// if(textitem.font)
+	// {
+	// css_code+="font-family:"+textitem.font+";\n";	
+	// }
+	
+	if(textitem.color.rgb.hexValue)
+	{
+		css_code+="color: #"+textitem.color.rgb.hexValue+"\n";
+	}
+	css_code+="opacity:"+(activeDocument.layerSets[i].layers[j].opacity/100).toFixed(1)+"\n";
 	css_code+="position:absolute;\n"+"left:"+pos[0].split(".")[0]+";\ntop:"+pos[1].split(".")[0]+";\n";
 	css_code+="text-align:"+text_justification.toString().split(".")[1]+";\n";
-	css_code+="}";
+	// css_code+="line-height:";
+	css_code+="}\n";
 }
 
 
 // HTML CODE FORMATION HERE
 function add_html()
 {
-	html_code+="<html>";
+	html_code+="<html>\n<head>";
 }
 
-function add_head()
-{
-	html_code+="<head>"
-}
+
 function add_title()
 {
-	var Document_name = app.documents[0].name;;
-	html_code+="<title>"+ Document_name.substring(0,Document_name.length-4)+"</title>\n</head>";
+	var Document_name = app.activeDocument.name;
+	html_code+="<title>"+ Document_name.substring(0,Document_name.length-4)+"\n</title>\n</head>";
 	
 }
 
@@ -137,21 +159,32 @@ function layersets(){
 
 function layer_post_kind(layer_kind,i,j)
 {
-	if(layer_kind=="LayerKind.NORMAL")
+	switch (layer_kind)
 	{
-	  	// normal_layer_addition(i,j); 
+	case LayerKind.TEXT:
+		text_layer_addition(i,j);
+		break;
 
+	case LayerKind.SOLIDFILL:
+	  	solidfill_layer_addition(i,j);
+	  	break;
+
+	case LayerKind.NORMAL:
+		break;
+	
 	}
-	else if (layer_kind=="LayerKind.TEXT") 
-	{
-		// working
-		text_layer_addition(i,j); 
-	}
+}
+
+function solidfill_layer_addition(i,j)
+{
+html_code+='<div class="'+activeDocument.layerSets[i].layers[j].name+'">';
+get_solid_css(i,j);
 
 }
 
-function text_layer_addition(i,j){
-	html_code+='<p>'+activeDocument.layerSets[i].layers[j].textItem.contents+"</p>\n";
+function text_layer_addition(i,j)
+{
+	html_code+='<p class="'+activeDocument.layerSets[i].layers[j].name+'">'+activeDocument.layerSets[i].layers[j].textItem.contents+"</p>\n";
 	get_text_css(i,j);
 	// alert(activeDocument.layerSets[i].layers[j].textItem.font);
 	//alert(j);
@@ -163,14 +196,15 @@ function normal_layer_addition(i,j){
 function code_chain_begin()
 {
 add_html();
-add_head();
 add_title();
 add_body();
+css_basic_code();
 layersets();
 add_page_close();
+
 // alert("thanking you for using PS2WEB!!");
 alert(css_code);
-// alert(html_code);
+alert(html_code);
 }
 
 code_chain_begin();
