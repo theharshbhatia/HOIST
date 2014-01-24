@@ -1,44 +1,43 @@
-var html_code="";
-var css_code="";
+var html_code = "";
+var css_code = "";
 //CSS CODE FORMATION
-function css_basic_code()
-{
-	css_code+="body\n{"+"\n}\n";
+function css_basic_code() {
+	css_code += "body\n{" + "\n}\n";
 	// alert(app.foregroundColor.rgb.hexValue);
-
+	
+	
 }
 
-function get_solid_css(i,j)
-{
-	var layer = activeDocument.layerSets[i].layers[j]	
-	css_code+="."+activeDocument.layerSets[i].layers[j].name+"\n{\n";
-	var boundstring=layer.bounds.toString().split(",");
-	var width = boundstring[0]-boundstring[2];
-	var height = boundstring[1]-boundstring[3];
-	if (width<0)
-		{width=width*(-1); }
-	if (height<0)
-		{ height=height*(-1);}
-	css_code+="height:"+height+"px;\n";
-	css_code+="width:"+width+"px;\n";
+
+function get_solid_css(i, j) {
+	var layer = activeDocument.layerSets[i].layers[j]
+	css_code += "." + activeDocument.layerSets[i].layers[j].name + "\n{\n";
+	var boundstring = layer.bounds.toString().split(",");
+	var width = boundstring[0] - boundstring[2];
+	var height = boundstring[1] - boundstring[3];
+	if (width < 0) {
+		width = width * (-1);
+	}
+	if (height < 0) {
+		height = height * (-1);
+	}
+	css_code += "height:" + height + "px;\n";
+	css_code += "width:" + width + "px;\n";
 	// turning of rectangle not allowed
-	css_code+="position:absolute;\n"
-	css_code+="left:"+boundstring[0]+";\n";
-	css_code+="top:"+boundstring[1]+"\n";
-	css_code+="opacity:"+(activeDocument.layerSets[i].layers[j].opacity/100).toFixed(1)+";\n";
-	css_code+="}\n";
+	css_code += "position:absolute;\n"
+	css_code += "left:" + boundstring[0] + ";\n";
+	css_code += "top:" + boundstring[1] + "\n";
+	css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
+	css_code += "}\n";
 }
 
-function get_text_css(i,j)
-{
+function get_text_css(i, j) {
 	var textitem = activeDocument.layerSets[i].layers[j].textItem;
 	var text_kind = textitem.kind;
 
-	if (text_kind="TextItem.POINTTEXT")
-	{
+	if (text_kind = "TextItem.POINTTEXT") {
 		// alert(text_kind);//does not wrap in a rectangle.
-	}
-	else{
+	} else {
 		// alert("paragraph text"); //does wrap in a rectangle.
 		var text_height = current_layer.textItem.height; //height of the text paragraph section
 		var text_width = current_layer.textItem.width;
@@ -46,7 +45,7 @@ function get_text_css(i,j)
 
 	// var text_autoLeadingAmount = textitem.autoLeadingAmount;
 	var text_antiAliasMethod = textitem.antiAliasMethod;
-	
+
 	var text_contents = textitem.contents;
 	var text_desiredGlyphScaling = textitem.desiredGlyphScaling;
 	var text_desiredLetterScaling = textitem.desiredLetterScaling;
@@ -79,14 +78,14 @@ function get_text_css(i,j)
 	var text_warpHorizontalDistortion = textitem.warpHorizontalDistortion;
 	var text_warpStyle = textitem.warpStyle;
 	var text_warpVerticalDistortion = textitem.warpVerticalDistortion;
-	
+
 	var text_justification = textitem.justification;
 	var text_position = textitem.position;
-	var pos=text_position.toString().split(",");
-	
+	var pos = text_position.toString().split(",");
+
 	// alert(text_leftIndent); both are zero so no addition.
 	//adding css style
-	css_code+="."+activeDocument.layerSets[i].layers[j].name+"\n{\n";
+	css_code += "." + activeDocument.layerSets[i].layers[j].name + "\n{\n";
 
 	//  if (textitem.size)
 	// {
@@ -97,116 +96,109 @@ function get_text_css(i,j)
 	// {
 	// css_code+="font-family:"+textitem.font+";\n";	
 	// }
-	
-	if(textitem.color.rgb.hexValue)
-	{
-		css_code+="color: #"+textitem.color.rgb.hexValue+"\n";
+
+	if (textitem.color.rgb.hexValue) {
+		css_code += "color: #" + textitem.color.rgb.hexValue + "\n";
 	}
-	css_code+="opacity:"+(activeDocument.layerSets[i].layers[j].opacity/100).toFixed(1)+";\n";
-	css_code+="position:absolute;\n"+"left:"+pos[0].split(".")[0]+";\ntop:"+pos[1].split(".")[0]+";\n";
-	css_code+="text-align:"+text_justification.toString().split(".")[1]+";\n";
+	css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
+	css_code += "position:absolute;\n" + "left:" + pos[0].split(".")[0] + ";\ntop:" + pos[1].split(".")[0] + ";\n";
+	css_code += "text-align:" + text_justification.toString().split(".")[1] + ";\n";
 	// css_code+="line-height:";
-	css_code+="}\n";
+	css_code += "}\n";
 }
 
 // HTML CODE FORMATION HERE
-function add_html()
-{
-	html_code+="<html>\n<head>";
+function add_html() {
+	html_code += "<html>\n<head>";
 }
 
 
-function add_title()
-{
+function add_title() {
 	var Document_name = app.activeDocument.name;
-	html_code+="<title>\n"+ Document_name.substring(0,Document_name.length-4)+'\n</title>\n<link rel="stylesheet" type="text/css" href="mystyle.css>\n</head>';
-	
+	html_code += "<title>\n" + Document_name.substring(0, Document_name.length - 4) + '\n</title>\n<link rel="stylesheet" type="text/css" href="mystyle.css>\n</head>';
+
 }
 
-function add_body(){
+function add_body() {
 	html_code += "<body>";
 }
 
-function add_div(div_name){
-	html_code+="<div class="+div_name+'">\n'; //layername
-}
-function add_header(){
-	html_code+='<header class="header">\n';
+function add_div(div_name) {
+	html_code += "<div class=" + div_name + '">\n'; //layername
 }
 
-function add_img(image_source,layername){
-	html_code+='<img src="'+image_source+'"class="'+layername+'/>\n';
+function add_header() {
+	html_code += '<header class="header">\n';
 }
 
-function add_button(layername){
-	html_code+='<button class='+layername+'>';
+function add_img(image_source, layername) {
+	html_code += '<img src="' + image_source + '"class="' + layername + '/>\n';
 }
 
-function add_div_close()
-{
-	html_code+="</div>"
-}
-function add_page_close(){
-	html_code+="</body></html>";
+function add_button(layername) {
+	html_code += '<button class=' + layername + '>';
 }
 
-function layersets(){
+function add_div_close() {
+	html_code += "</div>"
+}
+
+function add_page_close() {
+	html_code += "</body></html>";
+}
+
+function layersets() {
 	layer_array = new Array();
-	numoflayerset=activeDocument.layerSets.length;
+	numoflayerset = activeDocument.layerSets.length;
 	// var i=0;
-	for(var i=0;i<numoflayerset;i++)
-	{
-		div_name=activeDocument.layerSets[i].name;
+	for (var i = 0; i < numoflayerset; i++) {
+		div_name = activeDocument.layerSets[i].name;
 		add_div(div_name);
-		inside_layer_numbers=activeDocument.layerSets[i].layers.length;
+		inside_layer_numbers = activeDocument.layerSets[i].layers.length;
 		// alert(inside_layer);
-		for(var j=0;j<inside_layer_numbers;j++)
-		{
-			layer_name=activeDocument.layerSets[i].layers[j].name;
-			layer_kind=activeDocument.layerSets[i].layers[j].kind;
-			layer_post_kind(layer_kind,i,j);
+		for (var j = 0; j < inside_layer_numbers; j++) {
+			layer_name = activeDocument.layerSets[i].layers[j].name;
+			layer_kind = activeDocument.layerSets[i].layers[j].kind;
+			layer_post_kind(layer_kind, i, j);
 		}
 		add_div_close();
 	}
 }
 
-function layer_post_kind(layer_kind,i,j)
-{
-// alert(layer_kind);
-	switch (layer_kind)
-	{
-	case LayerKind.TEXT:
-		text_layer_addition(i,j);
-		break;
+function layer_post_kind(layer_kind, i, j) {
+	// alert(layer_kind);
+	switch (layer_kind) {
+		case LayerKind.TEXT:
+			text_layer_addition(i, j);
+			break;
 
-	case LayerKind.SOLIDFILL:
-	  	solidfill_layer_addition(i,j);
-	  	break;
+		case LayerKind.SOLIDFILL:
+			solidfill_layer_addition(i, j);
+			break;
 
-	case LayerKind.NORMAL:
-		solidfill_layer_addition(i,j);
-		break;
+		case LayerKind.NORMAL:
+			solidfill_layer_addition(i, j);
+			break;
 
-	
+
 	}
 }
 
-function solidfill_layer_addition(i,j)
-{
-html_code+='<div class="'+activeDocument.layerSets[i].layers[j].name+'">';
-get_solid_css(i,j);
+function solidfill_layer_addition(i, j) {
+	html_code += '<div class="' + activeDocument.layerSets[i].layers[j].name + '">';
+	get_solid_css(i, j);
 
 }
 
-function text_layer_addition(i,j)
-{
-	html_code+='<p class="'+activeDocument.layerSets[i].layers[j].name+'">'+activeDocument.layerSets[i].layers[j].textItem.contents+"</p>\n";
-	get_text_css(i,j);
+function text_layer_addition(i, j) {
+	html_code += '<p class="' + activeDocument.layerSets[i].layers[j].name + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</p>\n";
+	get_text_css(i, j);
 	// alert(activeDocument.layerSets[i].layers[j].textItem.font);
 	//alert(j);
 }
-function normal_layer_addition(i,j){
-	html_code += '<img class="'+ activeDocument.layerSets[i].layers[j].name +'"/>\n';
+
+function normal_layer_addition(i, j) {
+	html_code += '<img class="' + activeDocument.layerSets[i].layers[j].name + '"/>\n';
 }
 //
 /*
@@ -279,20 +271,60 @@ function LayerSet_properties()
 */
 
 
-function code_chain_begin()
-{
-add_html();
-add_title();
-add_body();
-css_basic_code();
-layersets();
-add_page_close();
-// alert("thanking you for using PS2WEB!!");
-alert(css_code);
-alert(html_code);
+function code_chain_begin() {
+	add_html();
+	add_title();
+	add_body();
+	css_basic_code();
+	layersets();
+	add_page_close();
+	// alert("thanking you for using PS2WEB!!");
+	alert(css_code);
+	alert(html_code);
+	create_folder();
+	create_file();
 }
-
-
 
 code_chain_begin();
 
+// Mac Specified Code 
+function create_folder(foldername) {
+	var main_folder = new Folder("~/Desktop/PS2WEB");
+	main_folder.create();
+}
+
+
+function create_file() {
+
+	var filepath = "~/Desktop/PS2WEB/style" + ".css";
+	var write_file = File(filepath);
+
+	if (!write_file.exists) {
+		write_file = new File(filepath);
+	} else {
+		var res = confirm("File with same name already exists. overwrite it", true, "TITLE");
+		if (res !== true) {
+			return;
+		}
+	}
+
+	if (write_file !== '') {
+		var out = write_file.open('w', undefined, undefined);
+		write_file.encoding = "UTF-8";
+		write_file.lineFeed = "Unix"; 
+		// txtFile.lineFeed = "Windows";
+		// txtFile.lineFeed = "Macintosh";
+	}
+	if (out !== false) {
+		write_file.write(css_code);
+		write_file.close();
+	}
+
+	// var append_file = File(filepath);
+	// append_file.open('a', undefined, undefined);
+	// if (append_file !== '') {
+	// 	append_file.writeln("Hello I'm an appended line!");
+	// 	append_file.close();
+	// }
+
+}
