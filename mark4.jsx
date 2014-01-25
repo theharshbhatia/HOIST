@@ -1,6 +1,6 @@
 var html_code = "";
 var css_code = "";
-var filepath = "~/Desktop/";
+var file_path = "~/Desktop/";
 //CSS CODE FORMATION
 function css_basic_code() {
 	css_code += "body\n{" + "\n}\n";
@@ -280,8 +280,9 @@ function code_chain_begin() {
 	alert(css_code);
 	alert(html_code);
 	create_folders();
-	create_file();
-	create_html();
+	create_file("css/style.css",css_code);
+	create_file("index.html",html_code);
+	
 }
 
 code_chain_begin();
@@ -298,13 +299,13 @@ function create_folders() {
 }
 
 
-function create_file(filename,filepath) {
+function create_file(file_name,content) {
 
-	var filepath = "~/Desktop/PS2WEB/css/style" + ".css";
-	var write_file = File(filepath);
+	var file_path = "~/Desktop/PS2WEB/" + file_name;
+	var write_file = File(file_path);
 
 	if (!write_file.exists) {
-		write_file = new File(filepath);
+		write_file = new File(file_path);
 	} else {
 		var res = confirm("File with same name already exists. overwrite it", true, "TITLE");
 		if (res !== true) {
@@ -320,51 +321,10 @@ function create_file(filename,filepath) {
 		// txtFile.lineFeed = "Macintosh";
 	}
 	if (out !== false) {
-		write_file.write(css_code);
+		write_file.write(content);
 		write_file.close();
 	}
 
-	// var append_file = File(filepath);
-	// append_file.open('a', undefined, undefined);
-	// if (append_file !== '') {
-	// 	append_file.writeln("Hello I'm an appended line!");
-	// 	append_file.close();
-	// }
 
 }
 
-// temperory section
-function create_html() {
-
-	var filepath = "~/Desktop/PS2WEB/index" + ".html";
-	var write_file = File(filepath);
-
-	if (!write_file.exists) {
-		write_file = new File(filepath);
-	} else {
-		var res = confirm("File with same name already exists. overwrite it", true, "TITLE");
-		if (res !== true) {
-			return;
-		}
-	}
-
-	if (write_file !== '') {
-		var out = write_file.open('w', undefined, undefined);
-		write_file.encoding = "UTF-8";
-		write_file.lineFeed = "Unix"; 
-		// txtFile.lineFeed = "Windows";
-		// txtFile.lineFeed = "Macintosh";
-	}
-	if (out !== false) {
-		write_file.write(html_code);
-		write_file.close();
-	}
-
-	// var append_file = File(filepath);
-	// append_file.open('a', undefined, undefined);
-	// if (append_file !== '') {
-	// 	append_file.writeln("Hello I'm an appended line!");
-	// 	append_file.close();
-	// }
-
-}
