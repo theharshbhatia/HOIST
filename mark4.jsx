@@ -1,13 +1,11 @@
 var html_code = "";
 var css_code = "";
+var filepath = "~/Desktop/";
 //CSS CODE FORMATION
 function css_basic_code() {
 	css_code += "body\n{" + "\n}\n";
 	// alert(app.foregroundColor.rgb.hexValue);
-	
-	
 }
-
 
 function get_solid_css(i, j) {
 	var layer = activeDocument.layerSets[i].layers[j]
@@ -115,7 +113,7 @@ function add_html() {
 
 function add_title() {
 	var Document_name = app.activeDocument.name;
-	html_code += "<title>\n" + Document_name.substring(0, Document_name.length - 4) + '\n</title>\n<link rel="stylesheet" type="text/css" href="mystyle.css>\n</head>';
+	html_code += "<title>\n" + Document_name.substring(0, Document_name.length - 4) + '\n</title>\n<link rel="stylesheet" type="text/css" href="css/style.css>\n</head>';
 
 }
 
@@ -281,22 +279,28 @@ function code_chain_begin() {
 	// alert("thanking you for using PS2WEB!!");
 	alert(css_code);
 	alert(html_code);
-	create_folder();
+	create_folders();
 	create_file();
+	create_html();
 }
 
 code_chain_begin();
 
 // Mac Specified Code 
-function create_folder(foldername) {
-	var main_folder = new Folder("~/Desktop/PS2WEB");
+function create_folders() {
+	var foldername="PS2WEB";
+	var main_folder = new Folder("~/Desktop/"+foldername);
 	main_folder.create();
+	var css_folder = new Folder("~/Desktop/"+foldername+"/css");
+	var images_folder = new Folder("~/Desktop/"+foldername+"/images");
+	css_folder.create();
+	images_folder.create();
 }
 
 
-function create_file() {
+function create_file(filename,filepath) {
 
-	var filepath = "~/Desktop/PS2WEB/style" + ".css";
+	var filepath = "~/Desktop/PS2WEB/css/style" + ".css";
 	var write_file = File(filepath);
 
 	if (!write_file.exists) {
@@ -317,6 +321,42 @@ function create_file() {
 	}
 	if (out !== false) {
 		write_file.write(css_code);
+		write_file.close();
+	}
+
+	// var append_file = File(filepath);
+	// append_file.open('a', undefined, undefined);
+	// if (append_file !== '') {
+	// 	append_file.writeln("Hello I'm an appended line!");
+	// 	append_file.close();
+	// }
+
+}
+
+// temperory section
+function create_html() {
+
+	var filepath = "~/Desktop/PS2WEB/index" + ".html";
+	var write_file = File(filepath);
+
+	if (!write_file.exists) {
+		write_file = new File(filepath);
+	} else {
+		var res = confirm("File with same name already exists. overwrite it", true, "TITLE");
+		if (res !== true) {
+			return;
+		}
+	}
+
+	if (write_file !== '') {
+		var out = write_file.open('w', undefined, undefined);
+		write_file.encoding = "UTF-8";
+		write_file.lineFeed = "Unix"; 
+		// txtFile.lineFeed = "Windows";
+		// txtFile.lineFeed = "Macintosh";
+	}
+	if (out !== false) {
+		write_file.write(html_code);
 		write_file.close();
 	}
 
