@@ -7,9 +7,13 @@ function css_basic_code() {
 	// alert(app.foregroundColor.rgb.hexValue);
 }
 
+function beautify_layer_name(layer_name){
+	layer_name = layer_name.split(' ').join('-');
+	return layer_name;
+}
 function get_solid_css(i, j) {
 	var layer = activeDocument.layerSets[i].layers[j]
-	css_code += "." + activeDocument.layerSets[i].layers[j].name + "\n{\n";
+	css_code += "." +beautify_layer_name( activeDocument.layerSets[i].layers[j].name )+ "\n{\n";
 	var boundstring = layer.bounds.toString().split(",");
 	var width = boundstring[0] - boundstring[2];
 	var height = boundstring[1] - boundstring[3];
@@ -83,7 +87,7 @@ function get_text_css(i, j) {
 
 	// alert(text_leftIndent); both are zero so no addition.
 	//adding css style
-	css_code += "." + activeDocument.layerSets[i].layers[j].name + "\n{\n";
+	css_code += "." + beautify_layer_name( activeDocument.layerSets[i].layers[j].name )+ "\n{\n";
 
 	//  if (textitem.size)
 	// {
@@ -113,7 +117,7 @@ function add_html() {
 
 function add_title() {
 	var Document_name = app.activeDocument.name;
-	html_code += "<title>\n" + Document_name.substring(0, Document_name.length - 4) + '\n</title>\n<link rel="stylesheet" type="text/css" href="css/style.css>\n</head>';
+	html_code += "<title>\n" + Document_name.substring(0, Document_name.length - 4) + '\n</title>\n<link rel="stylesheet" type="text/css" href="css/style.css">\n</head>';
 
 }
 
@@ -122,7 +126,7 @@ function add_body() {
 }
 
 function add_div(div_name) {
-	html_code += "<div class=" + div_name + '">\n'; //layername
+	html_code += '<div class=" '+ div_name + '">\n'; //layername
 }
 
 function add_header() {
@@ -183,20 +187,20 @@ function layer_post_kind(layer_kind, i, j) {
 }
 
 function solidfill_layer_addition(i, j) {
-	html_code += '<div class="' + activeDocument.layerSets[i].layers[j].name + '">';
+	html_code += '<div class="' + beautify_layer_name(activeDocument.layerSets[i].layers[j].name) + '">';
 	get_solid_css(i, j);
 
 }
 
 function text_layer_addition(i, j) {
-	html_code += '<p class="' + activeDocument.layerSets[i].layers[j].name + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</p>\n";
+	html_code += '<p class="' +beautify_layer_name(activeDocument.layerSets[i].layers[j].name) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</p>\n";
 	get_text_css(i, j);
 	// alert(activeDocument.layerSets[i].layers[j].textItem.font);
 	//alert(j);
 }
 
 function normal_layer_addition(i, j) {
-	html_code += '<img class="' + activeDocument.layerSets[i].layers[j].name + '"/>\n';
+	html_code += '<img class="' +beautify_layer_name(activeDocument.layerSets[i].layers[j].name) + '"/>\n';
 }
 //
 /*
@@ -286,6 +290,7 @@ function code_chain_begin() {
 }
 
 code_chain_begin();
+
 
 // Mac Specified Code 
 function create_folders() {
