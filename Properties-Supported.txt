@@ -1,16 +1,18 @@
 TEXT:
 Done:
+
 text-aiign
 position
 opacity
 color
-
-
-
-Undone
+indent
 size
 font-family
-indent
+
+default zero margin added
+
+Undone:
+
 
 text-aiign-last
 vertical align
@@ -18,7 +20,6 @@ line height
 word-spacing
 letter-spacing
 text-decoration
-
 text-shadows
 white-space
 tab-size

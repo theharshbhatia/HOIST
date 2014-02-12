@@ -9,6 +9,11 @@ function css_basic_code() {
 
 function beautify_layer_name(layer_name){
 	layer_name = layer_name.split(' ').join('-');
+	// convert every other nameinto something different
+	// if (layer_name.length > 20){
+		// layer_name=layer_name.substring(0,20);
+		//similar layer nomenclature
+	// }
 	return layer_name;
 }
 function get_solid_css(i, j) {
@@ -36,76 +41,81 @@ function get_solid_css(i, j) {
 function get_text_css(i, j) {
 	var textitem = activeDocument.layerSets[i].layers[j].textItem;
 	var text_kind = textitem.kind;
-
-	if (text_kind = "TextItem.POINTTEXT") {
-		// alert(text_kind);//does not wrap in a rectangle.
-	} else {
-		// alert("paragraph text"); //does wrap in a rectangle.
-		var text_height = current_layer.textItem.height; //height of the text paragraph section
-		var text_width = current_layer.textItem.width;
-	}
-
+	
 	// var text_autoLeadingAmount = textitem.autoLeadingAmount;
 	// var text_antiAliasMethod = textitem.antiAliasMethod;
-	var text_font = textitem.font
-	var text_contents = textitem.contents;
 	// var text_desiredGlyphScaling = textitem.desiredGlyphScaling;
 	// var text_desiredLetterScaling = textitem.desiredLetterScaling;
 	// var text_desiredWordScaling = textitem.desiredWordScaling;
-	var text_direction = textitem.direction;
-	var text_firstLineIndent = textitem.firstLineIndent;
-	var text_hangingPunctuation = textitem.hangingPunctuation;
-	var text_hyphenateAfterFirst = textitem.hyphenateAfterFirst;
-	var text_hyphenateBeforeLast = textitem.hyphenateBeforeLast;
-	var text_hyphenateCapitalWords = textitem.hyphenateCapitalWords;
-	var text_hyphenateWordsLongerThan = textitem.hyphenateWordsLongerThan;
-	var text_hyphenation = textitem.hyphenation;
-	var text_hyphenationZone = textitem.hyphenationZone;
-	var text_hyphenLimit = textitem.hyphenLimit;
-	var text_leftIndent = textitem.leftIndent;
-	var text_maximumGlyphScaling = textitem.maximumGlyphScaling;
-	var text_maximumLetterScaling = textitem.maximumLetterScaling;
-	var text_maximumWordScaling = textitem.maximumWordScaling;
-	var text_minimumGlyphScaling = textitem.minimumGlyphScaling;
-	var text_minimumLetterScaling = textitem.minimumLetterScaling;
-	var text_minimumWordScaling = textitem.minimumWordScaling;
-	var text_parent = textitem.parent;
-	var text_rightIndent = textitem.rightIndent;
-	var text_spaceAfter = textitem.spaceAfter;
-	var text_spaceBefore = textitem.spaceBefore;
-	var text_typename = textitem.typename;
-	var text_textComposer = textitem.textComposer;
-	var text_warpBend = textitem.warpBend;
-	var text_warpDirection = textitem.warpDirection;
-	var text_warpHorizontalDistortion = textitem.warpHorizontalDistortion;
-	var text_warpStyle = textitem.warpStyle;
-	var text_warpVerticalDistortion = textitem.warpVerticalDistortion;
+	// var text_firstLineIndent = textitem.firstLineIndent;
+	// var text_hangingPunctuation = textitem.hangingPunctuation;
+	// var text_hyphenateAfterFirst = textitem.hyphenateAfterFirst;
+	// var text_hyphenateBeforeLast = textitem.hyphenateBeforeLast;
+	// var text_hyphenateCapitalWords = textitem.hyphenateCapitalWords;
+	// var text_hyphenateWordsLongerThan = textitem.hyphenateWordsLongerThan;
+	// var text_hyphenation = textitem.hyphenation;
+	// var text_hyphenationZone = textitem.hyphenationZone;
+	// var text_hyphenLimit = textitem.hyphenLimit;
+	// var text_leftIndent = textitem.leftIndent;
+	// var text_maximumGlyphScaling = textitem.maximumGlyphScaling;
+	// var text_maximumLetterScaling = textitem.maximumLetterScaling;
+	// var text_maximumWordScaling = textitem.maximumWordScaling;
+	// var text_minimumGlyphScaling = textitem.minimumGlyphScaling;
+	// var text_minimumLetterScaling = textitem.minimumLetterScaling;
+	// var text_minimumWordScaling = textitem.minimumWordScaling;
+	// var text_parent = textitem.parent;
+	// var text_rightIndent = textitem.rightIndent;
+	// var text_spaceAfter = textitem.spaceAfter;
+	// var text_spaceBefore = textitem.spaceBefore;
+	// var text_typename = textitem.typename;
+	// var text_textComposer = textitem.textComposer;
+	// var text_warpBend = textitem.warpBend;
+	// var text_warpDirection = textitem.warpDirection;
+	// var text_warpHorizontalDistortion = textitem.warpHorizontalDistortion;
+	// var text_warpStyle = textitem.warpStyle;
+	// var text_warpVerticalDistortion = textitem.warpVerticalDistortion;
 
-	var text_justification = textitem.justification;
+	
 	var text_position = textitem.position;
 	var pos = text_position.toString().split(",");
 
+	var text_font = textitem.font
+	var text_contents = textitem.contents;
+	var text_direction = textitem.direction;
+	var text_justification = textitem.justification;
 	// alert(text_leftIndent); both are zero so no addition.
 	//adding css style
+	// alert(textitem.size);
+	// css_code+="line-height:";
+	
 	css_code += "." + beautify_layer_name( activeDocument.layerSets[i].layers[j].name )+ "\n{\n";
+	css_code+= "margin:0;\n"
 
-	//  if (textitem.size)
-	// {
-	// css_code+="font-size:"+textitem.size+";\n"	
-	// }
-
-	// if(textitem.font)
-	// {
-	// css_code+="font-family:"+textitem.font+";\n";	
-	// }
+	// css_code += "position:absolute;\n" + "left:" + pos[0].split(".")[0] + ";\ntop:" + pos[1].split(".")[0] + ";\n";
 
 	if (textitem.color.rgb.hexValue) {
-		css_code += "color: #" + textitem.color.rgb.hexValue + "\n";
+		css_code += "color: #" + textitem.color.rgb.hexValue + ";\n";
 	}
 	css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
-	css_code += "position:absolute;\n" + "left:" + pos[0].split(".")[0] + ";\ntop:" + pos[1].split(".")[0] + ";\n";
+	
 	css_code += "text-align:" + text_justification.toString().split(".")[1] + ";\n";
-	// css_code+="line-height:";
+
+
+	if (text_kind = "TextType.PARAGRAPHTEXT") {
+		css_code+= "height:"+textitem.height.as("pixel")+"px;\n"
+		css_code+= "width:"+textitem.width.as("pixel")+"px;\n"
+	}
+
+	if(textitem.font)
+		{
+		css_code+="font-family:"+textitem.font+";\n";	//for now else non-webfonts are still an issue.
+		}
+
+	if (textitem.size)
+		{
+		css_code+="font-size:"+textitem.size.as("pixel")+"px;\n" //font size in pt to be converted into pixels	
+		}
+
 	css_code += "}\n";
 }
 
@@ -283,6 +293,8 @@ function code_chain_begin() {
 	// alert("thanking you for using PS2WEB!!");
 	alert(css_code);
 	alert(html_code);
+
+	//Complete file creation code
 	create_folders();
 	create_file("css/style.css",css_code);
 	create_file("index.html",html_code);
