@@ -46,12 +46,12 @@ function get_text_css(i, j) {
 	}
 
 	// var text_autoLeadingAmount = textitem.autoLeadingAmount;
-	var text_antiAliasMethod = textitem.antiAliasMethod;
-
+	// var text_antiAliasMethod = textitem.antiAliasMethod;
+	var text_font = textitem.font
 	var text_contents = textitem.contents;
-	var text_desiredGlyphScaling = textitem.desiredGlyphScaling;
-	var text_desiredLetterScaling = textitem.desiredLetterScaling;
-	var text_desiredWordScaling = textitem.desiredWordScaling;
+	// var text_desiredGlyphScaling = textitem.desiredGlyphScaling;
+	// var text_desiredLetterScaling = textitem.desiredLetterScaling;
+	// var text_desiredWordScaling = textitem.desiredWordScaling;
 	var text_direction = textitem.direction;
 	var text_firstLineIndent = textitem.firstLineIndent;
 	var text_hangingPunctuation = textitem.hangingPunctuation;

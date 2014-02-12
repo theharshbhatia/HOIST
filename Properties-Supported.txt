@@ -1,0 +1,30 @@
+TEXT:
+Done:
+text-aiign
+position
+opacity
+color
+
+
+
+Undone
+size
+font-family
+indent
+
+text-aiign-last
+vertical align
+line height
+word-spacing
+letter-spacing
+text-decoration
+
+text-shadows
+white-space
+tab-size
+hyphens
+word-break
+line-break
+overflow-wrap
+direction
+
