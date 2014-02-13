@@ -7,18 +7,19 @@ function css_basic_code() {
 	// alert(app.foregroundColor.rgb.hexValue);
 }
 
-function beautify_layer_name(layer_name){
+function beautify_layer_name(layer_name,type,i,j){
 	layer_name = layer_name.split(' ').join('-');
+
 	// convert every other nameinto something different
-	// if (layer_name.length > 20){
-		// layer_name=layer_name.substring(0,20);
-		//similar layer nomenclature
-	// }
+	if (layer_name.length > 20){
+		layer_name=type+i+j;
+		// similar layer nomenclature
+	}
 	return layer_name;
 }
 function get_solid_css(i, j) {
 	var layer = activeDocument.layerSets[i].layers[j]
-	css_code += "." +beautify_layer_name( activeDocument.layerSets[i].layers[j].name )+ "\n{\n";
+	css_code += "." +beautify_layer_name( activeDocument.layerSets[i].layers[j].name,"text",i,j )+ "\n{\n";
 	var boundstring = layer.bounds.toString().split(",");
 	var width = boundstring[0] - boundstring[2];
 	var height = boundstring[1] - boundstring[3];
@@ -41,7 +42,7 @@ function get_solid_css(i, j) {
 function get_text_css(i, j) {
 	var textitem = activeDocument.layerSets[i].layers[j].textItem;
 	var text_kind = textitem.kind;
-	
+	// var text_direction = textitem.direction; 
 	// var text_autoLeadingAmount = textitem.autoLeadingAmount;
 	// var text_antiAliasMethod = textitem.antiAliasMethod;
 	// var text_desiredGlyphScaling = textitem.desiredGlyphScaling;
@@ -65,6 +66,7 @@ function get_text_css(i, j) {
 	// var text_minimumWordScaling = textitem.minimumWordScaling;
 	// var text_parent = textitem.parent;
 	// var text_rightIndent = textitem.rightIndent;
+	// alert(text_rightIndent);
 	// var text_spaceAfter = textitem.spaceAfter;
 	// var text_spaceBefore = textitem.spaceBefore;
 	// var text_typename = textitem.typename;
@@ -76,34 +78,39 @@ function get_text_css(i, j) {
 	// var text_warpVerticalDistortion = textitem.warpVerticalDistortion;
 
 	
-	var text_position = textitem.position;
-	var pos = text_position.toString().split(",");
+	
 
 	var text_font = textitem.font
 	var text_contents = textitem.contents;
-	var text_direction = textitem.direction;
+	
 	var text_justification = textitem.justification;
 	// alert(text_leftIndent); both are zero so no addition.
 	//adding css style
 	// alert(textitem.size);
 	// css_code+="line-height:";
+
 	
-	css_code += "." + beautify_layer_name( activeDocument.layerSets[i].layers[j].name )+ "\n{\n";
+	
+	css_code += "." + beautify_layer_name( activeDocument.layerSets[i].layers[j].name,"text",i,j )+ "\n{\n";
 	css_code+= "margin:0;\n"
 
-	// css_code += "position:absolute;\n" + "left:" + pos[0].split(".")[0] + ";\ntop:" + pos[1].split(".")[0] + ";\n";
+	var text_position = textitem.position;
+	var text_pos_x = text_position[0].value.toFixed(0);
+	var text_pos_y = text_position[1].value.toFixed(0);
+	css_code += "position: absolute;\n" + "left:" + text_pos_x + "px;\ntop: " + text_pos_y + "px;\n";
 
 	if (textitem.color.rgb.hexValue) {
 		css_code += "color: #" + textitem.color.rgb.hexValue + ";\n";
 	}
-	css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
+	css_code += "opacity: " + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
 	
-	css_code += "text-align:" + text_justification.toString().split(".")[1] + ";\n";
+	css_code += "text-align: " + text_justification.toString().split(".")[1] + ";\n";
 
 
 	if (text_kind = "TextType.PARAGRAPHTEXT") {
-		css_code+= "height:"+textitem.height.as("pixel")+"px;\n"
-		css_code+= "width:"+textitem.width.as("pixel")+"px;\n"
+		css_code+= "height: "+textitem.height.as("pixel")+"px;\n"
+		css_code+= "width: "+textitem.width.as("pixel")+"px;\n"
+		// alert(textitem.height);
 	}
 
 	if(textitem.font)
@@ -197,20 +204,20 @@ function layer_post_kind(layer_kind, i, j) {
 }
 
 function solidfill_layer_addition(i, j) {
-	html_code += '<div class="' + beautify_layer_name(activeDocument.layerSets[i].layers[j].name) + '">';
+	html_code += '<div class="' + beautify_layer_name(activeDocument.layerSets[i].layers[j].name,"solid",i,j) + '">';
 	get_solid_css(i, j);
 
 }
 
 function text_layer_addition(i, j) {
-	html_code += '<p class="' +beautify_layer_name(activeDocument.layerSets[i].layers[j].name) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</p>\n";
+	html_code += '<p class="' +beautify_layer_name(activeDocument.layerSets[i].layers[j].name,"text",i,j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</p>\n";
 	get_text_css(i, j);
 	// alert(activeDocument.layerSets[i].layers[j].textItem.font);
 	//alert(j);
 }
 
 function normal_layer_addition(i, j) {
-	html_code += '<img class="' +beautify_layer_name(activeDocument.layerSets[i].layers[j].name) + '"/>\n';
+	html_code += '<img class="' +beautify_layer_name(activeDocument.layerSets[i].layers[j].name,"normal",i,j) + '"/>\n';
 }
 //
 /*

@@ -13,7 +13,7 @@ default zero margin added
 
 Undone:
 
-
+text rotation
 text-aiign-last
 vertical align
 line height
