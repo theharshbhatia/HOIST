@@ -87,7 +87,7 @@ function get_text_css(i, j) {
 	// alert(text_leftIndent); both are zero so no addition.
 	//adding css style
 	// alert(textitem.size);
-	// css_code+="line-height:";
+	
 
 	
 	
@@ -120,7 +120,8 @@ function get_text_css(i, j) {
 
 	if (textitem.size)
 		{
-		css_code+="font-size:"+textitem.size.as("pixel")+"px;\n" //font size in pt to be converted into pixels	
+		css_code+="font-size:"+textitem.size.as("pixel")+"px;\n"; //font size in pt to be converted into pixels	
+		// css_code+="line-height:"+textitem.size.as("pixel")+"px\n";
 		}
 
 	css_code += "}\n";
