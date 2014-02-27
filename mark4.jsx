@@ -1,25 +1,35 @@
+/**
+ CODE: Convert PSD file design into html and css code and save it to desktop for Mac.
+ Version: 0.1(alpha)
+ Developer : Hash113 (Harsh Bhatia)
+*/
+
 var html_code = "";
 var css_code = "";
-var file_path = "~/Desktop/";
-//CSS CODE FORMATION
-function css_basic_code() {
-	css_code += "body\n{" + "\n}\n";
-	// alert(app.foregroundColor.rgb.hexValue);
-}
-
-function beautify_layer_name(layer_name,type,i,j){
+var g_file_path = "~/Desktop/";
+// ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
+// Naming Convention for Layers
+function beautifyLayerName(layer_name, type, i, j) {
 	layer_name = layer_name.split(' ').join('-');
 
-	// convert every other nameinto something different
-	if (layer_name.length > 20){
-		layer_name=type+i+j;
+	if (layer_name.length > 20) {
+		layer_name = type + i + j;
 		// similar layer nomenclature
 	}
 	return layer_name;
 }
-function get_solid_css(i, j) {
+// ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
+//CSS CODE FORMATION
+
+function addCssBasicCode() {
+	css_code += "body\n{" + "\n}\n";
+	// alert(app.foregroundColor.rgb.hexValue);
+}
+
+
+function getGeneralCss(i, j) {
 	var layer = activeDocument.layerSets[i].layers[j]
-	css_code += "." +beautify_layer_name( activeDocument.layerSets[i].layers[j].name,"text",i,j )+ "\n{\n";
+	css_code += "." + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + "\n{\n";
 	var boundstring = layer.bounds.toString().split(",");
 	var width = boundstring[0] - boundstring[2];
 	var height = boundstring[1] - boundstring[3];
@@ -39,7 +49,7 @@ function get_solid_css(i, j) {
 	css_code += "}\n";
 }
 
-function get_text_css(i, j) {
+function getTextCss(i, j) {
 	var textitem = activeDocument.layerSets[i].layers[j].textItem;
 	var text_kind = textitem.kind;
 	// var text_direction = textitem.direction; 
@@ -77,22 +87,14 @@ function get_text_css(i, j) {
 	// var text_warpStyle = textitem.warpStyle;
 	// var text_warpVerticalDistortion = textitem.warpVerticalDistortion;
 
-	
-	
-
 	var text_font = textitem.font
 	var text_contents = textitem.contents;
-	
 	var text_justification = textitem.justification;
 	// alert(text_leftIndent); both are zero so no addition.
 	//adding css style
 	// alert(textitem.size);
-	
-
-	
-	
-	css_code += "." + beautify_layer_name( activeDocument.layerSets[i].layers[j].name,"text",i,j )+ "\n{\n";
-	css_code+= "margin:0;\n"
+	css_code += "." + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + "\n{\n";
+	css_code += "margin:0;\n"
 
 	var text_position = textitem.position;
 	var text_pos_x = text_position[0].value.toFixed(0);
@@ -103,122 +105,101 @@ function get_text_css(i, j) {
 		css_code += "color: #" + textitem.color.rgb.hexValue + ";\n";
 	}
 	css_code += "opacity: " + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
-	
+
 	css_code += "text-align: " + text_justification.toString().split(".")[1] + ";\n";
 
 
 	if (text_kind = "TextType.PARAGRAPHTEXT") {
-		css_code+= "height: "+textitem.height.as("pixel")+"px;\n"
-		css_code+= "width: "+textitem.width.as("pixel")+"px;\n"
+		css_code += "height: " + textitem.height.as("pixel") + "px;\n"
+		css_code += "width: " + textitem.width.as("pixel") + "px;\n"
 		// alert(textitem.height);
 	}
 
-	if(textitem.font)
-		{
-		css_code+="font-family:"+textitem.font+";\n";	//for now else non-webfonts are still an issue.
-		}
+	if (textitem.font) {
+		css_code += "font-family:" + textitem.font + ";\n"; //for now else non-webfonts are still an issue.
+	}
 
-	if (textitem.size)
-		{
-		css_code+="font-size:"+textitem.size.as("pixel")+"px;\n"; //font size in pt to be converted into pixels	
+	if (textitem.size) {
+		css_code += "font-size:" + textitem.size.as("pixel") + "px;\n"; //font size in pt to be converted into pixels	
 		// css_code+="line-height:"+textitem.size.as("pixel")+"px\n";
-		}
+	}
 
 	css_code += "}\n";
 }
 
-// HTML CODE FORMATION HERE
-function add_html() {
+// ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
+// HTML CODE FORMATION
+function addBeforeBodyHtml() {
 	html_code += "<html>\n<head>";
-}
-
-
-function add_title() {
 	var Document_name = app.activeDocument.name;
 	html_code += "<title>\n" + Document_name.substring(0, Document_name.length - 4) + '\n</title>\n<link rel="stylesheet" type="text/css" href="css/style.css">\n</head>';
-
-}
-
-function add_body() {
 	html_code += "<body>";
 }
 
-function add_div(div_name) {
-	html_code += '<div class=" '+ div_name + '">\n'; //layername
+function addDivTag(div_name) {
+	html_code += '<div class=" ' + div_name + '">\n'; //layername
 }
 
-function add_header() {
-	html_code += '<header class="header">\n';
-}
-
-function add_img(image_source, layername) {
+function addImageTag(image_source, layername) {
 	html_code += '<img src="' + image_source + '"class="' + layername + '/>\n';
 }
 
-function add_button(layername) {
-	html_code += '<button class=' + layername + '>';
-}
 
-function add_div_close() {
+function addDivCloseTag() {
 	html_code += "</div>"
 }
 
-function add_page_close() {
+function addPageCloseTag() {
 	html_code += "</body></html>";
 }
 
-function layersets() {
-	layer_array = new Array();
+function layerSetsDivision() {
+	var layer_array = [];
 	numoflayerset = activeDocument.layerSets.length;
 	// var i=0;
 	for (var i = 0; i < numoflayerset; i++) {
 		div_name = activeDocument.layerSets[i].name;
-		add_div(div_name);
+		addDivTag(div_name);
 		inside_layer_numbers = activeDocument.layerSets[i].layers.length;
 		// alert(inside_layer);
 		for (var j = 0; j < inside_layer_numbers; j++) {
 			layer_name = activeDocument.layerSets[i].layers[j].name;
 			layer_kind = activeDocument.layerSets[i].layers[j].kind;
-			layer_post_kind(layer_kind, i, j);
+			switch (layer_kind) {
+				case LayerKind.TEXT:
+					addTextLayerCode(i, j);
+					break;
+
+				case LayerKind.SOLIDFILL:
+					addSoldfillLayerCode(i, j);
+					break;
+
+				case LayerKind.NORMAL:
+					addNormalLayerCode(i, j);
+					break;
+					}
 		}
-		add_div_close();
+		addDivCloseTag();
 	}
 }
+// ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 
-function layer_post_kind(layer_kind, i, j) {
-	// alert(layer_kind);
-	switch (layer_kind) {
-		case LayerKind.TEXT:
-			text_layer_addition(i, j);
-			break;
-
-		case LayerKind.SOLIDFILL:
-			solidfill_layer_addition(i, j);
-			break;
-
-		case LayerKind.NORMAL:
-			solidfill_layer_addition(i, j);
-			break;
-
-
-	}
-}
-
-function solidfill_layer_addition(i, j) {
-	html_code += '<div class="' + beautify_layer_name(activeDocument.layerSets[i].layers[j].name,"solid",i,j) + '">';
-	get_solid_css(i, j);
+function addSoldfillLayerCode(i, j) {
+	html_code += '<div class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "solid", i, j) + '">';
+	getGeneralCss(i, j);
 
 }
 
-function text_layer_addition(i, j) {
-	html_code += '<p class="' +beautify_layer_name(activeDocument.layerSets[i].layers[j].name,"text",i,j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</p>\n";
-	get_text_css(i, j);
+function addTextLayerCode(i, j) {
+	html_code += '<p class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</p>\n";
+	getTextCss(i, j);
 	// alert(activeDocument.layerSets[i].layers[j].textItem.font);
 	//alert(j);
 }
 
-function normal_layer_addition(i, j) {
-	html_code += '<img class="' +beautify_layer_name(activeDocument.layerSets[i].layers[j].name,"normal",i,j) + '"/>\n';
+function addNormalLayerCode(i, j) {
+	html_code += '<img class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "normal", i, j) + '"/>\n';
+	getImageCss(i, j);
 }
 //
 /*
@@ -290,47 +271,46 @@ function LayerSet_properties()
 }
 */
 
-
-function code_chain_begin() {
-	add_html();
-	add_title();
-	add_body();
-	css_basic_code();
-	layersets();
-	add_page_close();
+// ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
+// Main Function 
+function main() {
+	addBeforeBodyHtml();
+	addCssBasicCode();
+	layerSetsDivision();
+	addPageCloseTag();
 	// alert("thanking you for using PS2WEB!!");
 	alert(css_code);
 	alert(html_code);
-
-	//Complete file creation code
-	create_folders();
-	create_file("css/style.css",css_code);
-	create_file("index.html",html_code);
 	
+	//Complete file creation code
+	createFolders();
+	createFile("css/style.css", css_code);
+	createFile("index.html", html_code);
+
 }
 
-code_chain_begin();
+main();
 
-
+// ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
+// File and Folder Creation Code
 // Mac Specified Code 
-function create_folders() {
-	var foldername="PS2WEB";
-	var main_folder = new Folder("~/Desktop/"+foldername);
+function createFolders() {
+	var folder_name = "PS2WEB";
+	var main_folder = new Folder("~/Desktop/" + folder_name);
 	main_folder.create();
-	var css_folder = new Folder("~/Desktop/"+foldername+"/css");
-	var images_folder = new Folder("~/Desktop/"+foldername+"/images");
+	var css_folder = new Folder("~/Desktop/" + folder_name + "/css");
+	var images_folder = new Folder("~/Desktop/" + folder_name + "/images");
 	css_folder.create();
 	images_folder.create();
 }
 
 
-function create_file(file_name,content) {
-
-	var file_path = "~/Desktop/PS2WEB/" + file_name;
-	var write_file = File(file_path);
+function createFile(file_name, content) {
+	var g_file_path = "~/Desktop/PS2WEB/" + file_name;
+	var write_file = File(g_file_path);
 
 	if (!write_file.exists) {
-		write_file = new File(file_path);
+		write_file = new File(g_file_path);
 	} else {
 		var res = confirm("File with same name already exists. overwrite it", true, "TITLE");
 		if (res !== true) {
@@ -341,7 +321,7 @@ function create_file(file_name,content) {
 	if (write_file !== '') {
 		var out = write_file.open('w', undefined, undefined);
 		write_file.encoding = "UTF-8";
-		write_file.lineFeed = "Unix"; 
+		write_file.lineFeed = "Unix";
 		// txtFile.lineFeed = "Windows";
 		// txtFile.lineFeed = "Macintosh";
 	}
@@ -352,4 +332,3 @@ function create_file(file_name,content) {
 
 
 }
-
