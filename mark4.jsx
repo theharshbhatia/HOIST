@@ -1,4 +1,4 @@
-/**
+/*
  CODE: Convert PSD file design into html and css code and save it to desktop for Mac.
  Version: 0.1(alpha)
  Developer : Hash113 (Harsh Bhatia)
@@ -6,14 +6,20 @@
 var css_code = ""; //css code variable string
 var g_file_path = "~/Desktop/"; //TODO: file path to be used in case of multiple os compatibility 
 var html_code = ""; //html code variable string 
-var total_layer_number=0;
+var total_layer_number = 0;
+prefs = new Object();
+prefs.fileType = "";
+prefs.fileQuality = 12;
+prefs.filePath = app.activeDocument.path;
+prefs.count = 0;
+
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 // Naming Convention for Layers
 function beautifyLayerName(layer_name, type, i, j) {
 	layer_name = layer_name.split(' ').join('-');
 
 	if (layer_name.length > 20) {
-		layer_name = type + (total_layer_number- i + j);
+		layer_name = type + (total_layer_number - i + j);
 		// similar layer nomenclature
 	}
 	return layer_name;
@@ -45,7 +51,7 @@ function getGeneralCss(i, j) {
 	css_code += "left:" + boundstring[0] + ";\n";
 	css_code += "top:" + boundstring[1] + "\n";
 	css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
-	css_code += "z-index:"+(i+j)+ ";\n";
+	css_code += "z-index:" + (i + j) + ";\n";
 	css_code += "}\n";
 
 }
@@ -124,12 +130,75 @@ function getTextCss(i, j) {
 		css_code += "font-size:" + textitem.size.as("pixel") + "px;\n"; //TODO:font size in pt to be converted into pixels	
 		// css_code+="line-height:"+textitem.size.as("pixel")+"px\n";
 	}
-	css_code += "z-index:"+(total_layer_number-(i+j))+ ";\n";
+	css_code += "z-index:" + (total_layer_number - (i + j)) + ";\n";
 	css_code += "}\n";
 }
 
-function downloadImage(i, j) {
+function downloadImage(r, k) {
+	var layer_array = [];
+	numoflayerset = activeDocument.layerSets.length;
+	total_layer_number += numoflayerset;
+	for (var i = 0; i < numoflayerset; i++) {
+		div_name = activeDocument.layerSets[i].name;
+		inside_layer_numbers = activeDocument.layerSets[i].layers.length;
+		total_layer_number += inside_layer_numbers;
+		
+		for (var j = 0; j < inside_layer_numbers; j++) {
+			if (i == r && j == k) {
+				/*
+				// activeDocument.layerSets[i].visible=true;
+				activeDocument.layerSets[i].layers[j].visible = false;
+				alert(layer_name = activeDocument.layerSets[i].layers[j].name + " will be downloded");
+				var layer_name = activeDocument.layerSets[i].layers[j].name;
+				var file_name = layer_name.replace(/[\\\*\/\?:"\|<> ]/g, '');
+				activeDocument.layerSets[i].layers[j].visible = true;
+				var save_file =new File( "~/Desktop/images/" + "kk.png");
+				if (save_file.exists) save_file.remove();
+				pngSaveOptions = new PNGSaveOptions();
+				activeDocument.saveAs(save_file, pngSaveOptions, true, Extension.LOWERCASE);*/
+				saveImage(activeDocument.layerSets[i].layers[j].name)
+			}
+		}
+	}
 }
+
+function saveImage(layerName) {
+	var fileName = layerName.replace(/[\\\*\/\?:"\|<> ]/g, '');
+	if (fileName.length == 0) fileName = "autoname";
+	var handle = getUniqueName(prefs.filePath + "/" + fileName);
+	prefs.count++;
+	SavePNG24(handle);
+
+}
+
+function getUniqueName(fileroot) {
+	// form a full file name
+	// if the file name exists, a numeric suffix will be added to disambiguate
+
+	var filename = fileroot;
+	for (var i = 1; i < 100; i++) {
+		var handle = File(filename + "." + prefs.fileType);
+		if (handle.exists) {
+			filename = fileroot + "-" + padder(i, 3);
+		} else {
+			return handle;
+		}
+	}
+}
+
+function padder(input, padLength) {
+	// pad the input with zeroes up to indicated length
+	var result = (new Array(padLength + 1 - input.toString().length)).join('0') + input;
+	return result;
+}
+ 
+
+function SavePNG24(saveFile) {
+	pngSaveOptions = new PNGSaveOptions();
+	activeDocument.saveAs(saveFile, pngSaveOptions, true, Extension.LOWERCASE);
+}
+
+
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 // HTML CODE FORMATION
 function addBeforeBodyHtml() {
@@ -162,34 +231,34 @@ function layerSetsDivision() {
 	var layer_array = [];
 	numoflayerset = activeDocument.layerSets.length;
 	// var i=0;
-	total_layer_number+=numoflayerset;
-	
-		for (var i = 0; i < numoflayerset; i++) {
-			div_name = activeDocument.layerSets[i].name;
-			addDivTag(div_name);
-			inside_layer_numbers = activeDocument.layerSets[i].layers.length;
-			total_layer_number+=inside_layer_numbers;
-			for (var j = 0; j < inside_layer_numbers; j++) {
-				layer_name = activeDocument.layerSets[i].layers[j].name;
-				layer_kind = activeDocument.layerSets[i].layers[j].kind;
-				switch (layer_kind) {
-					case LayerKind.TEXT:
-						addTextLayerCode(i, j);
-						break;
+	total_layer_number += numoflayerset;
 
-					case LayerKind.SOLIDFILL:
-						addSoldfillLayerCode(i, j);
-						break;
+	for (var i = 0; i < numoflayerset; i++) {
+		div_name = activeDocument.layerSets[i].name;
+		addDivTag(div_name);
+		inside_layer_numbers = activeDocument.layerSets[i].layers.length;
+		total_layer_number += inside_layer_numbers;
+		for (var j = 0; j < inside_layer_numbers; j++) {
+			layer_name = activeDocument.layerSets[i].layers[j].name;
+			layer_kind = activeDocument.layerSets[i].layers[j].kind;
+			switch (layer_kind) {
+				case LayerKind.TEXT:
+					addTextLayerCode(i, j);
+					break;
 
-					case LayerKind.NORMAL:
-						addNormalLayerCode(i, j);
+				case LayerKind.SOLIDFILL:
+					addSoldfillLayerCode(i, j);
+					break;
 
-						break;
-				}
+				case LayerKind.NORMAL:
+					addNormalLayerCode(i, j);
+
+					break;
 			}
-			addDivCloseTag();
 		}
-	
+		addDivCloseTag();
+	}
+
 }
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 // Specific Layer Type Code Generation
@@ -258,19 +327,47 @@ function main() {
 	addCssBasicCode();
 	layerSetsDivision();
 	addPageCloseTag();
-	// alert("thanking you for using PS2WEB!!");
+
 	alert(css_code);
 	alert(html_code);
 
 	//Complete file creation code
-	/*
+
+	// alert("thanking you for using PS2WEB!!");
 	createFolders();
 	createFile("css/style.css", css_code);
 	createFile("index.html", html_code);
-	*/
+
 }
 
-main();
+function wrapper() {
+	function showError(err) {
+		alert(err + ': on line ' + err.line, 'Script Error', true);
+	}
+
+	try {
+		// suspend history for CS3 + versions
+		if (parseInt(version, 10) >= 10) {
+			activeDocument.suspendHistory('Save Layers', 'main()');
+		} else {
+			main();
+		}
+	} catch (e) {
+		// report errors unless the user cancelled
+		if (e.number != 8007) showError(e);
+	}
+}
+wrapper();
+
+function okDocument() {
+	// check that we have a valid document
+
+	if (!documents.length) return false;
+
+	var thisDoc = app.activeDocument;
+	var fileExt = decodeURI(thisDoc.name).replace(/^.*\./, '');
+	return fileExt.toLowerCase() == 'psd'
+}
 
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 //
@@ -340,5 +437,4 @@ function LayerSet_properties()
 	var LayerSets_lenght = LayerSets.length; //No of layer groups present in the ps document
 	var LayerSets_typename = LayerSets.typename;
 	var LayerSets_parent = LayerSets.parent;
-}
-*/
+}*/

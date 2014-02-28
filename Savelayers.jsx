@@ -1,16 +1,4 @@
-// NAME: 
-// 	SaveLayers
 
-// DESCRIPTION: 
-//	Saves each layer in the active document to a PNG or JPG file named after the layer. 
-//	These files will be created in the current document folder (same as working PSD).
-
-// REQUIRES: 
-// 	Adobe Photoshop CS2 or higher
-
-//Most current version always available at: https://github.com/jwa107/Photoshop-Export-Layers-as-Images
-
-// enable double-clicking from Finder/Explorer (CS2 and higher)
 #target photoshop
 app.bringToFront();
 
@@ -22,8 +10,6 @@ function main() {
     }
     
     var len = activeDocument.layers.length;
-    var ok = confirm("Note: All layers will be saved in same directory as your PSD.\nThis document contains " + len + " top level layers.\nBe aware that large numbers of layers may take some time!\nContinue?");
-    if(!ok) return
 
     // user preferences
     prefs = new Object();
@@ -59,9 +45,8 @@ function toggleVisibility(ref) {
 
 function saveLayers(ref) {
     var len = ref.layers.length;
-    // rename layers top to bottom
-    for (var i = 0; i < len; i++) {
-        var layer = ref.layers[i];
+    var layer_number=0;
+        var layer = ref.layers[layer_number];
         if (layer.typename == 'LayerSet') {
             // recurse if current layer is a group
             hideLayers(layer);
@@ -72,7 +57,7 @@ function saveLayers(ref) {
             saveImage(layer.name);
             layer.visible = false;
         }
-    }
+    // }
 }
 
 function saveImage(layerName) {
@@ -80,14 +65,8 @@ function saveImage(layerName) {
     if(fileName.length ==0) fileName = "autoname";
     var handle = getUniqueName(prefs.filePath + "/" + fileName);
     prefs.count++;
-    
-    if(prefs.fileType=="PNG" && prefs.fileQuality=="8") {
-        SavePNG8(handle); 
-    } else if (prefs.fileType=="PNG" && prefs.fileQuality=="24") {
         SavePNG24(handle);
-    } else {
-        SaveJPEG(handle); 
-    }
+    
 }
 
 function getUniqueName(fileroot) { 
@@ -111,12 +90,12 @@ function padder(input, padLength) {
     return result;
 }
 
-function SavePNG8(saveFile) { 
-    exportOptionsSaveForWeb = new ExportOptionsSaveForWeb();
-    exportOptionsSaveForWeb.format = SaveDocumentType.PNG
-    exportOptionsSaveForWeb.dither = Dither.NONE;
-    activeDocument.exportDocument( saveFile, ExportType.SAVEFORWEB, exportOptionsSaveForWeb );
-} 
+// function SavePNG8(saveFile) { 
+//     exportOptionsSaveForWeb = new ExportOptionsSaveForWeb();
+//     exportOptionsSaveForWeb.format = SaveDocumentType.PNG
+//     exportOptionsSaveForWeb.dither = Dither.NONE;
+//     activeDocument.exportDocument( saveFile, ExportType.SAVEFORWEB, exportOptionsSaveForWeb );
+// } 
 
 function SavePNG24(saveFile) { 
     pngSaveOptions = new PNGSaveOptions(); 
