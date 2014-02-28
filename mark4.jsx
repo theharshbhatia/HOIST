@@ -4,7 +4,6 @@
  Developer : Hash113 (Harsh Bhatia)
 */
 var css_code = ""; //css code variable string
-var g_file_path = "~/Desktop/"; //TODO: file path to be used in case of multiple os compatibility 
 var html_code = ""; //html code variable string 
 var total_layer_number = 0;
 prefs = new Object();
@@ -137,35 +136,32 @@ function getTextCss(i, j) {
 function downloadImage(r, k) {
 	var layer_array = [];
 	numoflayerset = activeDocument.layerSets.length;
-	total_layer_number += numoflayerset;
+	hideAllLayers();
 	for (var i = 0; i < numoflayerset; i++) {
 		div_name = activeDocument.layerSets[i].name;
 		inside_layer_numbers = activeDocument.layerSets[i].layers.length;
-		total_layer_number += inside_layer_numbers;
-		
 		for (var j = 0; j < inside_layer_numbers; j++) {
 			if (i == r && j == k) {
-				/*
-				// activeDocument.layerSets[i].visible=true;
-				activeDocument.layerSets[i].layers[j].visible = false;
-				alert(layer_name = activeDocument.layerSets[i].layers[j].name + " will be downloded");
-				var layer_name = activeDocument.layerSets[i].layers[j].name;
-				var file_name = layer_name.replace(/[\\\*\/\?:"\|<> ]/g, '');
-				activeDocument.layerSets[i].layers[j].visible = true;
-				var save_file =new File( "~/Desktop/images/" + "kk.png");
-				if (save_file.exists) save_file.remove();
-				pngSaveOptions = new PNGSaveOptions();
-				activeDocument.saveAs(save_file, pngSaveOptions, true, Extension.LOWERCASE);*/
+				activeDocument.layerSets[i].visible=true;
+				activeDocument.layerSets[i].layers[j].visible=true;
 				saveImage(activeDocument.layerSets[i].layers[j].name)
 			}
 		}
 	}
 }
-
+function hideAllLayers(){
+	for ( var i=0;i<numoflayerset;i++){
+		activeDocument.layerSets[i].visible=false;
+		inside_layer_numbers = activeDocument.layerSets[i].layers.length;
+		for(var j=0;j<inside_layer_numbers;j++){
+			activeDocument.layerSets[i].layers[j].visible=false;
+		}
+	}
+}
 function saveImage(layerName) {
 	var fileName = layerName.replace(/[\\\*\/\?:"\|<> ]/g, '');
 	if (fileName.length == 0) fileName = "autoname";
-	var handle = getUniqueName(prefs.filePath + "/" + fileName);
+	var handle = getUniqueName(prefs.filePath + "/PS2WEB/images/" + fileName);
 	prefs.count++;
 	SavePNG24(handle);
 
@@ -287,17 +283,18 @@ function addNormalLayerCode(i, j) {
 // Mac Specified Code 
 function createFolders() {
 	var folder_name = "PS2WEB";
-	var main_folder = new Folder("~/Desktop/" + folder_name);
+	var main_folder = new Folder(prefs.filePath+"/" + folder_name);
 	main_folder.create();
-	var css_folder = new Folder("~/Desktop/" + folder_name + "/css");
-	var images_folder = new Folder("~/Desktop/" + folder_name + "/images");
+	var css_folder = new Folder(prefs.filePath +"/"+ folder_name + "/css");
+	var images_folder = new Folder(prefs.filePath+"/" + folder_name + "/images");
 	css_folder.create();
 	images_folder.create();
 }
 
 
 function createFile(file_name, content) {
-	var g_file_path = "~/Desktop/PS2WEB/" + file_name;
+	var g_file_path = prefs.filePath+"/PS2WEB/" + file_name;
+	alert(g_file_path);
 	var write_file = File(g_file_path);
 	if (!write_file.exists) {
 		write_file = new File(g_file_path);

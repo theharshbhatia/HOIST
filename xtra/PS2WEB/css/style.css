@@ -1,0 +1,23 @@
+body
+{
+}
+.asr
+{
+height:348px;
+width:260px;
+position:absolute;
+left:718 px;
+top:317 px
+opacity:1.0;
+z-index:0;
+}
+.Layer-1
+{
+height:632px;
+width:500px;
+position:absolute;
+left:260 px;
+top:68 px
+opacity:1.0;
+z-index:1;
+}
