@@ -6,14 +6,14 @@
 var css_code = ""; //css code variable string
 var g_file_path = "~/Desktop/"; //TODO: file path to be used in case of multiple os compatibility 
 var html_code = ""; //html code variable string 
-
+var total_layer_number=0;
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 // Naming Convention for Layers
 function beautifyLayerName(layer_name, type, i, j) {
 	layer_name = layer_name.split(' ').join('-');
 
 	if (layer_name.length > 20) {
-		layer_name = type + i + j;
+		layer_name = type + (total_layer_number- i + j);
 		// similar layer nomenclature
 	}
 	return layer_name;
@@ -45,7 +45,9 @@ function getGeneralCss(i, j) {
 	css_code += "left:" + boundstring[0] + ";\n";
 	css_code += "top:" + boundstring[1] + "\n";
 	css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
+	css_code += "z-index:"+(i+j)+ ";\n";
 	css_code += "}\n";
+
 }
 
 function getTextCss(i, j) {
@@ -115,14 +117,14 @@ function getTextCss(i, j) {
 	}
 
 	if (textitem.font) {
-		css_code += "font-family:" + textitem.font + ";\n"; //for now else non-webfonts are still an issue.
+		css_code += "font-family:" + textitem.font + ";\n"; //TODO: now else non-webfonts are still an issue.
 	}
 
 	if (textitem.size) {
-		css_code += "font-size:" + textitem.size.as("pixel") + "px;\n"; //font size in pt to be converted into pixels	
+		css_code += "font-size:" + textitem.size.as("pixel") + "px;\n"; //TODO:font size in pt to be converted into pixels	
 		// css_code+="line-height:"+textitem.size.as("pixel")+"px\n";
 	}
-
+	css_code += "z-index:"+(total_layer_number-(i+j))+ ";\n";
 	css_code += "}\n";
 }
 
@@ -160,11 +162,13 @@ function layerSetsDivision() {
 	var layer_array = [];
 	numoflayerset = activeDocument.layerSets.length;
 	// var i=0;
-	if (layer.typename == 'LayerSet') {
+	total_layer_number+=numoflayerset;
+	
 		for (var i = 0; i < numoflayerset; i++) {
 			div_name = activeDocument.layerSets[i].name;
 			addDivTag(div_name);
 			inside_layer_numbers = activeDocument.layerSets[i].layers.length;
+			total_layer_number+=inside_layer_numbers;
 			for (var j = 0; j < inside_layer_numbers; j++) {
 				layer_name = activeDocument.layerSets[i].layers[j].name;
 				layer_kind = activeDocument.layerSets[i].layers[j].kind;
@@ -185,7 +189,7 @@ function layerSetsDivision() {
 			}
 			addDivCloseTag();
 		}
-	}
+	
 }
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 // Specific Layer Type Code Generation
@@ -204,6 +208,7 @@ function addTextLayerCode(i, j) {
 
 function addNormalLayerCode(i, j) {
 	html_code += '<img class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "normal", i, j) + '"/>\n';
+	getGeneralCss(i, j);
 	// getImageCss(i, j);
 	downloadImage(i, j);
 }
