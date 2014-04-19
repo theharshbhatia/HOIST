@@ -1,8 +1,6 @@
-/*
- CODE: Convert PSD file design into html and css code and save it to desktop for Mac.
- Version: 0.1(alpha)
- Developer : Hash113 (Harsh Bhatia)
-*/
+// CODE: Convert PSD file design into html and css code and save it to desktop for Mac.
+ // Version: 0.1(alpha)
+ // Developer : Hash113 (Harsh Bhatia)
 var css_code = ""; //css code variable string
 var html_code = ""; //html code variable string 
 var total_layer_number = 0;
@@ -35,7 +33,9 @@ function addCssBasicCode() {
 function getGeneralCss(i, j) {
 	var layer = activeDocument.layerSets[i].layers[j]
 	css_code += "." + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + "\n{\n";
-	var boundstring = layer.bounds.toString().split(",");
+	var boundstring = layer.bounds.toString().split(" ,");
+	// alert(layer.bounds);
+	alert(boundstring[0]);
 	var width = boundstring[0] - boundstring[2];
 	var height = boundstring[1] - boundstring[3];
 	if (width < 0) {
@@ -48,7 +48,7 @@ function getGeneralCss(i, j) {
 	css_code += "width:" + width + "px;\n";
 	css_code += "position:absolute;\n"
 	css_code += "left:" + boundstring[0] + ";\n";
-	css_code += "top:" + boundstring[1] + "\n";
+	css_code += "top:" + boundstring[1] + ";\n";
 	css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
 	css_code += "z-index:" + (i + j) + ";\n";
 	css_code += "}\n";
@@ -105,7 +105,7 @@ function getTextCss(i, j) {
 	var text_position = textitem.position;
 	var text_pos_x = text_position[0].value.toFixed(0);
 	var text_pos_y = text_position[1].value.toFixed(0);
-	css_code += "position: absolute;\n" + "left:" + text_pos_x + "px;\ntop: " + text_pos_y + "px;\n";
+	css_code += "position: absolute;\n" + "left:" + text_pos_x + "px;\ntop:" + text_pos_y +"px;\n";
 
 	if (textitem.color.rgb.hexValue) {
 		css_code += "color: #" + textitem.color.rgb.hexValue + ";\n";
@@ -114,11 +114,12 @@ function getTextCss(i, j) {
 
 	css_code += "text-align: " + text_justification.toString().split(".")[1] + ";\n";
 
+	// alert(text_kind);
+	if (text_kind == "TextType.PARAGRAPHTEXT") {
 
-	if (text_kind = "TextType.PARAGRAPHTEXT") {
 		css_code += "height: " + textitem.height.as("pixel") + "px;\n"
 		css_code += "width: " + textitem.width.as("pixel") + "px;\n"
-		// alert(textitem.height);
+			// alert(textitem.height);
 	}
 
 	if (textitem.font) {
@@ -187,11 +188,11 @@ function padder(input, padLength) {
 	var result = (new Array(padLength + 1 - input.toString().length)).join('0') + input;
 	return result;
 }
- 
+
 
 function SavePNG24(saveFile) {
 	pngSaveOptions = new PNGSaveOptions();
-	activeDocument.saveAs(saveFile, pngSaveOptions, true, Extension.LOWERCASE);
+	app.activeDocument.saveAs(saveFile, pngSaveOptions, true, Extension.LOWERCASE);
 }
 
 
@@ -282,6 +283,7 @@ function addNormalLayerCode(i, j) {
 // File and Folder Creation Code
 // Mac Specified Code 
 function createFolders() {
+	// creating all folders
 	var folder_name = "PS2WEB";
 	var main_folder = new Folder(prefs.filePath+"/" + folder_name);
 	main_folder.create();
@@ -293,8 +295,8 @@ function createFolders() {
 
 
 function createFile(file_name, content) {
+	// Creating a file
 	var g_file_path = prefs.filePath+"/PS2WEB/" + file_name;
-	alert(g_file_path);
 	var write_file = File(g_file_path);
 	if (!write_file.exists) {
 		write_file = new File(g_file_path);
@@ -317,23 +319,30 @@ function createFile(file_name, content) {
 	}
 }
 
+function fetch_fonts(){
+	// fetch all fonts installed in the system
+	var fontsInstalled = app.fonts;
+	alert(fontsInstalled[0]);
+}
+
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
-// Main Function 
+
 function main() {
+	// Main function 
 	addBeforeBodyHtml();
 	addCssBasicCode();
 	layerSetsDivision();
 	addPageCloseTag();
-
 	alert(css_code);
 	alert(html_code);
 
-	//Complete file creation code
+	// fetch_fonts(); // fetch all fonts installed in the system
 
+	
 	// alert("thanking you for using PS2WEB!!");
-	createFolders();
-	createFile("css/style.css", css_code);
-	createFile("index.html", html_code);
+	createFolders(); //creating folders
+	createFile("css/style.css", css_code); //Creating css files
+	createFile("index.html", html_code); //creating html file
 
 }
 
