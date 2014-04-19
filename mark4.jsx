@@ -26,7 +26,8 @@ function beautifyLayerName(layer_name, type, i, j) {
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 //CSS CODE FORMATION
 function addCssBasicCode() {
-	css_code += "body\n{" + "\n}\n";
+	// adding body element to css_code
+	css_code += "body\n{" +"\n}\n";
 	// alert(app.foregroundColor.rgb.hexValue);
 }
 
@@ -58,6 +59,7 @@ function getGeneralCss(i, j) {
 }
 
 function getTextCss(i, j) {
+	// Adding text css to css_code
 	var textitem = activeDocument.layerSets[i].layers[j].textItem;
 	var text_kind = textitem.kind;
 	// var text_direction = textitem.direction; 
@@ -137,6 +139,7 @@ function getTextCss(i, j) {
 }
 
 function downloadImage(r, k) {
+	// Downloading image funciton for layer
 	var layer_array = [];
 	numoflayerset = activeDocument.layerSets.length;
 	hideAllLayers();
@@ -153,6 +156,7 @@ function downloadImage(r, k) {
 	}
 }
 function hideAllLayers(){
+	// hide all layers to get one layer
 	for ( var i=0;i<numoflayerset;i++){
 		activeDocument.layerSets[i].visible=false;
 		inside_layer_numbers = activeDocument.layerSets[i].layers.length;
@@ -162,6 +166,7 @@ function hideAllLayers(){
 	}
 }
 function saveImage(layerName) {
+	// Saving layer into image folder
 	var fileName = layerName.replace(/[\\\*\/\?:"\|<> ]/g, '');
 	if (fileName.length == 0) fileName = "autoname";
 	var handle = getUniqueName(prefs.filePath + "/PS2WEB/images/" + fileName);
@@ -173,7 +178,6 @@ function saveImage(layerName) {
 function getUniqueName(fileroot) {
 	// form a full file name
 	// if the file name exists, a numeric suffix will be added to disambiguate
-
 	var filename = fileroot;
 	for (var i = 1; i < 100; i++) {
 		var handle = File(filename + "." + prefs.fileType);
@@ -226,7 +230,7 @@ function addPageCloseTag() {
 
 // TODO: for single layer without div
 function layerSetsDivision() {
-
+// Layer division by type
 	var layer_array = [];
 	numoflayerset = activeDocument.layerSets.length;
 	// var i=0;
@@ -251,7 +255,6 @@ function layerSetsDivision() {
 
 				case LayerKind.NORMAL:
 					addNormalLayerCode(i, j);
-
 					break;
 			}
 		}
@@ -321,12 +324,15 @@ function createFile(file_name, content) {
 	}
 }
 
-function fetch_fonts(){
+function allFonts(){
 	// fetch all fonts installed in the system
 	var fontsInstalled = app.fonts;
 	alert(fontsInstalled[0]);
 }
 
+function endNotes(){
+	alert("Thank you for using PS2WEB!!");
+}
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 
 function main() {
@@ -337,15 +343,12 @@ function main() {
 	addPageCloseTag();
 	alert(css_code);
 	alert(html_code);
-
-	// fetch_fonts(); // fetch all fonts installed in the system
-
+	// allFonts(); // fetch all fonts installed in the system
 	
-	// alert("thanking you for using PS2WEB!!");
 	createFolders(); //creating folders
 	createFile("css/style.css", css_code); //Creating css files
 	createFile("index.html", html_code); //creating html file
-
+	endNotes(); //End alert notes and recommendation
 }
 
 function wrapper() {
