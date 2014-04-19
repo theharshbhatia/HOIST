@@ -4,6 +4,7 @@
 var css_code = ""; //css code variable string
 var html_code = ""; //html code variable string 
 var total_layer_number = 0;
+// file required variables
 prefs = new Object();
 prefs.fileType = "";
 prefs.fileQuality = 12;
@@ -11,8 +12,9 @@ prefs.filePath = app.activeDocument.path;
 prefs.count = 0;
 
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
-// Naming Convention for Layers
+
 function beautifyLayerName(layer_name, type, i, j) {
+	// Removing spaces and converting long layer namesto small
 	layer_name = layer_name.split(' ').join('-');
 
 	if (layer_name.length > 20) {
@@ -23,7 +25,6 @@ function beautifyLayerName(layer_name, type, i, j) {
 }
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 //CSS CODE FORMATION
-
 function addCssBasicCode() {
 	css_code += "body\n{" + "\n}\n";
 	// alert(app.foregroundColor.rgb.hexValue);
@@ -31,11 +32,12 @@ function addCssBasicCode() {
 
 
 function getGeneralCss(i, j) {
+	// adding generall css to css_code string
 	var layer = activeDocument.layerSets[i].layers[j]
 	css_code += "." + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + "\n{\n";
-	var boundstring = layer.bounds.toString().split(" ,");
+	var boundstring = layer.bounds.toString().split(",");
 	// alert(layer.bounds);
-	alert(boundstring[0]);
+	alert(boundstring[0].split(' ').join(''));
 	var width = boundstring[0] - boundstring[2];
 	var height = boundstring[1] - boundstring[3];
 	if (width < 0) {
@@ -47,8 +49,8 @@ function getGeneralCss(i, j) {
 	css_code += "height:" + height + "px;\n";
 	css_code += "width:" + width + "px;\n";
 	css_code += "position:absolute;\n"
-	css_code += "left:" + boundstring[0] + ";\n";
-	css_code += "top:" + boundstring[1] + ";\n";
+	css_code += "left:" + boundstring[0].split(' ').join('') + ";\n";
+	css_code += "top:" + boundstring[1].split(' ').join('') + ";\n";
 	css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
 	css_code += "z-index:" + (i + j) + ";\n";
 	css_code += "}\n";
