@@ -1,6 +1,18 @@
 // CODE: Convert PSD file design into html and css code and save it to desktop for Mac.
  // Version: 0.1(alpha)
- // Developer : Hash113 (Harsh Bhatia)
+ // by Harsh Bhatia
+ ///@includepath "~/JSON Action Manager/"
+//@include "JSON Action Manager/jamEngine.jsxinc"
+//@include "JSON Action Manager/jamStyles.jsxinc"
+//@include "JSON Action Manager/jamActions.jsxinc"
+//@include "JSON Action Manager/jamHelpers.jsxinc"
+//@include "JSON Action Manager/jamJSON.jsxinc"
+//@include "JSON Action Manager/jamLayers.jsxinc"
+//@include "JSON Action Manager/jamShapes.jsxinc"
+//@include "JSON Action Manager/jamStyles.jsxinc"
+//@include "JSON Action Manager/jamText.jsxinc"
+//@include "JSON Action Manager/jamUtils.jsxinc"
+
 var css_code = ""; //css code variable string
 var html_code = ""; //html code variable string 
 var total_layer_number = 0;
@@ -18,6 +30,7 @@ function beautifyLayerName(layer_name, type, i, j) {
 	layer_name = layer_name.split(' ').join('-');
 
 	if (layer_name.length > 20) {
+		// layer name greater than 20
 		layer_name = type + (total_layer_number - i + j);
 		// similar layer nomenclature
 	}
@@ -38,7 +51,7 @@ function getGeneralCss(i, j) {
 	css_code += "." + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + "\n{\n";
 	var boundstring = layer.bounds.toString().split(",");
 	// alert(layer.bounds);
-	alert(boundstring[0].split(' ').join(''));
+	// alert(boundstring[0].split(' ').join(''));
 	var width = boundstring[0] - boundstring[2];
 	var height = boundstring[1] - boundstring[3];
 	if (width < 0) {
@@ -198,7 +211,16 @@ function padder(input, padLength) {
 
 function SavePNG24(saveFile) {
 	pngSaveOptions = new PNGSaveOptions();
+	try{
 	app.activeDocument.saveAs(saveFile, pngSaveOptions, true, Extension.LOWERCASE);
+	}
+	catch(err)
+	  {
+	  txt="There was an error on this page.\n\n";
+	  txt+="Error description: " + err.message + "\n\n";
+	  txt+="Click OK to continue.\n\n";
+	  alert(txt);
+	  }
 }
 
 
@@ -237,8 +259,15 @@ function layerSetsDivision() {
 	total_layer_number += numoflayerset;
 
 	for (var i = 0; i < numoflayerset; i++) {
-		div_name = activeDocument.layerSets[i].name;
-		addDivTag(div_name);
+		layer_name = activeDocument.layerSets[i].name;
+
+		if (layer_name=="nav"|| layer_name=="navbar"){
+			// html_code += '<nav class=" ' + layer_name + '">\n'; 
+			// TODO: figerout way to close this section and add css on basic html tag
+		}
+
+		addDivTag(layer_name);
+
 		inside_layer_numbers = activeDocument.layerSets[i].layers.length;
 		total_layer_number += inside_layer_numbers;
 		for (var j = 0; j < inside_layer_numbers; j++) {
@@ -267,12 +296,14 @@ function layerSetsDivision() {
 function addSoldfillLayerCode(i, j) {
 	html_code += '<div class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "solid", i, j) + '">';
 	getGeneralCss(i, j);
+	// layerstyltest();
 
 }
 
 function addTextLayerCode(i, j) {
 	html_code += '<p class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</p>\n";
 	getTextCss(i, j);
+	// layerstyltest();
 	// alert(activeDocument.layerSets[i].layers[j].textItem.font);
 	//alert(j);
 }
@@ -280,6 +311,8 @@ function addTextLayerCode(i, j) {
 function addNormalLayerCode(i, j) {
 	html_code += '<img class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "normal", i, j) + '"/>\n';
 	getGeneralCss(i, j);
+	app.activeDocument.activeLayer = activeDocument.layerSets[i].layers[j];
+	layerstyltest();
 	// getImageCss(i, j);
 	downloadImage(i, j);
 }
@@ -331,7 +364,32 @@ function allFonts(){
 }
 
 function endNotes(){
-	alert("Thank you for using PS2WEB!!");
+	alert("Thank you for using PS2WEB!! \
+		Please check http://photoshopetiquette.com/ for better results with psw");
+
+}
+function layerstyltest(){
+	var layerStyleObj = jamStyles.getLayerStyle ();
+if (layerStyleObj)
+{
+    if ("layerEffects" in layerStyleObj)
+    {
+        var layerEffectsObj = layerStyleObj["layerEffects"];
+        if ("dropShadow" in layerEffectsObj)
+        {
+            var dropShadowObj = layerEffectsObj["dropShadow"];
+            alert ("Drop shadow distance: " + dropShadowObj["distance"]);
+        }
+        else
+        {
+            alert ("No drop shadow");
+        }
+    }
+    else
+    {
+        alert ("No layer effects");
+    }
+}
 }
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 
@@ -341,13 +399,13 @@ function main() {
 	addCssBasicCode();
 	layerSetsDivision();
 	addPageCloseTag();
+	
 	alert(css_code);
 	alert(html_code);
 	// allFonts(); // fetch all fonts installed in the system
-	
-	createFolders(); //creating folders
-	createFile("css/style.css", css_code); //Creating css files
-	createFile("index.html", html_code); //creating html file
+	createFolders(); //create folders
+	createFile("css/style.css", css_code); //Create css file
+	createFile("index.html", html_code); //create html file
 	endNotes(); //End alert notes and recommendation
 }
 
@@ -372,7 +430,6 @@ wrapper();
 
 function okDocument() {
 	// check that we have a valid document
-
 	if (!documents.length) return false;
 
 	var thisDoc = app.activeDocument;
