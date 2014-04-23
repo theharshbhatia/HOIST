@@ -1,6 +1,5 @@
 ///@includepath "~/JSON Action Manager/"
 //@include "JSON Action Manager/jamEngine.jsxinc"
-//@include "JSON Action Manager/jamStyles.jsxinc"
 //@include "JSON Action Manager/jamActions.jsxinc"
 //@include "JSON Action Manager/jamHelpers.jsxinc"
 //@include "JSON Action Manager/jamJSON.jsxinc"

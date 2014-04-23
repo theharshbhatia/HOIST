@@ -1,9 +1,10 @@
-// CODE: Convert PSD file design into html and css code and save it to desktop for Mac.
+// CODE: Convert PSD file design into html and css code (MAC version)
  // Version: 0.1(alpha)
  // by Harsh Bhatia
+
+ // Included Files and libs
  ///@includepath "~/JSON Action Manager/"
 //@include "JSON Action Manager/jamEngine.jsxinc"
-//@include "JSON Action Manager/jamStyles.jsxinc"
 //@include "JSON Action Manager/jamActions.jsxinc"
 //@include "JSON Action Manager/jamHelpers.jsxinc"
 //@include "JSON Action Manager/jamJSON.jsxinc"
@@ -26,13 +27,12 @@ prefs.count = 0;
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 
 function beautifyLayerName(layer_name, type, i, j) {
-	// Removing spaces and converting long layer namesto small
+	// Replacing spaces with hyphens for css conventions
 	layer_name = layer_name.split(' ').join('-');
 
 	if (layer_name.length > 20) {
-		// layer name greater than 20
+		// layer name is equal to type + layer number for layer name greater than 20
 		layer_name = type + (total_layer_number - i + j);
-		// similar layer nomenclature
 	}
 	return layer_name;
 }
@@ -41,7 +41,6 @@ function beautifyLayerName(layer_name, type, i, j) {
 function addCssBasicCode() {
 	// adding body element to css_code
 	css_code += "body\n{" +"\n}\n";
-	// alert(app.foregroundColor.rgb.hexValue);
 }
 
 
@@ -50,8 +49,6 @@ function getGeneralCss(i, j) {
 	var layer = activeDocument.layerSets[i].layers[j]
 	css_code += "." + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + "\n{\n";
 	var boundstring = layer.bounds.toString().split(",");
-	// alert(layer.bounds);
-	// alert(boundstring[0].split(' ').join(''));
 	var width = boundstring[0] - boundstring[2];
 	var height = boundstring[1] - boundstring[3];
 	if (width < 0) {
@@ -68,7 +65,6 @@ function getGeneralCss(i, j) {
 	css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
 	css_code += "z-index:" + (i + j) + ";\n";
 	css_code += "}\n";
-
 }
 
 function getTextCss(i, j) {
@@ -115,7 +111,7 @@ function getTextCss(i, j) {
 	var text_justification = textitem.justification;
 	// alert(text_leftIndent); both are zero so no addition.
 	//adding css style
-	// alert(textitem.size);
+	
 	css_code += "." + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + "\n{\n";
 	css_code += "margin:0;\n"
 
@@ -131,12 +127,10 @@ function getTextCss(i, j) {
 
 	css_code += "text-align: " + text_justification.toString().split(".")[1] + ";\n";
 
-	// alert(text_kind);
 	if (text_kind == "TextType.PARAGRAPHTEXT") {
 
-		css_code += "height: " + textitem.height.as("pixel") + "px;\n"
-		css_code += "width: " + textitem.width.as("pixel") + "px;\n"
-			// alert(textitem.height);
+		css_code += "height: " + textitem.height.as("pixel") + "px;\n";
+		css_code += "width: " + textitem.width.as("pixel") + "px;\n";
 	}
 
 	if (textitem.font) {
@@ -152,7 +146,7 @@ function getTextCss(i, j) {
 }
 
 function downloadImage(r, k) {
-	// Downloading image funciton for layer
+	// Downloading image from layer
 	var layer_array = [];
 	numoflayerset = activeDocument.layerSets.length;
 	hideAllLayers();
@@ -250,7 +244,6 @@ function addPageCloseTag() {
 	html_code += "</body></html>";
 }
 
-// TODO: for single layer without div
 function layerSetsDivision() {
 // Layer division by type
 	var layer_array = [];
@@ -263,7 +256,7 @@ function layerSetsDivision() {
 
 		if (layer_name=="nav"|| layer_name=="navbar"){
 			// html_code += '<nav class=" ' + layer_name + '">\n'; 
-			// TODO: figerout way to close this section and add css on basic html tag
+			// TODO: find a way to close this section and add css on basic html tag
 		}
 
 		addDivTag(layer_name);
@@ -289,6 +282,7 @@ function layerSetsDivision() {
 			}
 		}
 		addDivCloseTag();
+		//TODO : Add css for div 
 	}
 
 }
@@ -297,22 +291,17 @@ function layerSetsDivision() {
 function addSoldfillLayerCode(i, j) {
 	html_code += '<div class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "solid", i, j) + '">';
 	getGeneralCss(i, j);
-	// layerstyltest();
 
 }
 
 function addTextLayerCode(i, j) {
 	html_code += '<p class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</p>\n";
 	getTextCss(i, j);
-	// layerstyltest();
-	// alert(activeDocument.layerSets[i].layers[j].textItem.font);
-	//alert(j);
 }
 
 function addNormalLayerCode(i, j) {
 	html_code += '<img class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "normal", i, j) + '"/>\n';
 	getGeneralCss(i, j);
-	// app.activeDocument.activeLayer = activeDocument.layerSets[i].layers[j];
 	layerstyltest();
 	// getImageCss(i, j);
 	// downloadImage(i, j);
@@ -387,25 +376,20 @@ if (layerStyleObj)
            var dropShadowColor=dropShadowObj["color"];
           var dsColor= "rgba("+dropShadowColor.red+","+dropShadowColor.green+","+dropShadowColor.blue+","+dropShadowOpacity/100+")";
            var dropShadowSpread=dropShadowObj["chokeMatte"];
-           // alert(dropShadowChokeMatte);
+           //Converting drop shadow to box-shadow 
+           // TODO: text -shadow
            var angle = (180 - dropShadowAngle) * Math.PI / 180;
            var h_shadow= Math.round((Math.cos(angle) * dropShadowDistance));
            var v_shadow= Math.round((Math.sin(angle) * dropShadowDistance));
            var css_spread=dropShadowDistance*dropShadowSpread/100;
            var css_blur=dropShadowDistance - css_spread;
            css_code+= "box-shadow:"+h_shadow+'px '+ v_shadow+ 'px '+ css_blur+'px '+ css_spread+'px '+dsColor+";\n";	
-           // alert(h_shadow)I
 
         }
-        else
-        {
-            // alert ("No drop shadow");
-        }
+        else{}
     }
     else
-    {
-        // alert ("No layer effects");
-    }
+    {}
 }
 }
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------

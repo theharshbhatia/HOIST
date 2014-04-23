@@ -1,6 +1,7 @@
+* Remove Empty Layersets and empty layer
+* Create Folder
 TEXT:
 Done:
-
 text-aiign
 position
 opacity
@@ -8,14 +9,17 @@ color
 size
 font-family
 
-
-
 *default zero margin added
 Not Supported:
 line height
 word-break
 
-text-decoration
+image:
+dimensions
+opacity
+shadow
+source
+
 
 Users NOT TO DO:
 multiple fonts in one paragraph;
