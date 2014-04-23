@@ -393,18 +393,18 @@ if (layerStyleObj)
            var v_shadow= Math.round((Math.sin(angle) * dropShadowDistance));
            var css_spread=dropShadowDistance*dropShadowSpread/100;
            var css_blur=dropShadowDistance - css_spread;
-           css_code+= "box-shadow:"+h_shadow+'px '+ v_shadow+ 'px '+ css_blur+'px '+ css_spread+'px '+dsColor+";\n";
+           css_code+= "box-shadow:"+h_shadow+'px '+ v_shadow+ 'px '+ css_blur+'px '+ css_spread+'px '+dsColor+";\n";	
            // alert(h_shadow)I
 
         }
         else
         {
-            alert ("No drop shadow");
+            // alert ("No drop shadow");
         }
     }
     else
     {
-        alert ("No layer effects");
+        // alert ("No layer effects");
     }
 }
 }
@@ -412,6 +412,7 @@ if (layerStyleObj)
 
 function main() {
 	// Main function 
+	removeEmptyThings();
 	addBeforeBodyHtml();
 	addCssBasicCode();
 	layerSetsDivision();
@@ -453,6 +454,50 @@ function okDocument() {
 	var fileExt = decodeURI(thisDoc.name).replace(/^.*\./, '');
 	return fileExt.toLowerCase() == 'psd'
 }
+// ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
+function removeEmptyThings() {
+    if ( app.documents.length > 0 )
+	{
+	var startRulerUnits = app.preferences.rulerUnits;
+	app.preferences.rulerUnits = Units.PIXELS;
+	removeAllEmptyArtLayers(app.activeDocument);
+    	removeAllEmptyLayerSets(app.activeDocument);
+	app.preferences.rulerunits = startRulerUnits;
+	}
+}
+
+function removeAllEmptyArtLayers(obj) {
+    for( var i = obj.artLayers.length-1; 0 <= i; i--) {
+        try {
+		if (obj.artLayers[i].kind == LayerKind.NORMAL && obj.artLayers[i].bounds[2] == 0 && obj.artLayers[i].bounds[3] == 0)
+			{
+			obj.artLayers[i].remove();
+			}
+        } 
+        catch (e) {
+        }
+    }
+    for( var i = obj.layerSets.length-1; 0 <= i; i--) {
+        removeAllEmptyArtLayers(obj.layerSets[i]);
+    }
+}
+
+function removeAllEmptyLayerSets(obj) {
+    var foundEmpty = true;
+    for( var i = obj.layerSets.length-1; 0 <= i; i--) {
+        if( removeAllEmptyLayerSets(obj.layerSets[i])) {
+            obj.layerSets[i].remove();
+        } else {
+            foundEmpty = false;
+        }
+    }
+    if (obj.artLayers.length > 0) {
+		foundEmpty = false;
+	}
+    return foundEmpty;
+}
+
+
 
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 //
