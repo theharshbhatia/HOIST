@@ -273,6 +273,7 @@ function layerSetsDivision() {
 		for (var j = 0; j < inside_layer_numbers; j++) {
 			layer_name = activeDocument.layerSets[i].layers[j].name;
 			layer_kind = activeDocument.layerSets[i].layers[j].kind;
+			app.activeDocument.activeLayer = activeDocument.layerSets[i].layers[j];
 			switch (layer_kind) {
 				case LayerKind.TEXT:
 					addTextLayerCode(i, j);
@@ -311,10 +312,10 @@ function addTextLayerCode(i, j) {
 function addNormalLayerCode(i, j) {
 	html_code += '<img class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "normal", i, j) + '"/>\n';
 	getGeneralCss(i, j);
-	app.activeDocument.activeLayer = activeDocument.layerSets[i].layers[j];
+	// app.activeDocument.activeLayer = activeDocument.layerSets[i].layers[j];
 	layerstyltest();
 	// getImageCss(i, j);
-	downloadImage(i, j);
+	// downloadImage(i, j);
 }
 
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
@@ -368,7 +369,8 @@ function endNotes(){
 		Please check http://photoshopetiquette.com/ for better results with psw");
 
 }
-function layerstyltest(){
+function layerstyltest()
+{
 	var layerStyleObj = jamStyles.getLayerStyle ();
 if (layerStyleObj)
 {
@@ -378,7 +380,22 @@ if (layerStyleObj)
         if ("dropShadow" in layerEffectsObj)
         {
             var dropShadowObj = layerEffectsObj["dropShadow"];
-            alert ("Drop shadow distance: " + dropShadowObj["distance"]);
+            var dropShadowDistance=dropShadowObj["distance"];
+            var dropShadowBlur=dropShadowObj["blur"];
+           var dropShadowOpacity=dropShadowObj["opacity"];
+           var dropShadowAngle=dropShadowObj["localLightingAngle"];
+           var dropShadowColor=dropShadowObj["color"];
+          var dsColor= "rgba("+dropShadowColor.red+","+dropShadowColor.green+","+dropShadowColor.blue+","+dropShadowOpacity/100+")";
+           var dropShadowSpread=dropShadowObj["chokeMatte"];
+           // alert(dropShadowChokeMatte);
+           var angle = (180 - dropShadowAngle) * Math.PI / 180;
+           var h_shadow= Math.round((Math.cos(angle) * dropShadowDistance));
+           var v_shadow= Math.round((Math.sin(angle) * dropShadowDistance));
+           var css_spread=dropShadowDistance*dropShadowSpread/100;
+           var css_blur=dropShadowDistance - css_spread;
+           css_code+= "box-shadow:"+h_shadow+'px '+ v_shadow+ 'px '+ css_blur+'px '+ css_spread+'px '+dsColor+";\n";
+           // alert(h_shadow)I
+
         }
         else
         {
@@ -402,11 +419,11 @@ function main() {
 	
 	alert(css_code);
 	alert(html_code);
-	// allFonts(); // fetch all fonts installed in the system
-	createFolders(); //create folders
-	createFile("css/style.css", css_code); //Create css file
-	createFile("index.html", html_code); //create html file
-	endNotes(); //End alert notes and recommendation
+	// // allFonts(); // fetch all fonts installed in the system
+	// createFolders(); //create folders
+	// createFile("css/style.css", css_code); //Create css file
+	// createFile("index.html", html_code); //create html file
+	// endNotes(); //End alert notes and recommendation
 }
 
 function wrapper() {
