@@ -147,6 +147,55 @@ function getTextCss(i, j) {
 	css_code += "}\n";
 }
 
+function addDivCss(div_name,i){
+	//css for layersets
+	// alert(layer_name);
+	css_code += "." + beautifyLayerName(div_name,"div",i,0) + "\n{\n" ;
+	css_code+= "opacity:"+(activeDocument.layerSets[i].opacity/100).toFixed(1)+";\n";
+	// add div shadow
+	css_code+="}\n"; 
+
+}
+
+function addLayerStyle(i,j)
+{
+	var layerStyleObj = jamStyles.getLayerStyle ();
+if (layerStyleObj)
+{
+    if ("layerEffects" in layerStyleObj)
+    {
+        var layerEffectsObj = layerStyleObj["layerEffects"];
+        if ("dropShadow" in layerEffectsObj)
+        {
+            var dropShadowObj = layerEffectsObj["dropShadow"];
+            var dropShadowDistance=dropShadowObj["distance"];
+            var dropShadowBlur=dropShadowObj["blur"];
+           var dropShadowOpacity=dropShadowObj["opacity"];
+           var dropShadowAngle=dropShadowObj["localLightingAngle"];
+           var dropShadowColor=dropShadowObj["color"];
+          var dsColor= "rgba("+dropShadowColor.red+","+dropShadowColor.green+","+dropShadowColor.blue+","+dropShadowOpacity/100+")";
+           var dropShadowSpread=dropShadowObj["chokeMatte"];
+           //Converting drop shadow to box-shadow 
+           // TODO: text -shadow
+           var angle = (180 - dropShadowAngle) * Math.PI / 180;
+           var h_shadow= Math.round((Math.cos(angle) * dropShadowDistance));
+           var v_shadow= Math.round((Math.sin(angle) * dropShadowDistance));
+           var css_spread=dropShadowDistance*dropShadowSpread/100;
+           var css_blur=dropShadowDistance - css_spread;
+           if(activeDocument.layerSets[i].layers[j].kind==LayerKind.TEXT){
+           	css_code+= "text-shadow:"+h_shadow+'px '+ v_shadow+ 'px '+ css_blur+'px '+dsColor+";\n";	
+           }
+           else{
+           css_code+= "box-shadow:"+h_shadow+'px '+ v_shadow+ 'px '+ css_blur+'px '+ css_spread+'px '+dsColor+";\n";	
+       	}
+        }
+        else{}
+    }
+    else
+    {}
+}
+}
+// ----------------------------------------------------------------------------------------------------------------------------------
 function downloadImage(r, k) {
 	// Downloading image from layer
 	var layer_array = [];
@@ -245,15 +294,7 @@ function addDivCloseTag() {
 function addPageCloseTag() {
 	html_code += "</body></html>";
 }
-
-function addDivCss(div_name,i){
-	//css for layersets
-	// alert(layer_name);
-	css_code += "." + beautifyLayerName(div_name,"div",i,0) + "\n{\n" ;
-	css_code+= "opacity:"+(activeDocument.layerSets[i].opacity/100).toFixed(1)+";\n";
-	css_code+="}\n"; 
-
-}
+// ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 function layerSetsDivision() {
 // Layer division by type
 	var layer_array = [];
@@ -294,8 +335,6 @@ function layerSetsDivision() {
 		}
 
 		addDivCloseTag();
-		
-		//TODO : Add css for div  	
 	}
 
 }
@@ -370,44 +409,6 @@ function endNotes(){
 	alert("Thank you for using PS2WEB!! \
 		Please check http://photoshopetiquette.com/ for better results with psw");
 
-}
-function addLayerStyle(i,j)
-{
-	var layerStyleObj = jamStyles.getLayerStyle ();
-if (layerStyleObj)
-{
-    if ("layerEffects" in layerStyleObj)
-    {
-        var layerEffectsObj = layerStyleObj["layerEffects"];
-        if ("dropShadow" in layerEffectsObj)
-        {
-            var dropShadowObj = layerEffectsObj["dropShadow"];
-            var dropShadowDistance=dropShadowObj["distance"];
-            var dropShadowBlur=dropShadowObj["blur"];
-           var dropShadowOpacity=dropShadowObj["opacity"];
-           var dropShadowAngle=dropShadowObj["localLightingAngle"];
-           var dropShadowColor=dropShadowObj["color"];
-          var dsColor= "rgba("+dropShadowColor.red+","+dropShadowColor.green+","+dropShadowColor.blue+","+dropShadowOpacity/100+")";
-           var dropShadowSpread=dropShadowObj["chokeMatte"];
-           //Converting drop shadow to box-shadow 
-           // TODO: text -shadow
-           var angle = (180 - dropShadowAngle) * Math.PI / 180;
-           var h_shadow= Math.round((Math.cos(angle) * dropShadowDistance));
-           var v_shadow= Math.round((Math.sin(angle) * dropShadowDistance));
-           var css_spread=dropShadowDistance*dropShadowSpread/100;
-           var css_blur=dropShadowDistance - css_spread;
-           if(activeDocument.layerSets[i].layers[j].kind==LayerKind.TEXT){
-           	css_code+= "text-shadow:"+h_shadow+'px '+ v_shadow+ 'px '+ css_blur+'px '+dsColor+";\n";	
-           }
-           else{
-           css_code+= "box-shadow:"+h_shadow+'px '+ v_shadow+ 'px '+ css_blur+'px '+ css_spread+'px '+dsColor+";\n";	
-       	}
-        }
-        else{}
-    }
-    else
-    {}
-}
 }
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 
