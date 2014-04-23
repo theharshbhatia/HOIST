@@ -229,8 +229,8 @@ function addBeforeBodyHtml() {
 	html_code += "<body>";
 }
 
-function addDivTag(div_name) {
-	html_code += '<div class=" ' + div_name + '">\n'; //layername
+function addDivTag(div_name,i) {
+	html_code += '<div class=" ' + beautifyLayerName(div_name,i,0) + '">\n'; //layername
 }
 
 function addImageTag(image_source, layername) {
@@ -246,6 +246,14 @@ function addPageCloseTag() {
 	html_code += "</body></html>";
 }
 
+function addDivCss(div_name,i){
+	//css for layersets
+	// alert(layer_name);
+	css_code += "." + beautifyLayerName(div_name,"div",i,0) + "\n{\n" ;
+	css_code+= "opacity:"+(activeDocument.layerSets[i].opacity/100).toFixed(1)+";\n";
+	css_code+="}\n"; 
+
+}
 function layerSetsDivision() {
 // Layer division by type
 	var layer_array = [];
@@ -254,14 +262,15 @@ function layerSetsDivision() {
 	total_layer_number += numoflayerset;
 
 	for (var i = 0; i < numoflayerset; i++) {
-		layer_name = activeDocument.layerSets[i].name;
+		layerSet_name = activeDocument.layerSets[i].name;
 
-		if (layer_name=="nav"|| layer_name=="navbar"){
+		if (layerSet_name=="nav"|| layerSet_name=="navbar"){
 			// html_code += '<nav class=" ' + layer_name + '">\n'; 
 			// TODO: find a way to close this section and add css on basic html tag
 		}
 
-		addDivTag(layer_name);
+		addDivTag(layerSet_name,i);
+		addDivCss(layerSet_name,i);
 
 		inside_layer_numbers = activeDocument.layerSets[i].layers.length;
 		total_layer_number += inside_layer_numbers;
@@ -283,7 +292,9 @@ function layerSetsDivision() {
 					break;
 			}
 		}
+
 		addDivCloseTag();
+		
 		//TODO : Add css for div  	
 	}
 
