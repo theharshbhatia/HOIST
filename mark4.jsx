@@ -64,6 +64,7 @@ function getGeneralCss(i, j) {
 	css_code += "top:" + boundstring[1].split(' ').join('') + ";\n";
 	css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
 	css_code += "z-index:" + (i + j) + ";\n";
+	addLayerStyle(i,j);
 	css_code += "}\n";
 }
 
@@ -142,6 +143,7 @@ function getTextCss(i, j) {
 		// css_code+="line-height:"+textitem.size.as("pixel")+"px\n";
 	}
 	css_code += "z-index:" + (total_layer_number - (i + j)) + ";\n";
+	addLayerStyle(i,j);
 	css_code += "}\n";
 }
 
@@ -282,7 +284,7 @@ function layerSetsDivision() {
 			}
 		}
 		addDivCloseTag();
-		//TODO : Add css for div 
+		//TODO : Add css for div  	
 	}
 
 }
@@ -302,7 +304,7 @@ function addTextLayerCode(i, j) {
 function addNormalLayerCode(i, j) {
 	html_code += '<img class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "normal", i, j) + '"/>\n';
 	getGeneralCss(i, j);
-	layerstyltest();
+	
 	// getImageCss(i, j);
 	// downloadImage(i, j);
 }
@@ -358,7 +360,7 @@ function endNotes(){
 		Please check http://photoshopetiquette.com/ for better results with psw");
 
 }
-function layerstyltest()
+function addLayerStyle(i,j)
 {
 	var layerStyleObj = jamStyles.getLayerStyle ();
 if (layerStyleObj)
@@ -383,8 +385,12 @@ if (layerStyleObj)
            var v_shadow= Math.round((Math.sin(angle) * dropShadowDistance));
            var css_spread=dropShadowDistance*dropShadowSpread/100;
            var css_blur=dropShadowDistance - css_spread;
+           if(activeDocument.layerSets[i].layers[j].kind==LayerKind.TEXT){
+           	css_code+= "text-shadow:"+h_shadow+'px '+ v_shadow+ 'px '+ css_blur+'px '+dsColor+";\n";	
+           }
+           else{
            css_code+= "box-shadow:"+h_shadow+'px '+ v_shadow+ 'px '+ css_blur+'px '+ css_spread+'px '+dsColor+";\n";	
-
+       	}
         }
         else{}
     }
