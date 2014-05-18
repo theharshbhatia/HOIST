@@ -175,8 +175,7 @@ if (layerStyleObj)
            var dropShadowColor=dropShadowObj["color"];
           var dsColor= "rgba("+dropShadowColor.red+","+dropShadowColor.green+","+dropShadowColor.blue+","+dropShadowOpacity/100+")";
            var dropShadowSpread=dropShadowObj["chokeMatte"];
-           //Converting drop shadow to box-shadow 
-           // TODO: text -shadow
+           //Converting drop shadow to box-shadow  / text-shadow
            var angle = (180 - dropShadowAngle) * Math.PI / 180;
            var h_shadow= Math.round((Math.cos(angle) * dropShadowDistance));
            var v_shadow= Math.round((Math.sin(angle) * dropShadowDistance));
@@ -271,8 +270,14 @@ function SavePNG24(saveFile) {
 
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 // HTML CODE FORMATION
+/*
+
+
+
+	
+	*/
 function addBeforeBodyHtml() {
-	html_code += "<html>\n<head>";
+	html_code += "<!doctype html>\n<html lang='en'>\n<head>\n<meta charset='UTF-8'>\n";
 	var Document_name = app.activeDocument.name;
 	html_code += "<title>\n" + Document_name.substring(0, Document_name.length - 4) + '\n</title>\n<link rel="stylesheet" type="text/css" href="css/style.css">\n</head>';
 	html_code += "<body>";
@@ -410,6 +415,10 @@ function endNotes(){
 		Please check http://photoshopetiquette.com/ for better results with psw");
 
 }
+function faqs(){
+	// alert("FAQ's");
+	// write a text file about the faqs.
+}
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 
 function main() {
@@ -419,14 +428,14 @@ function main() {
 	addCssBasicCode();
 	layerSetsDivision();
 	addPageCloseTag();
-	
+	faqs();
 	alert(css_code);
 	alert(html_code);
 	// // allFonts(); // fetch all fonts installed in the system
-	// createFolders(); //create folders
-	// createFile("css/style.css", css_code); //Create css file
-	// createFile("index.html", html_code); //create html file
-	// endNotes(); //End alert notes and recommendation
+	createFolders(); //create folders
+	createFile("css/style.css", css_code); //Create css file
+	createFile("index.html", html_code); //create html file
+	endNotes(); //End alert notes and recommendation
 }
 
 function wrapper() {
