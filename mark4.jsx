@@ -1,9 +1,9 @@
 // CODE: Convert PSD file design into html and css code (MAC version)
- // Version: 0.1(alpha)
- // by Harsh Bhatia
+// Version: 0.1(alpha)
+// by Harsh Bhatia
 
- // Included Files and libs
- ///@includepath "~/JSON Action Manager/"
+// Included Files and libs
+///@includepath "~/JSON Action Manager/"
 //@include "JSON Action Manager/jamEngine.jsxinc"
 //@include "JSON Action Manager/jamActions.jsxinc"
 //@include "JSON Action Manager/jamHelpers.jsxinc"
@@ -40,7 +40,7 @@ function beautifyLayerName(layer_name, type, i, j) {
 //CSS CODE FORMATION
 function addCssBasicCode() {
 	// adding body element to css_code
-	css_code += "body\n{" +"\n}\n";
+	css_code += "body\n{" + "\n}\n";
 }
 
 
@@ -64,12 +64,12 @@ function getGeneralCss(i, j) {
 	css_code += "top:" + boundstring[1].split(' ').join('') + ";\n";
 	css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
 	css_code += "z-index:" + (i + j) + ";\n";
-	addLayerStyle(i,j);
+	addLayerStyle(i, j);
 	css_code += "}\n";
 }
 
 function getTextCss(i, j) {
-	// Adding text css to css_code
+	// adding text styles to css_code
 	var textitem = activeDocument.layerSets[i].layers[j].textItem;
 	var text_kind = textitem.kind;
 	// var text_direction = textitem.direction; 
@@ -112,14 +112,14 @@ function getTextCss(i, j) {
 	var text_justification = textitem.justification;
 	// alert(text_leftIndent); both are zero so no addition.
 	//adding css style
-	
+
 	css_code += "." + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + "\n{\n";
 	css_code += "margin:0;\n"
 
 	var text_position = textitem.position;
 	var text_pos_x = text_position[0].value.toFixed(0);
 	var text_pos_y = text_position[1].value.toFixed(0);
-	css_code += "position: absolute;\n" + "left:" + text_pos_x + "px;\ntop:" + text_pos_y +"px;\n";
+	css_code += "position: absolute;\n" + "left:" + text_pos_x + "px;\ntop:" + text_pos_y + "px;\n";
 
 	if (textitem.color.rgb.hexValue) {
 		css_code += "color: #" + textitem.color.rgb.hexValue + ";\n";
@@ -143,56 +143,50 @@ function getTextCss(i, j) {
 		// css_code+="line-height:"+textitem.size.as("pixel")+"px\n";
 	}
 	css_code += "z-index:" + (total_layer_number - (i + j)) + ";\n";
-	addLayerStyle(i,j);
+	addLayerStyle(i, j);
 	css_code += "}\n";
 }
 
-function addDivCss(div_name,i){
-	//css for layersets
-	// alert(layer_name);
-	css_code += "." + beautifyLayerName(div_name,"div",i,0) + "\n{\n" ;
-	css_code+= "opacity:"+(activeDocument.layerSets[i].opacity/100).toFixed(1)+";\n";
-	// add div shadow
-	css_code+="}\n"; 
+function addDivCss(div_name, i) {
+	//adding div style to css_code
+	if ((activeDocument.layerSets[i].opacity / 100).toFixed(1) != 1.0) {
+		css_code += "." + beautifyLayerName(div_name, "div", i, 0) + "\n{\n";
+		css_code += "opacity:" + (activeDocument.layerSets[i].opacity / 100).toFixed(1) + ";\n";
+		// add div shadow
+		css_code += "}\n";
+	}
+
 
 }
 
-function addLayerStyle(i,j)
-{
-	var layerStyleObj = jamStyles.getLayerStyle ();
-if (layerStyleObj)
-{
-    if ("layerEffects" in layerStyleObj)
-    {
-        var layerEffectsObj = layerStyleObj["layerEffects"];
-        if ("dropShadow" in layerEffectsObj)
-        {
-            var dropShadowObj = layerEffectsObj["dropShadow"];
-            var dropShadowDistance=dropShadowObj["distance"];
-            var dropShadowBlur=dropShadowObj["blur"];
-           var dropShadowOpacity=dropShadowObj["opacity"];
-           var dropShadowAngle=dropShadowObj["localLightingAngle"];
-           var dropShadowColor=dropShadowObj["color"];
-          var dsColor= "rgba("+dropShadowColor.red+","+dropShadowColor.green+","+dropShadowColor.blue+","+dropShadowOpacity/100+")";
-           var dropShadowSpread=dropShadowObj["chokeMatte"];
-           //Converting drop shadow to box-shadow  / text-shadow
-           var angle = (180 - dropShadowAngle) * Math.PI / 180;
-           var h_shadow= Math.round((Math.cos(angle) * dropShadowDistance));
-           var v_shadow= Math.round((Math.sin(angle) * dropShadowDistance));
-           var css_spread=dropShadowDistance*dropShadowSpread/100;
-           var css_blur=dropShadowDistance - css_spread;
-           if(activeDocument.layerSets[i].layers[j].kind==LayerKind.TEXT){
-           	css_code+= "text-shadow:"+h_shadow+'px '+ v_shadow+ 'px '+ css_blur+'px '+dsColor+";\n";	
-           }
-           else{
-           css_code+= "box-shadow:"+h_shadow+'px '+ v_shadow+ 'px '+ css_blur+'px '+ css_spread+'px '+dsColor+";\n";	
-       	}
-        }
-        else{}
-    }
-    else
-    {}
-}
+function addLayerStyle(i, j) {
+	var layerStyleObj = jamStyles.getLayerStyle();
+	if (layerStyleObj) {
+		if ("layerEffects" in layerStyleObj) {
+			var layerEffectsObj = layerStyleObj["layerEffects"];
+			if ("dropShadow" in layerEffectsObj) {
+				var dropShadowObj = layerEffectsObj["dropShadow"];
+				var dropShadowDistance = dropShadowObj["distance"];
+				var dropShadowBlur = dropShadowObj["blur"];
+				var dropShadowOpacity = dropShadowObj["opacity"];
+				var dropShadowAngle = dropShadowObj["localLightingAngle"];
+				var dropShadowColor = dropShadowObj["color"];
+				var dsColor = "rgba(" + dropShadowColor.red + "," + dropShadowColor.green + "," + dropShadowColor.blue + "," + dropShadowOpacity / 100 + ")";
+				var dropShadowSpread = dropShadowObj["chokeMatte"];
+				//Converting drop shadow to box-shadow  / text-shadow
+				var angle = (180 - dropShadowAngle) * Math.PI / 180;
+				var h_shadow = Math.round((Math.cos(angle) * dropShadowDistance));
+				var v_shadow = Math.round((Math.sin(angle) * dropShadowDistance));
+				var css_spread = dropShadowDistance * dropShadowSpread / 100;
+				var css_blur = dropShadowDistance - css_spread;
+				if (activeDocument.layerSets[i].layers[j].kind == LayerKind.TEXT) {
+					css_code += "text-shadow:" + h_shadow + 'px ' + v_shadow + 'px ' + css_blur + 'px ' + dsColor + ";\n";
+				} else {
+					css_code += "box-shadow:" + h_shadow + 'px ' + v_shadow + 'px ' + css_blur + 'px ' + css_spread + 'px ' + dsColor + ";\n";
+				}
+			} else {}
+		} else {}
+	}
 }
 // ----------------------------------------------------------------------------------------------------------------------------------
 function downloadImage(r, k) {
@@ -205,23 +199,25 @@ function downloadImage(r, k) {
 		inside_layer_numbers = activeDocument.layerSets[i].layers.length;
 		for (var j = 0; j < inside_layer_numbers; j++) {
 			if (i == r && j == k) {
-				activeDocument.layerSets[i].visible=true;
-				activeDocument.layerSets[i].layers[j].visible=true;
+				activeDocument.layerSets[i].visible = true;
+				activeDocument.layerSets[i].layers[j].visible = true;
 				saveImage(activeDocument.layerSets[i].layers[j].name)
 			}
 		}
 	}
 }
-function hideAllLayers(){
+
+function hideAllLayers() {
 	// hide all layers to get one layer
-	for ( var i=0;i<numoflayerset;i++){
-		activeDocument.layerSets[i].visible=false;
+	for (var i = 0; i < numoflayerset; i++) {
+		activeDocument.layerSets[i].visible = false;
 		inside_layer_numbers = activeDocument.layerSets[i].layers.length;
-		for(var j=0;j<inside_layer_numbers;j++){
-			activeDocument.layerSets[i].layers[j].visible=false;
+		for (var j = 0; j < inside_layer_numbers; j++) {
+			activeDocument.layerSets[i].layers[j].visible = false;
 		}
 	}
 }
+
 function saveImage(layerName) {
 	// Saving layer into image folder
 	var fileName = layerName.replace(/[\\\*\/\?:"\|<> ]/g, '');
@@ -255,16 +251,14 @@ function padder(input, padLength) {
 
 function SavePNG24(saveFile) {
 	pngSaveOptions = new PNGSaveOptions();
-	try{
-	app.activeDocument.saveAs(saveFile, pngSaveOptions, true, Extension.LOWERCASE);
+	try {
+		app.activeDocument.saveAs(saveFile, pngSaveOptions, true, Extension.LOWERCASE);
+	} catch (err) {
+		txt = "There was an error on this page.\n\n";
+		txt += "Error description: " + err.message + "\n\n";
+		txt += "Click OK to continue.\n\n";
+		alert(txt);
 	}
-	catch(err)
-	  {
-	  txt="There was an error on this page.\n\n";
-	  txt+="Error description: " + err.message + "\n\n";
-	  txt+="Click OK to continue.\n\n";
-	  alert(txt);
-	  }
 }
 
 
@@ -283,8 +277,8 @@ function addBeforeBodyHtml() {
 	html_code += "<body>";
 }
 
-function addDivTag(div_name,i) {
-	html_code += '<div class=" ' + beautifyLayerName(div_name,i,0) + '">\n'; //layername
+function addDivTag(div_name, i) {
+	html_code += '<div class=" ' + beautifyLayerName(div_name, i, 0) + '">\n'; //layername
 }
 
 function addImageTag(image_source, layername) {
@@ -301,7 +295,7 @@ function addPageCloseTag() {
 }
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 function layerSetsDivision() {
-// Layer division by type
+	// Layer division by type
 	var layer_array = [];
 	numoflayerset = activeDocument.layerSets.length;
 	// var i=0;
@@ -310,13 +304,13 @@ function layerSetsDivision() {
 	for (var i = 0; i < numoflayerset; i++) {
 		layerSet_name = activeDocument.layerSets[i].name;
 
-		if (layerSet_name=="nav"|| layerSet_name=="navbar"){
+		if (layerSet_name == "nav" || layerSet_name == "navbar") {
 			// html_code += '<nav class=" ' + layer_name + '">\n'; 
 			// TODO: find a way to close this section and add css on basic html tag
 		}
 
-		addDivTag(layerSet_name,i);
-		addDivCss(layerSet_name,i);
+		addDivTag(layerSet_name, i);
+		addDivCss(layerSet_name, i);
 
 		inside_layer_numbers = activeDocument.layerSets[i].layers.length;
 		total_layer_number += inside_layer_numbers;
@@ -359,7 +353,7 @@ function addTextLayerCode(i, j) {
 function addNormalLayerCode(i, j) {
 	html_code += '<img class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "normal", i, j) + '"/>\n';
 	getGeneralCss(i, j);
-	
+
 	// getImageCss(i, j);
 	// downloadImage(i, j);
 }
@@ -370,10 +364,10 @@ function addNormalLayerCode(i, j) {
 function createFolders() {
 	// creating all folders
 	var folder_name = "PS2WEB";
-	var main_folder = new Folder(prefs.filePath+"/" + folder_name);
+	var main_folder = new Folder(prefs.filePath + "/" + folder_name);
 	main_folder.create();
-	var css_folder = new Folder(prefs.filePath +"/"+ folder_name + "/css");
-	var images_folder = new Folder(prefs.filePath+"/" + folder_name + "/images");
+	var css_folder = new Folder(prefs.filePath + "/" + folder_name + "/css");
+	var images_folder = new Folder(prefs.filePath + "/" + folder_name + "/images");
 	css_folder.create();
 	images_folder.create();
 }
@@ -381,7 +375,7 @@ function createFolders() {
 
 function createFile(file_name, content) {
 	// Creating a file
-	var g_file_path = prefs.filePath+"/PS2WEB/" + file_name;
+	var g_file_path = prefs.filePath + "/PS2WEB/" + file_name;
 	var write_file = File(g_file_path);
 	if (!write_file.exists) {
 		write_file = new File(g_file_path);
@@ -404,18 +398,19 @@ function createFile(file_name, content) {
 	}
 }
 
-function allFonts(){
+function allFonts() {
 	// fetch all fonts installed in the system
 	var fontsInstalled = app.fonts;
 	alert(fontsInstalled[0]);
 }
 
-function endNotes(){
+function endNotes() {
 	alert("Thank you for using PS2WEB!! \
 		Please check http://photoshopetiquette.com/ for better results with psw");
 
 }
-function faqs(){
+
+function faqs() {
 	// alert("FAQ's");
 	// write a text file about the faqs.
 }
@@ -467,45 +462,41 @@ function okDocument() {
 }
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 function removeEmptyThings() {
-    if ( app.documents.length > 0 )
-	{
-	var startRulerUnits = app.preferences.rulerUnits;
-	app.preferences.rulerUnits = Units.PIXELS;
-	removeAllEmptyArtLayers(app.activeDocument);
-    	removeAllEmptyLayerSets(app.activeDocument);
-	app.preferences.rulerunits = startRulerUnits;
+	if (app.documents.length > 0) {
+		var startRulerUnits = app.preferences.rulerUnits;
+		app.preferences.rulerUnits = Units.PIXELS;
+		removeAllEmptyArtLayers(app.activeDocument);
+		removeAllEmptyLayerSets(app.activeDocument);
+		app.preferences.rulerunits = startRulerUnits;
 	}
 }
 
 function removeAllEmptyArtLayers(obj) {
-    for( var i = obj.artLayers.length-1; 0 <= i; i--) {
-        try {
-		if (obj.artLayers[i].kind == LayerKind.NORMAL && obj.artLayers[i].bounds[2] == 0 && obj.artLayers[i].bounds[3] == 0)
-			{
-			obj.artLayers[i].remove();
+	for (var i = obj.artLayers.length - 1; 0 <= i; i--) {
+		try {
+			if (obj.artLayers[i].kind == LayerKind.NORMAL && obj.artLayers[i].bounds[2] == 0 && obj.artLayers[i].bounds[3] == 0) {
+				obj.artLayers[i].remove();
 			}
-        } 
-        catch (e) {
-        }
-    }
-    for( var i = obj.layerSets.length-1; 0 <= i; i--) {
-        removeAllEmptyArtLayers(obj.layerSets[i]);
-    }
+		} catch (e) {}
+	}
+	for (var i = obj.layerSets.length - 1; 0 <= i; i--) {
+		removeAllEmptyArtLayers(obj.layerSets[i]);
+	}
 }
 
 function removeAllEmptyLayerSets(obj) {
-    var foundEmpty = true;
-    for( var i = obj.layerSets.length-1; 0 <= i; i--) {
-        if( removeAllEmptyLayerSets(obj.layerSets[i])) {
-            obj.layerSets[i].remove();
-        } else {
-            foundEmpty = false;
-        }
-    }
-    if (obj.artLayers.length > 0) {
+	var foundEmpty = true;
+	for (var i = obj.layerSets.length - 1; 0 <= i; i--) {
+		if (removeAllEmptyLayerSets(obj.layerSets[i])) {
+			obj.layerSets[i].remove();
+		} else {
+			foundEmpty = false;
+		}
+	}
+	if (obj.artLayers.length > 0) {
 		foundEmpty = false;
 	}
-    return foundEmpty;
+	return foundEmpty;
 }
 
 
