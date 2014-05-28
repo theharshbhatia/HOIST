@@ -40,7 +40,7 @@ function beautifyLayerName(layer_name, type, i, j) {
 //CSS CODE FORMATION
 function addCssBasicCode() {
 	// adding body element to css_code
-	css_code += "body\n{" + "\n}\n";
+	css_code += "body\n{\nwidth:100%;" + "\n}\n";
 }
 
 
@@ -126,20 +126,21 @@ function getTextCss(i, j) {
 	}
 	css_code += "opacity: " + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
 
-	css_code += "text-align: " + text_justification.toString().split(".")[1] + ";\n";
+	css_code += "text-align:  " + text_justification.toString().split(".")[1].toLowerCase() + ";\n";
 
 	if (text_kind == "TextType.PARAGRAPHTEXT") {
 
 		css_code += "height: " + textitem.height.as("pixel") + "px;\n";
 		css_code += "width: " + textitem.width.as("pixel") + "px;\n";
+
 	}
 
 	if (textitem.font) {
-		css_code += "font-family:" + textitem.font + ";\n"; //TODO: now else non-webfonts are still an issue.
+		css_code += "font-family: " + textitem.font + ";\n"; //TODO: now else non-webfonts are still an issue.
 	}
 
 	if (textitem.size) {
-		css_code += "font-size:" + textitem.size.as("pixel") + "px;\n"; //TODO:font size in pt to be converted into pixels	
+		css_code += "font-size: " + textitem.size.as("pixel") + "px;\n"; //TODO:font size in pt to be converted into pixels	
 		// css_code+="line-height:"+textitem.size.as("pixel")+"px\n";
 	}
 	css_code += "z-index:" + (total_layer_number - (i + j)) + ";\n";
@@ -346,9 +347,44 @@ function addSoldfillLayerCode(i, j) {
 }
 
 function addTextLayerCode(i, j) {
-	html_code += '<p class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</p>\n";
+	var textitem = activeDocument.layerSets[i].layers[j].textItem;
+	var text_kind = textitem.kind;
+	var hsize = textitem.size.as("pixel");
+	if (text_kind == "TextType.PARAGRAPHTEXT") {
+		html_code += '<p class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</p>\n";
+	} else {
+		// addHTag(hsize, i, j);
+		// TODO: add htag
+	}
 	getTextCss(i, j);
 }
+/*
+
+function addHTag(foo, i, j) {
+	switch (true) { // invariant TRUE instead of variable foo
+		case foo >= 0 && foo <= 12:
+			alert('h6');
+			break;
+		case foo > 12 && foo <= 14:
+			alert("h5");
+			break;
+		case foo > 14 && foo = < 16:
+			alert("h4");
+			break;
+		case foo > 16 && foo = < 20:
+			alert("h3");
+			break;
+		case foo > 20 && foo <= 24:
+			alert("h2");
+			break;
+		case foo > 24 && foo <= 32:
+			alert("h1");
+			break;
+		default:
+			alert('no tag will be added due to unknown size');
+	}
+}
+*/
 
 function addNormalLayerCode(i, j) {
 	html_code += '<img class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "normal", i, j) + '"/>\n';
@@ -358,6 +394,11 @@ function addNormalLayerCode(i, j) {
 	// downloadImage(i, j);
 }
 
+function allFonts() {
+	// fetch all fonts installed in the system
+	var fontsInstalled = app.fonts;
+	alert(fontsInstalled[0]);
+}
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 // File and Folder Creation Code
 // Mac Specified Code 
@@ -371,7 +412,6 @@ function createFolders() {
 	css_folder.create();
 	images_folder.create();
 }
-
 
 function createFile(file_name, content) {
 	// Creating a file
@@ -397,12 +437,8 @@ function createFile(file_name, content) {
 		write_file.close();
 	}
 }
-
-function allFonts() {
-	// fetch all fonts installed in the system
-	var fontsInstalled = app.fonts;
-	alert(fontsInstalled[0]);
-}
+// ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
+// Cleaning stuff
 
 function endNotes() {
 	alert("Thank you for using PS2WEB!! \
@@ -419,6 +455,7 @@ function faqs() {
 function main() {
 	// Main function 
 	removeEmptyThings();
+	docSizeAdjust();
 	addBeforeBodyHtml();
 	addCssBasicCode();
 	layerSetsDivision();
@@ -453,15 +490,16 @@ function wrapper() {
 wrapper();
 
 function okDocument() {
-	// check that we have a valid document
+	// checking document validity
 	if (!documents.length) return false;
-
 	var thisDoc = app.activeDocument;
 	var fileExt = decodeURI(thisDoc.name).replace(/^.*\./, '');
 	return fileExt.toLowerCase() == 'psd'
 }
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 function removeEmptyThings() {
+	// clearing empty layer and layersets
+	// TODO: Ask for clearing empty layer
 	if (app.documents.length > 0) {
 		var startRulerUnits = app.preferences.rulerUnits;
 		app.preferences.rulerUnits = Units.PIXELS;
@@ -472,6 +510,7 @@ function removeEmptyThings() {
 }
 
 function removeAllEmptyArtLayers(obj) {
+	// clearing empty layers
 	for (var i = obj.artLayers.length - 1; 0 <= i; i--) {
 		try {
 			if (obj.artLayers[i].kind == LayerKind.NORMAL && obj.artLayers[i].bounds[2] == 0 && obj.artLayers[i].bounds[3] == 0) {
@@ -485,6 +524,7 @@ function removeAllEmptyArtLayers(obj) {
 }
 
 function removeAllEmptyLayerSets(obj) {
+	// clearing empty layersets
 	var foundEmpty = true;
 	for (var i = obj.layerSets.length - 1; 0 <= i; i--) {
 		if (removeAllEmptyLayerSets(obj.layerSets[i])) {
@@ -500,7 +540,22 @@ function removeAllEmptyLayerSets(obj) {
 }
 
 
+function docSizeAdjust() {
+	// app.activeDocument.width=1024;
 
+	doc = app.activeDocument;
+
+	// change the color mode to RGB.  Important for resizing GIFs with indexed colors, to get better results
+	doc.changeMode(ChangeMode.RGB);
+
+	// these are our values for the end result width and height (in pixels) of our image
+	var fWidth = 1024;
+	app.preferences.rulerUnits = Units.PIXELS;
+	app.preferences.typeUnits = TypeUnits.PIXELS;
+	// do the resizing.  if height > width (portrait-mode) resize based on height.  otherwise, resize based on width
+	// doc.resizeImage(null,UnitValue(fHeight,"px"),null,ResampleMethod.BICUBIC);
+	doc.resizeImage(UnitValue(fWidth, "px"), null, null, ResampleMethod.BICUBIC);
+}
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 //
 /*
