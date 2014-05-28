@@ -353,38 +353,39 @@ function addTextLayerCode(i, j) {
 	if (text_kind == "TextType.PARAGRAPHTEXT") {
 		html_code += '<p class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</p>\n";
 	} else {
-		// addHTag(hsize, i, j);
+		addHTag(hsize, i, j);
 		// TODO: add htag
 	}
 	getTextCss(i, j);
 }
-/*
+
 
 function addHTag(foo, i, j) {
 	switch (true) { // invariant TRUE instead of variable foo
 		case foo >= 0 && foo <= 12:
-			alert('h6');
+			html_code += '<h6 class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</h6>\n";
 			break;
 		case foo > 12 && foo <= 14:
-			alert("h5");
+			html_code += '<h5 class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</h5>\n";
 			break;
-		case foo > 14 && foo = < 16:
-			alert("h4");
+		case foo>14 && foo<16:
+			html_code += '<h4 class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</h4>\n";
 			break;
-		case foo > 16 && foo = < 20:
-			alert("h3");
+		case foo>16 && foo<=20:
+			html_code += '<h3 class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</h3>\n";
 			break;
-		case foo > 20 && foo <= 24:
-			alert("h2");
+		case foo>20 && foo <=24:
+			html_code += '<h2 class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</h2>\n";
 			break;
-		case foo > 24 && foo <= 32:
-			alert("h1");
+		case foo > 24:
+			html_code += '<h1 class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</h1>\n";
 			break;
 		default:
 			alert('no tag will be added due to unknown size');
 	}
 }
-*/
+
+
 
 function addNormalLayerCode(i, j) {
 	html_code += '<img class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "normal", i, j) + '"/>\n';
