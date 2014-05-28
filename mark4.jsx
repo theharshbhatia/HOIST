@@ -28,7 +28,7 @@ prefs.count = 0;
 
 function beautifyLayerName(layer_name, type, i, j) {
 	// Replacing spaces with hyphens for css conventions
-	layer_name = layer_name.split(' ').join('-');
+	layer_name = layer_name.split(' ').join('-').toLowerCase();
 
 	if (layer_name.length > 20) {
 		// layer name is equal to type + layer number for layer name greater than 20
@@ -123,14 +123,16 @@ function getTextCss(i, j) {
 	css_code += "position: absolute;\n" + "left:" + text_pos_x + "px;\ntop:" + text_pos_y + "px;\n";
 
 	if (textitem.color.rgb.hexValue) {
-		css_code += "color: #" + textitem.color.rgb.hexValue + ";\n";
+		if(textitem.color.rgb.hexValue!=000000){
+		css_code += "color: #" + textitem.color.rgb.hexValue + ";\n";}
 	}
 	if ((activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) != 1.0) {
 	css_code += "opacity: " + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
 	}
 
-
-	css_code += "text-align:  " + text_justification.toString().split(".")[1].toLowerCase() + ";\n";
+	if(text_justification.toString().split(".")[1].toLowerCase()!="left")
+	{
+	css_code += "text-align:  " + text_justification.toString().split(".")[1].toLowerCase() + ";\n";}
 
 	if (text_kind == "TextType.PARAGRAPHTEXT") {
 
