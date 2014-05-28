@@ -6,6 +6,7 @@ functionality :
 3. Adding non-visible layer elements as display: none
 4. seperate files for css and html
 
+
 Photoshop to Web Converter
 
 HTML TAGS SUPPORTED :
@@ -16,15 +17,15 @@ HTML TAGS SUPPORTED :
 img 
 style 
 h1 -  h6
+div 
+head
 
 TODO right now
 button 
 center 
-div 
 embed 
 figcaption 
- figure 
- head 
+figure
 input
 nav  
 video

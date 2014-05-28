@@ -40,7 +40,7 @@ function beautifyLayerName(layer_name, type, i, j) {
 //CSS CODE FORMATION
 function addCssBasicCode() {
 	// adding body element to css_code
-	css_code += "body\n{\nwidth:100%;" + "\n}\n";
+	css_code += "body\n{\nwidth:100%;\nmargin: 0;\npadding:0;" + "\n}\n";
 }
 
 
