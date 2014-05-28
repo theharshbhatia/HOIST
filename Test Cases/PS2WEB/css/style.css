@@ -2,7 +2,7 @@ body
 {
 width:100%;
 margin: 0;
- padding:0;
+padding:0;
 }
 .text4
 {
@@ -11,7 +11,6 @@ position: absolute;
 left:268px;
 top:437px;
 color: #001F48;
-opacity: 1.0;
 text-align:  left;
 height: 160.136123657227px;
 width: 276.121459960938px;
@@ -26,7 +25,6 @@ position: absolute;
 left:278px;
 top:276px;
 color: #001F48;
-opacity: 1.0;
 text-align:  left;
 font-family: AdobeMingStd-Light;
 font-size: 12px;
@@ -39,7 +37,7 @@ position: absolute;
 left:83px;
 top:138px;
 color: #001F48;
-opacity: 1.0;
+opacity: 0.7;
 text-align:  left;
 font-family: AdobeMingStd-Light;
 font-size: 30px;

@@ -62,7 +62,8 @@ function getGeneralCss(i, j) {
 	css_code += "position:absolute;\n"
 	css_code += "left:" + boundstring[0].split(' ').join('') + ";\n";
 	css_code += "top:" + boundstring[1].split(' ').join('') + ";\n";
-	css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
+	if ((activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1)!= 1.0) 
+	{css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";}
 	css_code += "z-index:" + (i + j) + ";\n";
 	addLayerStyle(i, j);
 	css_code += "}\n";
@@ -124,7 +125,10 @@ function getTextCss(i, j) {
 	if (textitem.color.rgb.hexValue) {
 		css_code += "color: #" + textitem.color.rgb.hexValue + ";\n";
 	}
+	if ((activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) != 1.0) {
 	css_code += "opacity: " + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
+	}
+
 
 	css_code += "text-align:  " + text_justification.toString().split(".")[1].toLowerCase() + ";\n";
 
@@ -272,7 +276,7 @@ function SavePNG24(saveFile) {
 	
 	*/
 function addBeforeBodyHtml() {
-	html_code += "<!doctype html>\n<html lang='en'>\n<head>\n<meta charset='UTF-8'>\n";
+	html_code += "<!doctype html>\n<html lang='en'>\n<head>\n<meta charset='UTF-8'><link rel='icon' type='image/png' href=''>\n";
 	var Document_name = app.activeDocument.name;
 	html_code += "<title>\n" + Document_name.substring(0, Document_name.length - 4) + '\n</title>\n<link rel="stylesheet" type="text/css" href="css/style.css">\n</head>';
 	html_code += "<body>";
@@ -368,13 +372,13 @@ function addHTag(foo, i, j) {
 		case foo > 12 && foo <= 14:
 			html_code += '<h5 class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</h5>\n";
 			break;
-		case foo>14 && foo<16:
+		case foo > 14 && foo < 16:
 			html_code += '<h4 class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</h4>\n";
 			break;
-		case foo>16 && foo<=20:
+		case foo > 16 && foo <= 20:
 			html_code += '<h3 class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</h3>\n";
 			break;
-		case foo>20 && foo <=24:
+		case foo > 20 && foo <= 24:
 			html_code += '<h2 class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</h2>\n";
 			break;
 		case foo > 24:
