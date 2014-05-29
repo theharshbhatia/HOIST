@@ -33,9 +33,19 @@ function beautifyLayerName(layer_name, type, i, j) {
 
 	if (layer_name.length > 20) {
 		// layer name is equal to type + layer number for layer name greater than 20
-		layer_name = type + (total_layer_number - i + j);
+		layer_name = type+ i.toString()+j.toString();
 	}
 	return layer_name;
+}
+function beautifyLayerSetName(layerSet_name, type, i) {
+	// Replacing spaces with hyphens for css conventions
+	layerSet_name = layerSet_name.split(' ').join('-').toLowerCase();
+
+	if (layerSet_name.length > 20) {
+		// layer name is equal to type + layer number for layer name greater than 20
+		layerSet_name = type +i.toString();
+	}
+	return layerSet_name;
 }
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 //CSS CODE FORMATION
@@ -341,7 +351,7 @@ function addBeforeBodyHtml() {
 }
 
 function addDivTag(div_name, i) {
-	html_code += '<div class=" ' + beautifyLayerName(div_name, i, 0) + '">\n'; 
+	html_code += '<div class=" ' + beautifyLayerSetName(div_name,"div", i) + '">\n';
 	divideLayerIntoType(i);
 	addDivCss(layerSet_name, i);
 	html_code += "</div>";
@@ -381,29 +391,28 @@ function layerSetsDivision() {
 	total_layer_number += numoflayerset;
 
 	for (var i = 0; i < numoflayerset; i++) {
-		layerSet_name = activeDocument.layerSets[i].name;
-
-		if (layerSet_name == "nav" || layerSet_name == "navbar") {
-			// html_code += '<nav class=" ' + layer_name + '">\n'; 
-			// TODO: find a way to close this section and add css on basic html tag
-		}
-		switch (layerSet_name.toLowerCase()) {
-			case "nav":
-			case "navbar":
-				// alert(layerSet_name);
-				addNavbarTagCode(i);
-				break;
-				// alert(layer_kind);
-			default:
-				addDivTag(layerSet_name, i);
-				break;
+		layerSet_name = activeDocument.layerSets[i].name.toLowerCase();
+		if (layerSet_name.indexOf("button") > -1) {
+			addButtonTagCode(i);
+		} else {
+			switch (layerSet_name) {
+				case "nav":
+				case "navbar":
+					// alert(layerSet_name);
+					addNavbarTagCode(i);
+					break;
+					// alert(layer_kind);
+				default:
+					addDivTag(layerSet_name, i);
+					break;
+			}
 		}
 	}
 
 }
 
 function divideLayerIntoType(i) {
-	var j=0;
+	var j = 0;
 	inside_layer_numbers = activeDocument.layerSets[i].layers.length;
 	total_layer_number += inside_layer_numbers;
 	for (var j = 0; j < inside_layer_numbers; j++) {
@@ -411,7 +420,7 @@ function divideLayerIntoType(i) {
 		layer_name = activeDocument.layerSets[i].layers[j].name;
 		layer_kind = activeDocument.layerSets[i].layers[j].kind;
 		app.activeDocument.activeLayer = activeDocument.layerSets[i].layers[j];
-		alert(layer_name);
+		// alert(layer_name);
 		// alert(layerSet_name);
 
 		switch (layer_kind) {
@@ -492,10 +501,22 @@ function addNormalLayerCode(i, j) {
 	// downloadImage(i, j);
 }
 
-function addNavbarTagCode(i, j) {
+function addButtonTagCode(i) {
+	html_code+='<button class="' +beautifyLayerSetName(activeDocument.layerSets[i].name.toLowerCase(), i, "button") +'">\n';
+	if ((activeDocument.layerSets[i].opacity / 100).toFixed(1) != 1.0) {
+		css_code += "." + beautifyLayerSetName(activeDocument.layerSets[i].name.toLowerCase(), i, "button")+ "\n{\n";
+		css_code += "opacity:" + (activeDocument.layerSets[i].opacity / 100).toFixed(1) + ";\n";
+		// add div shadow
+		css_code += "}\n";
+	}
+	// TODONOW
+	html_code+="</button>";
+}	
+
+function addNavbarTagCode(i) {
 	// NavBar Addition Code
 	html_code += "<nav>\n";
-	divideLayerIntoType(i,j);
+	divideLayerIntoType(i);
 	// add navcss
 	html_code += "</nav>";
 }
