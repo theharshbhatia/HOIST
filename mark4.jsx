@@ -63,12 +63,14 @@ function getGeneralCss(i, j) {
 	css_code += "position:absolute;\n"
 	css_code += "left:" + boundstring[0].split(' ').join('') + ";\n";
 	css_code += "top:" + boundstring[1].split(' ').join('') + ";\n";
-	if ((activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1)!= 1.0) 
-	{css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";}
+	if ((activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) != 1.0) {
+		css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
+	}
 	css_code += "z-index:" + (i + j) + ";\n";
 	addLayerStyle(i, j);
 	css_code += "}\n";
 }
+
 
 function getTextCss(i, j) {
 	// adding text styles to css_code
@@ -124,22 +126,23 @@ function getTextCss(i, j) {
 	css_code += "position: absolute;\n" + "left:" + text_pos_x + "px;\ntop:" + text_pos_y + "px;\n";
 
 	if (textitem.color.rgb.hexValue) {
-		if(textitem.color.rgb.hexValue!=000000){
-		css_code += "color: #" + textitem.color.rgb.hexValue + ";\n";}
+		if (textitem.color.rgb.hexValue != 000000) {
+			css_code += "color: #" + textitem.color.rgb.hexValue + ";\n";
+		}
 	}
 	if ((activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) != 1.0) {
-	css_code += "opacity: " + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
+		css_code += "opacity: " + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
 	}
 
-	if(text_justification.toString().split(".")[1].toLowerCase()!="left")
-	{
-	css_code += "text-align:  " + text_justification.toString().split(".")[1].toLowerCase() + ";\n";}
+	if (text_justification.toString().split(".")[1].toLowerCase() != "left") {
+		css_code += "text-align:  " + text_justification.toString().split(".")[1].toLowerCase() + ";\n";
+	}
 
 	if (text_kind == "TextType.PARAGRAPHTEXT") {
 
 		css_code += "height: " + textitem.height.as("pixel") + "px;\n";
 		css_code += "width: " + textitem.width.as("pixel") + "px;\n";
-		css_code+= "word-wrap:break-word;\n";
+		css_code += "word-wrap:break-word;\n";
 	}
 
 	if (textitem.font) {
@@ -208,10 +211,46 @@ function getFillColor() {
 	fillcolor.rgb.red = color.getDouble(charIDToTypeID('Rd  '));
 	fillcolor.rgb.green = color.getDouble(charIDToTypeID('Grn '));
 	fillcolor.rgb.blue = color.getDouble(charIDToTypeID('Bl  '));
-	css_code=css_code.substring(0,css_code.length-2);
-	css_code+="background: #"+fillcolor.rgb.hexValue+";\n}\n";
+	css_code = css_code.substring(0, css_code.length - 2);
+	css_code += "background: #" + fillcolor.rgb.hexValue + ";\n}\n";
+	roundRect();
 	return fillcolor;
 };
+
+function roundRect() {
+
+	try {
+		var Paths, Path;
+		var SubPaths, Item;
+		var Points, Point;
+		X = new Array;
+		Paths = app.activeDocument.pathItems;
+		for (var i = 0; i < Paths.length; i++) {
+			Path = Paths[i];
+			SubPaths = Path.subPathItems;
+			for (var j = 0; j < SubPaths.length; j++) {
+				Item = SubPaths[j];
+				Points = Item.pathPoints;
+
+				for (var k = 1; k < 3; k++) {
+					Point = Points[k];
+					X[k] = Point.anchor[0];
+				}
+			}
+			X[1] = parseInt(X[1]);
+			X[2] = parseInt(X[2]);
+		}
+		var Radius = X[2] - X[1];
+
+	} catch (e) {}
+	if (Radius != 0) {
+		css_code = css_code.substring(0, css_code.length - 2);
+		css_code += "border-radius:" + Radius + "px;\n}\n";
+
+	}
+}
+
+
 // ----------------------------------------------------------------------------------------------------------------------------------
 function downloadImage(r, k) {
 	// Downloading image from layer
@@ -302,7 +341,12 @@ function addBeforeBodyHtml() {
 }
 
 function addDivTag(div_name, i) {
-	html_code += '<div class=" ' + beautifyLayerName(div_name, i, 0) + '">\n'; //layername
+	html_code += '<div class=" ' + beautifyLayerName(div_name, i, 0) + '">\n'; 
+	divideLayerIntoType(i);
+	addDivCss(layerSet_name, i);
+	html_code += "</div>";
+
+	//layername
 }
 
 function addImageTag(image_source, layername) {
@@ -343,38 +387,51 @@ function layerSetsDivision() {
 			// html_code += '<nav class=" ' + layer_name + '">\n'; 
 			// TODO: find a way to close this section and add css on basic html tag
 		}
-
-		addDivTag(layerSet_name, i);
-		addDivCss(layerSet_name, i);
-
-		inside_layer_numbers = activeDocument.layerSets[i].layers.length;
-		total_layer_number += inside_layer_numbers;
-		for (var j = 0; j < inside_layer_numbers; j++) {
-			layer_name = activeDocument.layerSets[i].layers[j].name;
-			layer_kind = activeDocument.layerSets[i].layers[j].kind;
-			app.activeDocument.activeLayer = activeDocument.layerSets[i].layers[j];
-			// alert(layer_kind);
-			switch (layer_kind) {
-				case LayerKind.TEXT:
-					addTextLayerCode(i, j);
-					break;
-
-				case LayerKind.SOLIDFILL:
-					addSoldfillLayerCode(i, j);
-					break;
-
-				case LayerKind.NORMAL:
-					addNormalLayerCode(i, j);
-					break;
-				default:
-					alert(layer_kind);
-					break;
-			}
+		switch (layerSet_name.toLowerCase()) {
+			case "nav":
+			case "navbar":
+				// alert(layerSet_name);
+				addNavbarTagCode(i);
+				break;
+				// alert(layer_kind);
+			default:
+				addDivTag(layerSet_name, i);
+				break;
 		}
-
-		addDivCloseTag();
 	}
 
+}
+
+function divideLayerIntoType(i) {
+	var j=0;
+	inside_layer_numbers = activeDocument.layerSets[i].layers.length;
+	total_layer_number += inside_layer_numbers;
+	for (var j = 0; j < inside_layer_numbers; j++) {
+
+		layer_name = activeDocument.layerSets[i].layers[j].name;
+		layer_kind = activeDocument.layerSets[i].layers[j].kind;
+		app.activeDocument.activeLayer = activeDocument.layerSets[i].layers[j];
+		alert(layer_name);
+		// alert(layerSet_name);
+
+		switch (layer_kind) {
+			case LayerKind.TEXT:
+				addTextLayerCode(i, j);
+				break;
+
+			case LayerKind.SOLIDFILL:
+				addSoldfillLayerCode(i, j);
+				break;
+
+			case LayerKind.NORMAL:
+				addNormalLayerCode(i, j);
+				break;
+			default:
+				alert(layer_kind);
+				break;
+		}
+
+	}
 }
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 // Specific Layer Type Code Generation
@@ -382,6 +439,7 @@ function addSoldfillLayerCode(i, j) {
 	html_code += '<div class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "solid", i, j) + '">';
 	getGeneralCss(i, j);
 	getFillColor();
+	addDivCloseTag();
 
 }
 
@@ -430,9 +488,16 @@ function addNormalLayerCode(i, j) {
 	// TODO href for image
 	html_code += '<img class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "normal", i, j) + '"/>\n';
 	getGeneralCss(i, j);
-
 	// getImageCss(i, j);
 	// downloadImage(i, j);
+}
+
+function addNavbarTagCode(i, j) {
+	// NavBar Addition Code
+	html_code += "<nav>\n";
+	divideLayerIntoType(i,j);
+	// add navcss
+	html_code += "</nav>";
 }
 
 function allFonts() {

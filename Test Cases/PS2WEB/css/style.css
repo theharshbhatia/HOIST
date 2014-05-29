@@ -4,6 +4,28 @@ width:100%;
 margin: 0;
 padding:0;
 }
+.harsh
+{
+margin:0;
+position: absolute;
+left:723px;
+top:106px;
+color: #00BFF3;
+font-family: ArialNarrow;
+font-size: 120px;
+z-index:3;
+}
+.rounded-rectangle-1
+{
+height:260px;
+width:417px;
+position:absolute;
+left:307px;
+top:437px;
+z-index:1;
+background: #00BFF3;
+border-radius:100px;
+}
 .rectangle-1
 {
 height:264px;
@@ -11,6 +33,6 @@ width:424px;
 position:absolute;
 left:180px;
 top:123px;
-z-index:0;
+z-index:2;
 background: #00BFF3;
 }
