@@ -1,5 +1,6 @@
+// HOIST: Js photoshop plugin
 // CODE: Convert PSD file design into html and css code (MAC version)
-// Version: 0.1(alpha)
+// Version: 0.1(Beta)
 // by Harsh Bhatia
 
 // Included Files and libs
@@ -195,6 +196,22 @@ function addLayerStyle(i, j) {
 		} else {}
 	}
 }
+
+function getFillColor() {
+	var ref = new ActionReference();
+	ref.putEnumerated(stringIDToTypeID("contentLayer"), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
+	var ref1 = executeActionGet(ref);
+	var list = ref1.getList(charIDToTypeID("Adjs"));
+	var solidColorLayer = list.getObjectValue(0);
+	var color = solidColorLayer.getObjectValue(charIDToTypeID('Clr '));
+	var fillcolor = new SolidColor;
+	fillcolor.rgb.red = color.getDouble(charIDToTypeID('Rd  '));
+	fillcolor.rgb.green = color.getDouble(charIDToTypeID('Grn '));
+	fillcolor.rgb.blue = color.getDouble(charIDToTypeID('Bl  '));
+	css_code=css_code.substring(0,css_code.length-2);
+	css_code+="background: #"+fillcolor.rgb.hexValue+";\n}\n";
+	return fillcolor;
+};
 // ----------------------------------------------------------------------------------------------------------------------------------
 function downloadImage(r, k) {
 	// Downloading image from layer
@@ -336,6 +353,7 @@ function layerSetsDivision() {
 			layer_name = activeDocument.layerSets[i].layers[j].name;
 			layer_kind = activeDocument.layerSets[i].layers[j].kind;
 			app.activeDocument.activeLayer = activeDocument.layerSets[i].layers[j];
+			// alert(layer_kind);
 			switch (layer_kind) {
 				case LayerKind.TEXT:
 					addTextLayerCode(i, j);
@@ -347,6 +365,9 @@ function layerSetsDivision() {
 
 				case LayerKind.NORMAL:
 					addNormalLayerCode(i, j);
+					break;
+				default:
+					alert(layer_kind);
 					break;
 			}
 		}
@@ -360,8 +381,10 @@ function layerSetsDivision() {
 function addSoldfillLayerCode(i, j) {
 	html_code += '<div class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "solid", i, j) + '">';
 	getGeneralCss(i, j);
+	getFillColor();
 
 }
+
 
 function addTextLayerCode(i, j) {
 	var textitem = activeDocument.layerSets[i].layers[j].textItem;
