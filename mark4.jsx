@@ -138,7 +138,7 @@ function getTextCss(i, j) {
 
 		css_code += "height: " + textitem.height.as("pixel") + "px;\n";
 		css_code += "width: " + textitem.width.as("pixel") + "px;\n";
-
+		css_code+= "word-wrap:break-word;\n";
 	}
 
 	if (textitem.font) {
@@ -298,7 +298,18 @@ function addDivCloseTag() {
 }
 
 function addPageCloseTag() {
-	html_code += "</body></html>";
+	html_code += "<script type='text/javascript'>\
+	 function downloadJSAtOnload() {\
+var element = document.createElement('script');\
+element.src = '';\
+document.body.appendChild(element);\
+}\
+if (window.addEventListener)\
+window.addEventListener('load', downloadJSAtOnload, false);\
+else if (window.attachEvent)\
+window.attachEvent('onload', downloadJSAtOnload);\
+else window.onload = downloadJSAtOnload;\
+</script></body></html>";
 }
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 function layerSetsDivision() {
@@ -360,7 +371,6 @@ function addTextLayerCode(i, j) {
 		html_code += '<p class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</p>\n";
 	} else {
 		addHTag(hsize, i, j);
-		// TODO: add htag
 	}
 	getTextCss(i, j);
 }
@@ -394,6 +404,7 @@ function addHTag(foo, i, j) {
 
 
 function addNormalLayerCode(i, j) {
+	// TODO href for image
 	html_code += '<img class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "normal", i, j) + '"/>\n';
 	getGeneralCss(i, j);
 

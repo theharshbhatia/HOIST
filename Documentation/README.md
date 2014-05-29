@@ -7,7 +7,7 @@ functionality :
 4. seperate files for css and html
 
 
-Photoshop to Web Converter
+Photoshop to Web Converter:
 
 HTML TAGS SUPPORTED :
  !-- 
@@ -19,20 +19,21 @@ style
 h1 -  h6
 div 
 head
+center
+script
 
 TODO right now
 button 
-center 
 embed 
 figcaption 
 figure
 input
-nav  
+nav 
 video
 textarea 
 span
 section
-script
+
 ========================================================================================================
 CSS properties supported:
 align-content
