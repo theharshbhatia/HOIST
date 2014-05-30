@@ -7,32 +7,41 @@ padding:0;
 .harsh
 {
 margin:0;
-position: absolute;
-left:723px;
-top:106px;
-color: #00BFF3;
+color: #363636;
 font-family: ArialNarrow;
 font-size: 120px;
-z-index:3;
-}
-.rounded-rectangle-1
-{
-height:260px;
-width:417px;
-position:absolute;
-left:307px;
-top:437px;
-z-index:1;
-background: #00BFF3;
-border-radius:100px;
+z-index:4;
 }
 .rectangle-1
 {
-height:264px;
-width:424px;
+height:304px;
+width:449px;
 position:absolute;
 left:180px;
 top:123px;
-z-index:2;
+z-index:1;
 background: #00BFF3;
+}
+.press
+{
+margin:0;
+color: #363636;
+height: 386px;
+width: 603px;
+word-wrap:break-word;
+font-family: ArialNarrow;
+font-size: 120px;
+z-index:5;
+}
+.button2
+{
+margin:0;
+height:260px;
+width:417px;
+position:absolute;
+left:291px;
+top:454px;
+z-index:3;
+background: #00BFF3;
+border-radius:100px;
 }

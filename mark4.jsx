@@ -33,17 +33,21 @@ function beautifyLayerName(layer_name, type, i, j) {
 
 	if (layer_name.length > 20) {
 		// layer name is equal to type + layer number for layer name greater than 20
-		layer_name = type+ i.toString()+j.toString();
+		layer_name = type + i.toString() + j.toString();
 	}
 	return layer_name;
 }
+
 function beautifyLayerSetName(layerSet_name, type, i) {
 	// Replacing spaces with hyphens for css conventions
 	layerSet_name = layerSet_name.split(' ').join('-').toLowerCase();
 
 	if (layerSet_name.length > 20) {
 		// layer name is equal to type + layer number for layer name greater than 20
-		layerSet_name = type +i.toString();
+		layerSet_name = type + i.toString();
+	}
+	if (type = 'button') {
+		alert("button");
 	}
 	return layerSet_name;
 }
@@ -54,11 +58,54 @@ function addCssBasicCode() {
 	css_code += "body\n{\nwidth:100%;\nmargin: 0;\npadding:0;" + "\n}\n";
 }
 
+function getButtonTextCss(i,j){
+	var textitem = activeDocument.layerSets[i].layers[j].textItem;
+	var text_kind = textitem.kind;
+	var text_font = textitem.font
+	var text_contents = textitem.contents;
+	var text_justification = textitem.justification;
+	//adding css style
 
-function getGeneralCss(i, j) {
+	css_code += "." + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + "\n{\n";
+	css_code += "margin:0;\n";
+
+	if (textitem.color.rgb.hexValue) {
+		if (textitem.color.rgb.hexValue != 000000) {
+			css_code += "color: #" + textitem.color.rgb.hexValue + ";\n";
+		}
+	}
+	if ((activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) != 1.0) {
+		css_code += "opacity: " + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
+	}
+
+	if (text_justification.toString().split(".")[1].toLowerCase() != "left") {
+		css_code += "text-align:  " + text_justification.toString().split(".")[1].toLowerCase() + ";\n";
+	}
+
+	if (text_kind == "TextType.PARAGRAPHTEXT") {
+
+		css_code += "height: " + textitem.height.as("pixel") + "px;\n";
+		css_code += "width: " + textitem.width.as("pixel") + "px;\n";
+		css_code += "word-wrap:break-word;\n";
+	}
+
+	if (textitem.font) {
+		css_code += "font-family: " + textitem.font + ";\n"; //TODO: now else non-webfonts are still an issue.
+	}
+
+	if (textitem.size) {
+		css_code += "font-size: " + textitem.size.as("pixel") + "px;\n"; //TODO:font size in pt to be converted into pixels	
+		// css_code+="line-height:"+textitem.size.as("pixel")+"px\n";
+	}
+	css_code += "z-index:" + (total_layer_number - (i + j)) + ";\n";
+	addLayerStyle(i, j);
+	css_code += "}\n";
+}
+
+function getGeneralCss(i, j, typeo) {
 	// adding generall css to css_code string
 	var layer = activeDocument.layerSets[i].layers[j]
-	css_code += "." + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + "\n{\n";
+	css_code += "." + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, typeo, i, j) + "\n{\n";
 	var boundstring = layer.bounds.toString().split(",");
 	var width = boundstring[0] - boundstring[2];
 	var height = boundstring[1] - boundstring[3];
@@ -86,45 +133,9 @@ function getTextCss(i, j) {
 	// adding text styles to css_code
 	var textitem = activeDocument.layerSets[i].layers[j].textItem;
 	var text_kind = textitem.kind;
-	// var text_direction = textitem.direction; 
-	// var text_autoLeadingAmount = textitem.autoLeadingAmount;
-	// var text_antiAliasMethod = textitem.antiAliasMethod;
-	// var text_desiredGlyphScaling = textitem.desiredGlyphScaling;
-	// var text_desiredLetterScaling = textitem.desiredLetterScaling;
-	// var text_desiredWordScaling = textitem.desiredWordScaling;
-	// var text_firstLineIndent = textitem.firstLineIndent;
-	// var text_hangingPunctuation = textitem.hangingPunctuation;
-	// var text_hyphenateAfterFirst = textitem.hyphenateAfterFirst;
-	// var text_hyphenateBeforeLast = textitem.hyphenateBeforeLast;
-	// var text_hyphenateCapitalWords = textitem.hyphenateCapitalWords;
-	// var text_hyphenateWordsLongerThan = textitem.hyphenateWordsLongerThan;
-	// var text_hyphenation = textitem.hyphenation;
-	// var text_hyphenationZone = textitem.hyphenationZone;
-	// var text_hyphenLimit = textitem.hyphenLimit;
-	// var text_leftIndent = textitem.leftIndent;
-	// var text_maximumGlyphScaling = textitem.maximumGlyphScaling;
-	// var text_maximumLetterScaling = textitem.maximumLetterScaling;
-	// var text_maximumWordScaling = textitem.maximumWordScaling;
-	// var text_minimumGlyphScaling = textitem.minimumGlyphScaling;
-	// var text_minimumLetterScaling = textitem.minimumLetterScaling;
-	// var text_minimumWordScaling = textitem.minimumWordScaling;
-	// var text_parent = textitem.parent;
-	// var text_rightIndent = textitem.rightIndent;
-	// alert(text_rightIndent);
-	// var text_spaceAfter = textitem.spaceAfter;
-	// var text_spaceBefore = textitem.spaceBefore;
-	// var text_typename = textitem.typename;
-	// var text_textComposer = textitem.textComposer;
-	// var text_warpBend = textitem.warpBend;
-	// var text_warpDirection = textitem.warpDirection;
-	// var text_warpHorizontalDistortion = textitem.warpHorizontalDistortion;
-	// var text_warpStyle = textitem.warpStyle;
-	// var text_warpVerticalDistortion = textitem.warpVerticalDistortion;
-
 	var text_font = textitem.font
 	var text_contents = textitem.contents;
 	var text_justification = textitem.justification;
-	// alert(text_leftIndent); both are zero so no addition.
 	//adding css style
 
 	css_code += "." + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + "\n{\n";
@@ -171,9 +182,8 @@ function getTextCss(i, j) {
 function addDivCss(div_name, i) {
 	//adding div style to css_code
 	if ((activeDocument.layerSets[i].opacity / 100).toFixed(1) != 1.0) {
-		css_code += "." + beautifyLayerName(div_name, "div", i, 0) + "\n{\n";
+		css_code += "." + beautifyLayerSetName(div_name, "div", i) + "\n{\n";
 		css_code += "opacity:" + (activeDocument.layerSets[i].opacity / 100).toFixed(1) + ";\n";
-		// add div shadow
 		css_code += "}\n";
 	}
 
@@ -210,6 +220,33 @@ function addLayerStyle(i, j) {
 	}
 }
 
+function addButtonCss(i, j) {
+	css_code += "." + beautifyLayerSetName(activeDocument.layerSets[i].name, "button", i) + "\n{\n";
+	css_code += "margin:0;\n";
+	var layer = activeDocument.layerSets[i].layers[j]
+	var boundstring = layer.bounds.toString().split(",");
+	var width = boundstring[0] - boundstring[2];
+	var height = boundstring[1] - boundstring[3];
+	if (width < 0) {
+		width = width * (-1);
+	}
+	if (height < 0) {
+		height = height * (-1);
+	}
+	css_code += "height:" + height + "px;\n";
+	css_code += "width:" + width + "px;\n";
+	css_code += "position:absolute;\n"
+	css_code += "left:" + boundstring[0].split(' ').join('') + ";\n";
+	css_code += "top:" + boundstring[1].split(' ').join('') + ";\n";
+	if ((activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) != 1.0) {
+		css_code += "opacity:" + (activeDocument.layerSets[i].layers[j].opacity / 100).toFixed(1) + ";\n";
+	}
+	css_code += "z-index:" + (i + j) + ";\n";
+	addLayerStyle(i, j);
+	css_code += "}\n";
+	getFillColor();
+}
+
 function getFillColor() {
 	var ref = new ActionReference();
 	ref.putEnumerated(stringIDToTypeID("contentLayer"), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
@@ -223,7 +260,12 @@ function getFillColor() {
 	fillcolor.rgb.blue = color.getDouble(charIDToTypeID('Bl  '));
 	css_code = css_code.substring(0, css_code.length - 2);
 	css_code += "background: #" + fillcolor.rgb.hexValue + ";\n}\n";
-	roundRect();
+	Radius = roundRect();
+	if (Radius != 0) {
+		css_code = css_code.substring(0, css_code.length - 2);
+		css_code += "border-radius:" + Radius + "px;\n}\n";
+
+	}
 	return fillcolor;
 };
 
@@ -253,11 +295,8 @@ function roundRect() {
 		var Radius = X[2] - X[1];
 
 	} catch (e) {}
-	if (Radius != 0) {
-		css_code = css_code.substring(0, css_code.length - 2);
-		css_code += "border-radius:" + Radius + "px;\n}\n";
+	return Radius;
 
-	}
 }
 
 
@@ -351,7 +390,7 @@ function addBeforeBodyHtml() {
 }
 
 function addDivTag(div_name, i) {
-	html_code += '<div class=" ' + beautifyLayerSetName(div_name,"div", i) + '">\n';
+	html_code += '<div class=" ' + beautifyLayerSetName(div_name, "div", i) + '">\n';
 	divideLayerIntoType(i);
 	addDivCss(layerSet_name, i);
 	html_code += "</div>";
@@ -365,22 +404,22 @@ function addImageTag(image_source, layername) {
 
 
 function addDivCloseTag() {
-	html_code += "</div>"
+	html_code += "</div>";
 }
 
 function addPageCloseTag() {
 	html_code += "<script type='text/javascript'>\
 	 function downloadJSAtOnload() {\
-var element = document.createElement('script');\
-element.src = '';\
-document.body.appendChild(element);\
-}\
-if (window.addEventListener)\
-window.addEventListener('load', downloadJSAtOnload, false);\
-else if (window.attachEvent)\
-window.attachEvent('onload', downloadJSAtOnload);\
-else window.onload = downloadJSAtOnload;\
-</script></body></html>";
+	var element = document.createElement('script');\
+	element.src = '';\
+	document.body.appendChild(element);\
+	}\
+	if (window.addEventListener)\
+	window.addEventListener('load', downloadJSAtOnload, false);\
+	else if (window.attachEvent)\
+	window.attachEvent('onload', downloadJSAtOnload);\
+	else window.onload = downloadJSAtOnload;\
+	</script></body></html>";
 }
 // ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
 function layerSetsDivision() {
@@ -446,7 +485,7 @@ function divideLayerIntoType(i) {
 // Specific Layer Type Code Generation
 function addSoldfillLayerCode(i, j) {
 	html_code += '<div class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "solid", i, j) + '">';
-	getGeneralCss(i, j);
+	getGeneralCss(i, j, "solid");
 	getFillColor();
 	addDivCloseTag();
 
@@ -494,30 +533,59 @@ function addHTag(foo, i, j) {
 
 
 function addNormalLayerCode(i, j) {
-	// TODO href for image
 	html_code += '<img class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "normal", i, j) + '"/>\n';
-	getGeneralCss(i, j);
-	// getImageCss(i, j);
+	getGeneralCss(i, j, "image");
+	getImageCss(i, j);
 	// downloadImage(i, j);
 }
 
 function addButtonTagCode(i) {
-	html_code+='<button class="' +beautifyLayerSetName(activeDocument.layerSets[i].name.toLowerCase(), i, "button") +'">\n';
+	html_code += '<button class="' + beautifyLayerSetName(activeDocument.layerSets[i].name.toLowerCase(), i, "button") + '">\n';
 	if ((activeDocument.layerSets[i].opacity / 100).toFixed(1) != 1.0) {
-		css_code += "." + beautifyLayerSetName(activeDocument.layerSets[i].name.toLowerCase(), i, "button")+ "\n{\n";
+		css_code += "." + beautifyLayerSetName(activeDocument.layerSets[i].name.toLowerCase(), i, "button") + "\n{\n";
 		css_code += "opacity:" + (activeDocument.layerSets[i].opacity / 100).toFixed(1) + ";\n";
-		// add div shadow
 		css_code += "}\n";
 	}
-	// TODONOW
-	html_code+="</button>";
-}	
+	inside_layer_numbers = activeDocument.layerSets[i].layers.length;
+	total_layer_number += inside_layer_numbers;
+	for (var j = 0; j < inside_layer_numbers; j++) {
+		layer_name = activeDocument.layerSets[i].layers[j].name;
+		layer_kind = activeDocument.layerSets[i].layers[j].kind;
+		app.activeDocument.activeLayer = activeDocument.layerSets[i].layers[j];
+
+		switch (layer_kind) {
+			case LayerKind.TEXT:
+				html_code += '<span class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</span>\n";
+				getButtonTextCss(i,j);
+				break;
+
+			case LayerKind.SOLIDFILL:
+				// html_code += '<i class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "solid", i, j) +'"> </i>\n';
+				addButtonCss(i, j);
+				break;
+
+			case LayerKind.NORMAL:
+				// addNormalLayerCode(i, j);
+				html_code += '<i class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "solid", i, j) + '"> </i>\n';
+				break;
+			default:
+				break;
+		}
+
+	}
+	html_code += "</button>";
+}
 
 function addNavbarTagCode(i) {
 	// NavBar Addition Code
 	html_code += "<nav>\n";
 	divideLayerIntoType(i);
 	// add navcss
+	if ((activeDocument.layerSets[i].opacity / 100).toFixed(1) != 1.0) {
+		css_code += "." + beautifyLayerSetName(activeDocument.layerSets[i].name.toLowerCase(), "nav", i) + "\n{\n";
+		css_code += "opacity:" + (activeDocument.layerSets[i].opacity / 100).toFixed(1) + ";\n";
+		css_code += "}\n";
+	}
 	html_code += "</nav>";
 }
 
@@ -568,9 +636,7 @@ function createFile(file_name, content) {
 // Cleaning stuff
 
 function endNotes() {
-	alert("Thank you for using PS2WEB!! \
-		Please check http://photoshopetiquette.com/ for better results with psw");
-
+	alert("Thank you for using HOIST \nPlease check 'http://photoshopetiquette.com' for better results with Hoist \nIf you Find this project interesting please contribute.");
 }
 
 function faqs() {
@@ -669,12 +735,9 @@ function removeAllEmptyLayerSets(obj) {
 
 function docSizeAdjust() {
 	// app.activeDocument.width=1024;
-
 	doc = app.activeDocument;
-
 	// change the color mode to RGB.  Important for resizing GIFs with indexed colors, to get better results
 	doc.changeMode(ChangeMode.RGB);
-
 	// these are our values for the end result width and height (in pixels) of our image
 	var fWidth = 1024;
 	app.preferences.rulerUnits = Units.PIXELS;
@@ -683,72 +746,3 @@ function docSizeAdjust() {
 	// doc.resizeImage(null,UnitValue(fHeight,"px"),null,ResampleMethod.BICUBIC);
 	doc.resizeImage(UnitValue(fWidth, "px"), null, null, ResampleMethod.BICUBIC);
 }
-// ------------------------------------------------------------------- ------------------------------------------------------------------- -------------------------------------------------------------------
-//
-/*
-function Application_properties()
-{
-var app_activeDocument = app.activeDocument;
-var app_backgroundColor = app.backgroundColor;
-var app_build = app.build;
-var app_colorSettings = app.colorSettings;
-var app_displayDialogs = app.displayDialogs;
-var app_documents = app.documents;
-var app_fonts = app.fonts;
-var app_foregroundColor = app.foregroundColor;
-var app_freeMemory = app.freeMemory;
-var app_locale = app.locale;
-var app_macintoshFileTypes = app.macintoshFileTypes;
-var app_measurementLog = app.measurementLog ;
-var app_name = app.name;
-var app_notifiers = app.notifiers;
-var app_notifiersEnabled = app.notifiersEnabled;
-var app_path = app.path;
-var app_playbackDisplayDialogs = app.playbackDisplayDialogs;
-var app_playbackParameters = app.playbackParameters ;
-var app_preferences = app.preferences ;
-var app_preferencesFolder = app.preferencesFolder;
-var app_recentFiles = app.recentFiles ;
-var app_scriptingBuildDate = app.scriptingBuildDate;
-var app_scriptingVersion = app.scriptingVersion ;
-var app_systemInformation = app.systemInformation;
-var app_typename = app.typename ;
-var app_version = app.version ;
-var app_windowsFileTypes = app.windowsFileTypes;
-}
-*/
-
-
-/*
-LayerSet_properties(0);
-
-function LayerSet_properties(Layer_Number)
-{
-	var LayerSet = activeDocument.layerSets[Layer_Number];
-
-	var LayerSet_allLocked = LayerSet.allLocked;
-	var LayerSet_artLayers = LayerSet.artLayers;
-	var LayerSet_blendMode = LayerSet.blendMode; 
-	var LayerSet_bounds = LayerSet.bounds ;
-	var LayerSet_enabledChannels = LayerSet.enabledChannels;
-	var LayerSet_layers = LayerSet.layers;
-	var LayerSet_layerSets = LayerSet.layerSets;
-	var LayerSet_linkedLayers = LayerSet.linkedLayers ;
-	var LayerSet_name = LayerSet.name;
-	var LayerSet_opacity = LayerSet.opacity; 
-	var LayerSet_parent = LayerSet.parent;
-	var LayerSet_tyename = LayerSet.typename;
-	var LayerSet_visible = LayerSet.visible;
-}
-*/
-
-/*----------------------function call for LayerSets property fetching --------------------------*/
-/*
-LayerSet_properties();
-function LayerSet_properties()
-{
-	var LayerSets = activeDocument.layerSets;
-	var LayerSets_lenght = LayerSets.length; //No of layer groups present in the ps document
-	var LayerSets_typename = LayerSets.typename;
-	var LayerSets_parent = LayerSets.parent;
-}*/
