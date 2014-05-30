@@ -334,7 +334,7 @@ function saveImage(layerName) {
 	// Saving layer into image folder
 	var fileName = layerName.replace(/[\\\*\/\?:"\|<> ]/g, '');
 	if (fileName.length == 0) fileName = "autoname";
-	var handle = getUniqueName(prefs.filePath + "/PS2WEB/images/" + fileName);
+	var handle = getUniqueName(prefs.filePath + "/HOIST/images/" + fileName);
 	prefs.count++;
 	SavePNG24(handle);
 
@@ -599,7 +599,7 @@ function allFonts() {
 // Mac Specified Code 
 function createFolders() {
 	// creating all folders
-	var folder_name = "PS2WEB";
+	var folder_name = "HOIST";
 	var main_folder = new Folder(prefs.filePath + "/" + folder_name);
 	main_folder.create();
 	var css_folder = new Folder(prefs.filePath + "/" + folder_name + "/css");
@@ -610,7 +610,7 @@ function createFolders() {
 
 function createFile(file_name, content) {
 	// Creating a file
-	var g_file_path = prefs.filePath + "/PS2WEB/" + file_name;
+	var g_file_path = prefs.filePath + "/HOIST/" + file_name;
 	var write_file = File(g_file_path);
 	if (!write_file.exists) {
 		write_file = new File(g_file_path);
