@@ -29,7 +29,7 @@ prefs.count = 0;
 
 function beautifyLayerName(layer_name, type, i, j) {
 	// Replacing spaces with hyphens for css conventions
-	layer_name = layer_name.split(' ').join('-').toLowerCase();
+	layer_name = "h"+layer_name.split(' ').join('-').toLowerCase().replace();
 
 	if (layer_name.length > 20) {
 		// layer name is equal to type + layer number for layer name greater than 20
@@ -45,9 +45,6 @@ function beautifyLayerSetName(layerSet_name, type, i) {
 	if (layerSet_name.length > 20) {
 		// layer name is equal to type + layer number for layer name greater than 20
 		layerSet_name = type + i.toString();
-	}
-	if (type = 'button') {
-		alert("button");
 	}
 	return layerSet_name;
 }
@@ -67,7 +64,7 @@ function getButtonTextCss(i,j){
 	//adding css style
 
 	css_code += "." + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + "\n{\n";
-	css_code += "margin:0;\n";
+	css_code += "margin: 0px;\n";
 
 	if (textitem.color.rgb.hexValue) {
 		if (textitem.color.rgb.hexValue != 000000) {
@@ -133,7 +130,10 @@ function getTextCss(i, j) {
 	// adding text styles to css_code
 	var textitem = activeDocument.layerSets[i].layers[j].textItem;
 	var text_kind = textitem.kind;
-	var text_font = textitem.font
+	try{
+	var text_font = textitem.font;
+	}
+	catch(e){};
 	var text_contents = textitem.contents;
 	var text_justification = textitem.justification;
 	//adding css style
@@ -166,9 +166,10 @@ function getTextCss(i, j) {
 		css_code += "word-wrap:break-word;\n";
 	}
 
-	if (textitem.font) {
+	try {
 		css_code += "font-family: " + textitem.font + ";\n"; //TODO: now else non-webfonts are still an issue.
 	}
+	catch(e){};
 
 	if (textitem.size) {
 		css_code += "font-size: " + textitem.size.as("pixel") + "px;\n"; //TODO:font size in pt to be converted into pixels	
@@ -180,7 +181,7 @@ function getTextCss(i, j) {
 }
 
 function addDivCss(div_name, i) {
-	//adding div style to css_code
+	//adding div style to css_code	
 	if ((activeDocument.layerSets[i].opacity / 100).toFixed(1) != 1.0) {
 		css_code += "." + beautifyLayerSetName(div_name, "div", i) + "\n{\n";
 		css_code += "opacity:" + (activeDocument.layerSets[i].opacity / 100).toFixed(1) + ";\n";
@@ -475,7 +476,7 @@ function divideLayerIntoType(i) {
 				addNormalLayerCode(i, j);
 				break;
 			default:
-				alert(layer_kind);
+				// alert(layer_kind);
 				break;
 		}
 
@@ -495,13 +496,14 @@ function addSoldfillLayerCode(i, j) {
 function addTextLayerCode(i, j) {
 	var textitem = activeDocument.layerSets[i].layers[j].textItem;
 	var text_kind = textitem.kind;
-	var hsize = textitem.size.as("pixel");
+	try{var hsize = textitem.size.as("pixel");
 	if (text_kind == "TextType.PARAGRAPHTEXT") {
 		html_code += '<p class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "text", i, j) + '">' + activeDocument.layerSets[i].layers[j].textItem.contents + "</p>\n";
 	} else {
 		addHTag(hsize, i, j);
 	}
-	getTextCss(i, j);
+	getTextCss(i, j);}
+	catch(e){};
 }
 
 
@@ -535,7 +537,7 @@ function addHTag(foo, i, j) {
 function addNormalLayerCode(i, j) {
 	html_code += '<img class="' + beautifyLayerName(activeDocument.layerSets[i].layers[j].name, "normal", i, j) + '"/>\n';
 	getGeneralCss(i, j, "image");
-	getImageCss(i, j);
+	// getImageCss(i, j);
 	// downloadImage(i, j);
 }
 
@@ -654,8 +656,8 @@ function main() {
 	layerSetsDivision();
 	addPageCloseTag();
 	faqs();
-	alert(css_code);
-	alert(html_code);
+	// alert(css_code);
+	// alert(html_code);
 	// // allFonts(); // fetch all fonts installed in the system
 	createFolders(); //create folders
 	createFile("css/style.css", css_code); //Create css file
