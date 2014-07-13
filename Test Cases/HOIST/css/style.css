@@ -1,0 +1,81 @@
+body
+{
+width:100%;
+margin: 0;
+padding:0;
+}
+.hhot
+{
+margin:0;
+position: absolute;
+left:812px;
+top:36px;
+color: #FFFFFF;
+font-family: ArialMT;
+font-size: 20px;
+z-index:5;
+}
+.hcool
+{
+margin:0;
+position: absolute;
+left:705px;
+top:37px;
+color: #FFFFFF;
+font-family: ArialMT;
+font-size: 20px;
+z-index:4;
+}
+.hrounded-rectangle-1
+{
+height:53px;
+width:1022px;
+position:absolute;
+left:0px;
+top:1px;
+z-index:2;
+background: #25003A;
+border-radius:13px;
+}
+.hsmall
+{
+margin:0;
+position: absolute;
+left:662px;
+top:367px;
+color: #FFFFFF;
+font-family: ArialMT;
+font-size: 20px;
+z-index:8;
+}
+.hbig
+{
+margin:0;
+position: absolute;
+left:218px;
+top:362px;
+color: #FFFFFF;
+font-family: ArialMT;
+font-size: 20px;
+z-index:7;
+}
+.hrectangle-2
+{
+height:666px;
+width:396px;
+position:absolute;
+left:514px;
+top:70px;
+z-index:3;
+background: #2E3192;
+}
+.hrectangle-1
+{
+height:666px;
+width:390px;
+position:absolute;
+left:77px;
+top:70px;
+z-index:4;
+background: #2E3192;
+}
